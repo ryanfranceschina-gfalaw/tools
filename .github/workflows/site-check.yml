@@ -1,0 +1,62 @@
+name: Weekly website check
+
+# Checks every gfalaw.us page, the MyCase intake forms and the full-screen tools.
+# If anything is down or broken, this run fails and GitHub emails the account owner.
+on:
+  schedule:
+    - cron: '23 14 * * 1'   # Mondays, about 8:23 a.m. Central
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pages and forms
+        run: |
+          fail=0
+          while read -r u; do
+            [ -z "$u" ] && continue
+            code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 -A 'Mozilla/5.0 (GFA LAW site check)' "$u")
+            if [ "$code" = "200" ]; then echo "OK   $code $u"; else echo "::error::$code $u"; fail=1; fi
+          done <<'URLS'
+            https://www.gfalaw.us/
+            https://www.gfalaw.us/home
+            https://www.gfalaw.us/about-the-firm
+            https://www.gfalaw.us/about-the-firm/practice-areas
+            https://www.gfalaw.us/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits
+            https://www.gfalaw.us/about-the-firm/practice-areas/innocent-defense
+            https://www.gfalaw.us/about-the-firm/practice-areas/firearm-rights-and-expunction
+            https://www.gfalaw.us/about-the-firm/david-t-amad-1791-scholarship-application
+            https://www.gfalaw.us/about-the-firm/cj-grisham
+            https://www.gfalaw.us/about-the-firm/ryan-franceschina
+            https://www.gfalaw.us/contact/contact-gfa-law
+            https://www.gfalaw.us/contact/faq
+            https://www.gfalaw.us/contact/socials
+            https://www.gfalaw.us/contact/espanol
+            https://www.gfalaw.us/tools
+            https://www.gfalaw.us/tools/can-the-cop-do-that
+            https://www.gfalaw.us/tools/deadline-checker
+            https://www.gfalaw.us/tools/case-review-finder
+            https://www.gfalaw.us/tools/records-request-builder
+            https://www.gfalaw.us/tools/firearm-return-and-expunction-checker
+            https://www.gfalaw.us/tools/know-your-rights-guide
+            https://www.gfalaw.us/tools/restore-my-rights
+            https://www.gfalaw.us/payments
+            https://www.gfalaw.us/press-releases
+            https://www.gfalaw.us/complaints
+            https://www.gfalaw.us/merch
+            https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc
+            https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft
+            https://gfa-law-pllc.mycase.com/contact_us/NTqsGH4GHoUzNbjDfTpv8t1T
+            https://ryanfranceschina-gfalaw.github.io/tools/
+            https://ryanfranceschina-gfalaw.github.io/tools/restore-my-rights.html
+            https://ryanfranceschina-gfalaw.github.io/tools/know-your-rights.html
+            https://ryanfranceschina-gfalaw.github.io/tools/know-your-rights-guide.pdf
+            https://ryanfranceschina-gfalaw.github.io/tools/can-the-cop-do-that.html
+            https://ryanfranceschina-gfalaw.github.io/tools/deadline-checker.html
+            https://ryanfranceschina-gfalaw.github.io/tools/case-review-finder.html
+            https://ryanfranceschina-gfalaw.github.io/tools/records-request-builder.html
+            https://ryanfranceschina-gfalaw.github.io/tools/firearm-return-and-expunction-checker.html
+            https://ryanfranceschina-gfalaw.github.io/tools/espanol.html
+          URLS
+          exit $fail
