@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><base target="_top"><style>html,body{margin:0;background:transparent}</style></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:transparent}
+*{box-sizing:border-box}
+.w{height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5vmin}
+.c{width:100%;max-width:480px;max-height:100%;display:flex;flex-direction:column;font:400 clamp(11px,3.4vmin,15px)/1.45 Inter,Arial,sans-serif;color:#1A2E1C;background:#FBF8EF;border:2px solid #D4AF5A;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.h{background:#2B4E30;border-bottom:3px solid #D4AF5A;text-align:center;padding:.9em 1em}
+.h b{display:block;font:600 1.35em 'Playfair Display',Georgia,serif;color:#F4EEDC;letter-spacing:.02em}
+.h span{display:block;font-size:.78em;color:#D4AF5A;letter-spacing:.14em;text-transform:uppercase;margin-top:.2em}
+.b{padding:1em 1.2em 1.1em;display:flex;flex-direction:column;gap:.8em}
+.n{font-size:.88em;background:#F3EAD0;border-left:3px solid #D4AF5A;padding:.6em .8em;border-radius:4px}
+label{display:flex;gap:.7em;align-items:flex-start;cursor:pointer;font-size:.95em}
+input{width:1.25em;height:1.25em;margin:.15em 0 0;flex-shrink:0;accent-color:#2B4E30}
+#p{text-align:center;opacity:.35;filter:grayscale(1);pointer-events:none;transition:all .3s}
+#p.on{opacity:1;filter:none;pointer-events:auto}
+.t{font-weight:700;margin-bottom:.45em}
+.btn{display:inline-block;background:#D4AF5A;color:#1A2E1C;text-decoration:none;font-weight:700;padding:.75em 2.2em;border-radius:999px;letter-spacing:.04em;box-shadow:0 3px 8px rgba(0,0,0,.18)}
+.btn:hover{background:#D9B867}
+.f{font-size:.75em;color:#5b5b4f;margin-top:.5em}
+</style>
+<div class="w"><div class="c">
+<div class="h"><b>Consultation Payment</b><span>GFA LAW, PLLC</span></div>
+<div class="b">
+<div class="n"><strong>Required:</strong> confirm both statements to unlock payment.</div>
+<label><input type="checkbox" class="k"><span>I have already <strong>scheduled and confirmed</strong> a consultation time with a GFA LAW attorney.</span></label>
+<label><input type="checkbox" class="k"><span>I understand the consultation fee is <strong>$350</strong> and that payment does not guarantee the firm will take my case.</span></label>
+<div id="p"><div class="t">Total due: $350.00</div><a class="btn" href="https://secure.lawpay.com/pages/gfalaw/trust?amount=350.00&amp;reference=Consultation%20Fee&amp;readOnlyFields=amount" target="_blank" rel="noopener">Pay Securely</a><div class="f">Card or eCheck, securely processed by LawPay for GFA LAW, PLLC.<br>Your payment is held in the firm's trust account until your consultation takes place.</div></div>
+</div></div></div>
+<script>var k=document.querySelectorAll('.k'),p=document.getElementById('p');k.forEach(function(x){x.onchange=function(){p.classList.toggle('on',[].every.call(k,function(c){return c.checked}))}})</script>
+
+</body></html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GFA LAW, PLLC • Office of Grievance Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest-green: #2D5A27;
+    --forest-dark: #1a2e1a;
+    --gold-mid: #B59344;
+    --gold-light: #E2CE8F;
+    --olive-border: #4B4929;
+    --ink: #1a1a1a;
+    --muted: #6b7280;
+    --line: #dee2e6;
+    --err: #b42318;
+    --ok: #1f7a3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--forest-green);
+    background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.15) 1px, transparent 0);
+    background-size: 40px 40px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 60px;
+  }
+  .topbar {
+    background: var(--forest-dark);
+    color: var(--gold-light);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    margin: 0 -16px 28px;
+    width: calc(100% + 32px);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .topbar .secure { color: #9be29b; font-weight: 800; }
+  .kicker { font-size: .7rem; font-weight: 800; letter-spacing: .4em; text-transform: uppercase; color: var(--gold-light); margin: 0 0 10px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 2.6rem; margin: 0 0 22px; text-align: center; font-weight: 900; }
+
+  .progress { width: 100%; max-width: 760px; margin-bottom: 18px; }
+  .progress-track { height: 8px; background: rgba(0,0,0,.35); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold-mid); width: 0; transition: width .6s ease; }
+  .progress-label { font-size: .72rem; margin-top: 6px; color: var(--gold-light); letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; }
+
+  .office-desk {
+    background: #fdfdfd;
+    border-top: 12px solid var(--gold-mid);
+    border-radius: 4px;
+    width: 100%;
+    max-width: 760px;
+    padding: 34px 28px;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.6);
+    color: var(--ink);
+    position: relative;
+  }
+  @media (max-width: 520px) { .office-desk { padding: 26px 18px; } h1 { font-size: 2rem; } }
+
+  .hr-character {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 20px;
+    background-image: url('../assets/img/complaints-avatar.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    border: 4px solid var(--gold-mid);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+  .nameplate {
+    background: var(--olive-border); color: var(--gold-light);
+    padding: 6px 22px; font-weight: 800; font-size: .66rem; text-transform: uppercase;
+    letter-spacing: 2px; display: inline-block; border-radius: 2px; margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  .speech-bubble {
+    background: #f8f9fa; border: 1px solid #e9ecef; padding: 18px 20px; border-radius: 8px;
+    position: relative; margin-bottom: 30px; font-style: italic; color: #555; font-size: 1.02rem; line-height: 1.5;
+    text-align: center;
+  }
+  .speech-bubble::after {
+    content: ''; position: absolute; bottom: -10px; left: 50%;
+    border-width: 10px 10px 0; border-style: solid; border-color: #f8f9fa transparent transparent; transform: translateX(-50%);
+  }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .step h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin: 0 0 6px; color: var(--forest-dark); }
+  .sub { color: var(--muted); font-size: .88rem; margin: 0 0 20px; line-height: 1.5; }
+  .field { margin-bottom: 16px; }
+  label.lbl { display: block; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #333; margin-bottom: 6px; }
+  label.lbl .req { color: var(--err); }
+  .hint { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+  input[type=text], input[type=email], input[type=tel], input[type=date], input[type=time], input[type=number], select, textarea {
+    width: 100%; border: 2px solid var(--line); border-radius: 4px; padding: 12px 14px; font-family: inherit; font-size: 1rem; background: #fff; color: var(--ink);
+  }
+  textarea { min-height: 150px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold-mid); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; margin-bottom: 12px; line-height: 1.45; cursor: pointer; }
+  .check input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
+  .radios { display: flex; gap: 18px; flex-wrap: wrap; font-size: .95rem; }
+  .radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .error { color: var(--err); font-size: .82rem; margin-top: 6px; font-weight: 600; display: none; }
+  .error.show { display: block; }
+  .notice { background: #fff8e6; border-left: 4px solid var(--gold-mid); padding: 14px 16px; font-size: .9rem; line-height: 1.55; margin-bottom: 18px; color: #4a3b12; }
+  .notice.red { background: #fdecea; border-color: var(--err); color: #7a1c14; }
+  .notice.green { background: #e8f5ec; border-color: var(--ok); color: #164d27; }
+  .info-box { background: #f1f3f5; border: 1px solid #e3e6ea; padding: 14px 16px; border-radius: 4px; font-size: .88rem; line-height: 1.55; color: #444; margin-bottom: 18px; }
+
+  .submit-btn {
+    background: var(--forest-green); color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    width: 100%; padding: 17px; border: 0; border-radius: 2px; transition: all .3s; cursor: pointer; font-family: inherit; font-size: .9rem; margin-top: 8px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--forest-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+  .submit-btn:disabled { background: #9aa39a; cursor: not-allowed; }
+  .ghost-btn {
+    background: transparent; border: 1px solid var(--olive-border); color: var(--olive-border); font-family: inherit; font-size: .75rem;
+    text-transform: uppercase; letter-spacing: .1em; padding: 10px 14px; border-radius: 2px; cursor: pointer; font-weight: 800;
+  }
+  .ghost-btn:hover { background: var(--olive-border); color: var(--gold-light); }
+  .links { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; font-size: .76rem; color: var(--muted); flex-wrap: wrap; }
+  .links a { color: var(--forest-green); text-decoration: underline; cursor: pointer; }
+
+  .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid #cfd6cf; border-top-color: var(--forest-green); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .status-line { font-size: .85rem; color: #444; margin-top: 12px; display: none; }
+  .status-line.show { display: block; }
+
+  .counter { font-size: .75rem; text-align: right; color: var(--muted); margin-top: 4px; }
+  .counter.bad { color: var(--err); font-weight: 700; }
+
+  input[type=range] { width: 100%; accent-color: var(--forest-green); }
+  .range-label { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); }
+  .sev-readout { text-align: center; font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--forest-dark); margin: 6px 0 2px; }
+  .sev-desc { text-align: center; font-size: .85rem; color: var(--muted); margin-bottom: 14px; }
+
+
+  .queue-box { text-align: center; padding: 20px 10px; }
+  .queue-num { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--forest-dark); line-height: 1; }
+  .queue-sub { color: var(--muted); font-size: .85rem; margin-top: 6px; }
+  .hold-bar { height: 6px; background: #e3e6ea; border-radius: 3px; overflow: hidden; margin: 22px auto 10px; max-width: 360px; }
+  .hold-bar div { height: 100%; width: 0; background: var(--gold-mid); transition: width 1s linear; }
+  .tip { font-size: .8rem; color: #555; font-style: italic; min-height: 2.4em; }
+
+  .terms-box { height: 220px; overflow-y: auto; border: 2px solid var(--line); padding: 16px; font-size: .84rem; line-height: 1.6; background: #fff; color: #333; }
+  .terms-box h4 { margin: 14px 0 4px; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+  .terms-box h4:first-child { margin-top: 0; }
+  .initials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 520px) { .initials { grid-template-columns: 1fr; } }
+  .initials input { text-transform: uppercase; text-align: center; letter-spacing: .2em; }
+
+  table.review { width: 100%; border-collapse: collapse; font-size: .86rem; margin-bottom: 14px; }
+  table.review th, table.review td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+  table.review th { width: 38%; color: #555; font-weight: 700; text-transform: uppercase; font-size: .7rem; letter-spacing: .06em; }
+
+  /* ===== overlay / modal ===== */
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+  #overlay.show { display: flex; }
+  .modal { background: #fff; color: var(--ink); max-width: 440px; width: 100%; border-radius: 4px; border-top: 8px solid var(--gold-mid); padding: 26px 24px; box-shadow: 0 30px 80px rgba(0,0,0,.6); animation: fade .25s ease; }
+  .modal h4 { font-family: 'Playfair Display', serif; margin: 0 0 8px; font-size: 1.25rem; color: var(--forest-dark); }
+  .modal p { font-size: .9rem; line-height: 1.5; color: #444; margin: 0 0 16px; }
+  .modal .btns { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .modal .submit-btn { width: auto; padding: 12px 18px; margin: 0; }
+  .bar { height: 8px; background: #e3e6ea; border-radius: 4px; overflow: hidden; margin: 10px 0 14px; }
+  .bar div { height: 100%; background: var(--forest-green); width: 0; transition: width .4s; }
+
+  /* ===== toast ===== */
+  #toast { position: fixed; top: 14px; right: 14px; left: 14px; max-width: 360px; margin-left: auto; background: #111; color: #fff; padding: 14px 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: .85rem; transform: translateY(-140%); visibility: hidden; transition: transform .4s ease, visibility 0s .4s; z-index: 60; }
+  #toast.show { transform: none; visibility: visible; transition: transform .4s ease; }
+  #toast small { display: block; color: #aaa; font-size: .7rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .08em; }
+
+  /* ===== shredder ===== */
+  #action-zone { display: none; text-align: center; position: relative; margin-top: 10px; }
+  .paper-fly { width: 100px; height: 130px; background: #fff; border: 1px solid #ccc; margin: 0 auto; position: relative; z-index: 5; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 1s cubic-bezier(0.5,0,0.5,1), opacity .3s; padding: 10px; font-size: .45rem; text-align: left; color: #666; overflow: hidden; line-height: 1.5; white-space: pre-wrap; }
+  .shredder-machine { width: 250px; height: 250px; background: linear-gradient(135deg, #666 0%, #333 100%); margin: 0 auto; border-radius: 4px; border: 4px solid var(--olive-border); position: relative; z-index: 10; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+  .blades-slot { height: 35px; background: #111; width: 100%; border-bottom: 3px solid var(--gold-mid); box-shadow: inset 0 2px 10px rgba(255,255,255,0.1); }
+  .shred-strips { display: none; width: 100px; height: 130px; margin: 0 auto; position: relative; z-index: 5; }
+  .strip { width: 10px; background: #fff; border-left: 1px solid #eee; height: 100%; float: left; transition: all 2s cubic-bezier(0.5,0,0.5,1); }
+  .remnants-box { width: 100%; height: 60px; background: rgba(181,147,68,0.05); position: absolute; bottom: 0; left: 0; border-top: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+  .remnants-pile { display: none; position: absolute; inset: 0; background-image: repeating-linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8) 10px, transparent 10px, transparent 15px), repeating-linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.5) 10px, transparent 10px, transparent 15px); background-size: 20px 20px; opacity: .4; transform: rotate(15deg) scale(1.5) translateY(20px); }
+  .remnants-box::after { content: 'GFA'; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2rem; color: var(--gold-mid); opacity: .1; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+  #status-text { margin-top: 26px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: .2em; font-size: .72rem; }
+
+  /* ===== final ===== */
+  #final-screen { display: none; text-align: center; margin-top: 30px; max-width: 640px; animation: fade .6s ease; }
+  #final-screen .stamp { display: inline-block; border: 4px solid var(--gold-light); color: var(--gold-light); font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; letter-spacing: .3em; padding: 8px 18px; transform: rotate(-4deg); margin-bottom: 20px; }
+  #final-screen h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #fff; margin: 0 0 6px; }
+  #final-screen .caseline { font-size: .74rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 26px; }
+  #final-screen .verdict { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 14vw, 6rem); line-height: 1; color: var(--gold-light); font-weight: 900; margin: 10px 0 26px; }
+  #final-screen p { color: rgba(255,255,255,.85); line-height: 1.65; font-size: .98rem; margin: 0 auto 14px; }
+  #final-screen .fbtns { margin-top: 30px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  #final-screen .fbtn { padding: 10px 18px; border: 1px solid var(--gold-mid); color: var(--gold-light); background: transparent; font-family: inherit; font-size: .72rem; text-transform: uppercase; letter-spacing: .15em; cursor: pointer; transition: .25s; }
+  #final-screen .fbtn:hover { background: var(--gold-mid); color: #000; }
+
+  footer.meta { margin-top: 22px; font-size: .7rem; color: rgba(255,255,255,.65); text-align: center; line-height: 1.8; max-width: 760px; }
+  footer.meta b { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span>GFA LAW, PLLC · Office of Grievance Intake</span>
+  <span><span class="secure">&#9679; Secure Session</span> &nbsp;·&nbsp; Case <span id="case-id">GFA-000000</span></span>
+</div>
+
+<h2 class="kicker">Internal Support</h2>
+<h1>GFA HR Portal</h1>
+
+<div class="progress">
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <div class="progress-label"><span id="plabel">Step 1 of 10: Notice</span><span id="ptime">Est. remaining: about 4 minutes</span></div>
+</div>
+
+<div class="office-desk" id="main-desk">
+  <div style="text-align:center">
+    <div class="hr-character"></div>
+    <div class="nameplate">Alicia Henderson • HR Lead at GFA LAW, PLLC</div>
+    <div class="speech-bubble" id="hr-text">"Thank you for contacting the GFA Office of Grievance Intake. I'll be personally handling your file today."</div>
+  </div>
+
+  <div id="steps">
+
+    <div class="step active" data-step="0">
+      <h3>Notice to Complainants</h3>
+      <p class="sub">Please read the following notice in its entirety before proceeding. This notice is required under Firm Policy GFA-HR-001.</p>
+      <div class="notice">
+        This portal is the exclusive channel for grievances concerning statements or opinions expressed by attorneys of GFA LAW, PLLC, whether spoken, written, or posted. Grievances submitted by email, telephone, voicemail, certified mail, or social media comment will not be processed and will not be forwarded to this office. All fields marked with an asterisk (<span style="color:#b42318">*</span>) are mandatory. Incomplete submissions will be returned to the complainant for completion and will not be docketed until complete. Please have the date, time, and specific wording of the statement at issue available before you begin. Processing times vary.
+      </div>
+      <label class="check"><input type="checkbox" class="ack"> I have read the notice above in its entirety.</label>
+      <label class="check"><input type="checkbox" class="ack"> I understand that this portal accepts grievances concerning attorney statements and opinions only, and that other matters must be directed to the appropriate office.</label>
+      <label class="check"><input type="checkbox" class="ack"> I certify that my grievance is submitted in good faith and that the information I provide will be true and accurate to the best of my knowledge.</label>
+      <label class="check"><input type="checkbox" class="ack"> I consent to the collection and processing of the information I provide for the purpose of reviewing my grievance and for quality assurance.</label>
+      <div class="error" id="err-ack">All four acknowledgments are required.</div>
+      <button class="submit-btn" id="btn0">Begin Grievance</button>
+      <div class="links"><a onclick="helpModal()">Need help?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="1">
+      <h3>Section A: Narrative Statement</h3>
+      <p class="sub">Describe, in your own words, the statement at issue and its effect on you. Please be as complete as possible; the narrative is the primary basis for review, and it cannot be edited once you proceed to the next section.</p>
+      <div class="field">
+        <textarea id="f-narr" placeholder="Include dates, context, the specific statements at issue, and the effect on you."></textarea>
+        <div class="counter" id="narr-count">0 characters</div>
+        <div class="error" id="err-narr"></div>
+      </div>
+      <div class="status-line" id="st4"><span class="spinner"></span>Saving narrative to secure server…</div>
+      <button class="submit-btn" id="btn4">Save &amp; Continue</button>
+      <div class="links"><a onclick="helpModal()">Can I attach screenshots?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="2">
+      <h3>Section B: Complainant Identity</h3>
+      <p class="sub">We are required to verify your identity before a grievance can be accepted. Anonymous grievances cannot be processed.</p>
+      <div class="field"><label class="lbl">Full legal name <span class="req">*</span></label><input type="text" id="f-name" placeholder="First Middle Last"><div class="error" id="err-name"></div></div>
+      <div class="row">
+        <div class="field"><label class="lbl">Email address <span class="req">*</span></label><input type="email" id="f-email" placeholder="you@example.com"><div class="error" id="err-email"></div></div>
+        <div class="field"><label class="lbl">Confirm email address <span class="req">*</span></label><input type="email" id="f-email2" placeholder="Re-enter email address" oncopy="return false" onpaste="return false"><div class="error" id="err-email2"></div></div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="lbl">Phone number <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="Phone number"><div class="error" id="err-phone"></div></div>
+        <div class="field"><label class="lbl">ZIP code <span class="req">*</span></label><input type="text" id="f-zip" placeholder="5 digits" maxlength="5"><div class="error" id="err-zip"></div></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Relationship to GFA LAW <span class="req">*</span></label>
+        <select id="f-rel">
+          <option value="">Select one</option>
+          <option>Current client</option>
+          <option>Former client</option>
+          <option>Opposing party</option>
+          <option>Opposing counsel</option>
+          <option>Government employee (personal capacity)</option>
+          <option>Government employee (official capacity)</option>
+          <option>Member of the media</option>
+          <option>Member of the public</option>
+          <option>Prefer not to say</option>
+        </select>
+        <div class="error" id="err-rel"></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Have you previously submitted a grievance to this office? <span class="req">*</span></label>
+        <div class="radios"><label><input type="radio" name="f-off" value="Yes"> Yes</label><label><input type="radio" name="f-off" value="No"> No</label><label><input type="radio" name="f-off" value="Unsure"> Unsure</label></div>
+        <div class="error" id="err-off"></div>
+      </div>
+      <div class="status-line" id="st1"><span class="spinner"></span><span id="st1-text">Verifying identity…</span></div>
+      <div class="notice red" id="phone-fail" style="display:none">Identity verification failed: the phone number provided could not be validated. Please re-enter your phone number exactly in the format <b>(XXX) XXX-XXXX</b> and try again. (Error GFA-ID-4471)</div>
+      <button class="submit-btn" id="btn1">Verify &amp; Continue</button>
+      <div class="links"><a onclick="helpModal()">Why is this information required?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="3">
+      <h3>Section C: Nature of the Grievance</h3>
+      <p class="sub">Identify the statement or opinion at issue with as much specificity as possible. Grievances that do not identify a specific statement cannot be docketed.</p>
+      <div class="field">
+        <label class="lbl">Grievance category <span class="req">*</span></label>
+        <select id="f-cat">
+          <option value="">Select one</option>
+          <option>Attorney expressed an opinion I found offensive</option>
+          <option>Attorney expressed an opinion about me personally</option>
+          <option>Attorney expressed an opinion about my organization or agency</option>
+          <option>Attorney posted publicly on social media</option>
+          <option>Attorney's tone or language</option>
+          <option>Attorney was dismissive of my position</option>
+          <option>Attorney used humor I considered inappropriate</option>
+          <option>Attorney declined to retract a prior statement</option>
+          <option>I was informed of the statement by a third party</option>
+          <option>Other</option>
+        </select>
+        <div class="error" id="err-cat"></div>
+      </div>
+      <div class="field"><label class="lbl">Statement or opinion at issue <span class="req">*</span></label><input type="text" id="f-opinion" placeholder="Quote the statement exactly, including punctuation"><div class="error" id="err-opinion"></div></div>
+      <div class="row">
+        <div class="field"><label class="lbl">Date of occurrence <span class="req">*</span></label><input type="date" id="f-date"><div class="error" id="err-date"></div></div>
+        <div class="field"><label class="lbl">Approximate time of occurrence <span class="req">*</span></label><input type="time" id="f-time"><div class="error" id="err-time"></div><div class="hint">Central Time. Please convert if the occurrence took place in another time zone.</div></div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="lbl">Number of times you have viewed the statement <span class="req">*</span></label><input type="number" id="f-reread" min="0" placeholder="0"><div class="error" id="err-reread"></div><div class="hint" id="reread-hint"></div></div>
+        <div class="field">
+          <label class="lbl">Was the statement brought to your attention by another person? <span class="req">*</span></label>
+          <div class="radios"><label><input type="radio" name="f-forced" value="Yes"> Yes</label><label><input type="radio" name="f-forced" value="No"> No</label></div>
+          <div class="error" id="err-forced"></div>
+          <div id="forced-who" style="display:none;margin-top:10px"><input type="text" id="f-forcer" placeholder="Name of that person (optional)"></div>
+        </div>
+      </div>
+      <button class="submit-btn" id="btn2">Continue</button>
+      <div class="links"><a onclick="helpModal()">What qualifies as a statement?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="4">
+      <h3>Section D: Impact Assessment</h3>
+      <p class="sub">This section is used to classify the grievance for review. Please answer each item as accurately as possible.</p>
+      <div class="field">
+        <label class="lbl">Severity of impact <span class="req">*</span></label>
+        <div class="sev-readout" id="sev-num">5</div>
+        <div class="sev-desc" id="sev-desc">Moderate</div>
+        <input type="range" id="f-sev" min="0" max="10" value="5">
+        <div class="range-label"><span>0: Minimal</span><span>10: Severe</span></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Physical impact <span class="req">*</span></label>
+        <div class="radios">
+          <label><input type="radio" name="f-phys" value="None"> None</label>
+          <label><input type="radio" name="f-phys" value="Minor"> Minor</label>
+          <label><input type="radio" name="f-phys" value="Moderate"> Moderate</label>
+          <label><input type="radio" name="f-phys" value="Significant"> Significant</label>
+        </div>
+        <div class="error" id="err-phys"></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Have you raised this concern directly with the attorney? <span class="req">*</span></label>
+        <div class="radios"><label><input type="radio" name="f-logoff" value="Yes"> Yes</label><label><input type="radio" name="f-logoff" value="No"> No</label></div>
+        <div class="error" id="err-logoff"></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Resolution requested (select all that apply) <span class="req">*</span></label>
+        <label class="check"><input type="checkbox" class="rem" value="Public apology"> Public apology</label>
+        <label class="check"><input type="checkbox" class="rem" value="Private apology"> Private apology</label>
+        <label class="check"><input type="checkbox" class="rem" value="Retraction"> Retraction of the statement</label>
+        <label class="check"><input type="checkbox" class="rem" value="Correction"> Correction or clarification</label>
+        <label class="check"><input type="checkbox" class="rem" value="Monetary damages" id="rem-money"> Monetary compensation</label>
+        <label class="check"><input type="checkbox" class="rem" value="Other"> Other</label>
+        <div class="error" id="err-rem"></div>
+        <div id="money-box" style="display:none;margin-top:8px">
+          <input type="number" id="f-amount" min="0" placeholder="Amount requested (USD)">
+          <div class="hint">You may be contacted to provide supporting documentation.</div>
+        </div>
+      </div>
+      <button class="submit-btn" id="btn3">Continue</button>
+      <div class="links"><a onclick="helpModal()">How is severity determined?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="5">
+      <h3>Section E: Docket Summary</h3>
+      <p class="sub">For docketing purposes, please summarize the narrative you provided in Section A in <b>40 characters or fewer</b>. This summary will appear on the docket entry.</p>
+      <div class="field"><input type="text" id="f-sum" maxlength="40" placeholder="Brief summary"><div class="counter" id="sum-count">0 / 40</div><div class="error" id="err-sum"></div></div>
+      <button class="submit-btn" id="btn5">Continue</button>
+      <div class="links"><a onclick="helpModal()">Why is a summary required?</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="6">
+      <h3>Section F: Contact Verification</h3>
+      <p class="sub" id="code-sub">For your security, a 6-digit verification code has been sent to the phone number on file. Enter it below to continue.</p>
+      <div class="field"><label class="lbl">Verification code <span class="req">*</span></label><input type="text" id="f-code" maxlength="6" placeholder="6 digits" inputmode="numeric" style="letter-spacing:.4em;text-align:center;font-size:1.3rem"><div class="error" id="err-code"></div></div>
+      <div class="status-line show" id="code-status"><span class="spinner"></span><span id="code-status-text">Sending code…</span></div>
+      <div class="notice red" id="code-lock" style="display:none">Too many failed attempts. Please wait <b id="lock-sec">30</b> seconds before trying again.</div>
+      <button class="submit-btn" id="btn6">Verify Code</button>
+      <div class="links"><a id="resend" onclick="sendCode(true)">Didn't receive a code? Resend</a><a onclick="helpModal()">I don't have access to this phone</a></div>
+    </div>
+
+    <div class="step" data-step="7">
+      <h3>Section G: Representative Review</h3>
+      <p class="sub">A Grievance Intake Representative must attach your file to the review queue before you can proceed. Please remain on this page; leaving the page will forfeit your place in line.</p>
+      <div class="queue-box">
+        <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:#888">Your position in queue</div>
+        <div class="queue-num" id="q-num">-</div>
+        <div class="queue-sub" id="q-sub">Connecting…</div>
+        <div class="hold-bar"><div id="hold-fill"></div></div>
+        <div class="tip" id="q-tip">Please hold.</div>
+      </div>
+      <button class="submit-btn" id="btn8" disabled>Waiting for representative…</button>
+      <div class="links"><a onclick="helpModal()">Request a callback</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="8">
+      <h3>Section H: Terms of Submission</h3>
+      <p class="sub">Please scroll and read the Terms of Submission in full. The acknowledgment box will become available once you have reached the end.</p>
+      <div class="terms-box" id="terms">
+        <h4>1. Scope</h4>
+        <p>These Terms of Submission ("Terms") govern the submission, intake, docketing, and review of grievances concerning statements or opinions expressed by attorneys of GFA LAW, PLLC (the "Firm") through the Office of Grievance Intake (the "Office"). By submitting a grievance, the complainant ("Complainant") agrees to be bound by these Terms in their entirety.</p>
+        <h4>2. Definitions</h4>
+        <p>"Statement" means any oral, written, or electronically published expression attributed to an attorney of the Firm. "Grievance" means a complaint submitted through this portal concerning a Statement. "Docketing" means the assignment of a case number and the entry of the Grievance into the Office's review log. "Business Day" means any day other than a Saturday, Sunday, or Firm-observed holiday.</p>
+        <h4>3. Eligibility and Timeliness</h4>
+        <p>A Grievance must be submitted within seventy-two (72) hours of the occurrence giving rise to it. The Office may, in its sole discretion, decline to docket any Grievance that is untimely, incomplete, duplicative of a prior submission, or that does not identify a specific Statement. A determination that a Grievance is not eligible for docketing is final.</p>
+        <h4>4. Submission Requirements</h4>
+        <p>All mandatory fields must be completed. The Complainant is responsible for the accuracy and completeness of all information submitted. The Office will not correct, supplement, or interpret a submission on the Complainant's behalf. Supplemental materials may be requested by the Office and must be provided within five (5) Business Days of the request.</p>
+        <h4>5. Review Process</h4>
+        <p>Docketed Grievances are assigned to a reviewer in the order received. The reviewer will evaluate the Grievance under the standards set forth in the Firm's internal policies, which are not published and are subject to change without notice. The Complainant is not entitled to participate in the review, to receive interim updates, or to be informed of the identity of the reviewer.</p>
+        <h4>6. Timelines</h4>
+        <p>The Office does not commit to any particular timeline for review. Estimated processing times displayed in this portal are provided for convenience only and do not create any obligation on the part of the Office or the Firm.</p>
+        <h4>7. Retention</h4>
+        <p>Grievance records are retained in accordance with the Firm's document retention schedule. The Complainant acknowledges that the retention period applicable to a given Grievance is determined by the Firm and is not disclosed. Records may be disposed of at the conclusion of the applicable retention period without notice to the Complainant.</p>
+        <h4>8. Confidentiality</h4>
+        <p>Information submitted through this portal will be handled in accordance with the Firm's internal confidentiality practices. The Office does not guarantee confidentiality with respect to any Statement that was itself public at the time it was made. Submission of a Grievance does not create an attorney-client relationship with the Firm or any of its attorneys.</p>
+        <h4>9. Communications</h4>
+        <p>All communications regarding a Grievance must be directed through this portal. The Office does not respond to inquiries submitted by email, telephone, mail, or social media. The Complainant agrees not to contact individual attorneys of the Firm regarding a pending Grievance.</p>
+        <h4>10. Resolution</h4>
+        <p>Any resolution offered is determined at the sole discretion of the Firm. The resolution options presented in Section C of this portal are provided for classification purposes only and do not constitute an offer, promise, or representation that any particular resolution is available.</p>
+        <h4>11. Appeals</h4>
+        <p>A Complainant who disagrees with the disposition of a Grievance may request reconsideration in accordance with the Firm's internal procedures. Requests for reconsideration are reviewed by the Office of Appeals. The Office of Appeals is not obligated to respond to any request.</p>
+        <h4>12. No Waiver</h4>
+        <p>Nothing in these Terms, and nothing in the acceptance, docketing, review, or disposition of any Grievance, shall be construed as an admission by the Firm or any attorney of the Firm, or as a waiver of any right, privilege, or defense.</p>
+        <h4>13. Governing Law</h4>
+        <p>These Terms are governed by the laws of the State of Texas without regard to its conflict-of-laws principles. Any dispute arising from these Terms shall be resolved exclusively through the procedures described herein.</p>
+        <h4>14. Acknowledgment</h4>
+        <p>By checking the acknowledgment box and initialing below, the Complainant affirms that they have read these Terms in full, understand them, and agree to be bound by them.</p>
+        <p style="text-align:center;color:#999;font-size:.75rem;margin-top:20px">END OF TERMS</p>
+      </div>
+      <div class="hint" id="terms-hint" style="margin-top:6px">Scroll to the end to enable acknowledgment.</div>
+      <label class="check" style="margin-top:12px"><input type="checkbox" id="f-terms" disabled> I have read and agree to the Terms of Submission.</label>
+      <div class="field" style="margin-top:14px">
+        <label class="lbl">Initial each acknowledgment <span class="req">*</span></label>
+        <div class="initials">
+          <div><input type="text" class="init" maxlength="4" placeholder="Sec. 5"><div class="hint">Review Process</div></div>
+          <div><input type="text" class="init" maxlength="4" placeholder="Sec. 7"><div class="hint">Retention</div></div>
+          <div><input type="text" class="init" maxlength="4" placeholder="Sec. 14"><div class="hint">Acknowledgment</div></div>
+        </div>
+        <div class="error" id="err-init"></div>
+      </div>
+      <button class="submit-btn" id="btn9">Continue to Review</button>
+      <div class="links"><a onclick="helpModal()">Request a printed copy</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+    <div class="step" data-step="9">
+      <h3>Section I: Review &amp; Submit</h3>
+      <p class="sub">Please review your grievance for accuracy. Once submitted, a grievance cannot be edited or withdrawn.</p>
+      <table class="review" id="review-table"></table>
+      <div class="field"><label class="lbl">Electronic signature: type your full legal name exactly as entered in Section B <span class="req">*</span></label><input type="text" id="f-sig" placeholder="Full legal name" onpaste="return false"><div class="error" id="err-sig"></div></div>
+      <button class="submit-btn" id="btn10">File Official Grievance</button>
+      <div class="links"><a onclick="go(2)">Edit Section B</a><a onclick="saveModal()">Save and continue later</a></div>
+    </div>
+
+  </div>
+
+  <div id="action-zone">
+    <div class="paper-fly" id="flyer"></div>
+    <div class="shredder-machine">
+      <div class="blades-slot"></div>
+      <div class="shred-strips" id="strips-container"></div>
+      <div class="remnants-box"><div class="remnants-pile" id="pile-visual"></div></div>
+    </div>
+    <div id="status-text">Reviewing for legal merit…</div>
+  </div>
+</div>
+
+<div id="final-screen">
+  <div class="stamp">CLOSED</div>
+  <h2>Grievance Processed</h2>
+  <div class="caseline">Case <span id="final-case">GFA-000000</span> · Status: Closed · Disposition: Final</div>
+  <div class="verdict">Get lost.</div>
+  <p>Your grievance has been reviewed with the full care and attention it deserved, which was none. The attorneys' opinions remain unchanged and, if anything, are now held slightly more firmly.</p>
+  <p>You spent <b id="elapsed" style="color:var(--gold-light)">-</b> completing this form. We spent zero seconds reading it. The First Amendment thanks you for your participation.</p>
+  <p style="font-size:.8rem;color:rgba(255,255,255,.55)">This decision is final and unappealable. See Terms of Submission, Section 11 (the Office of Appeals is a drawer).</p>
+  <div class="fbtns">
+    <button class="fbtn" onclick="appealModal()">Appeal this decision</button>
+    <button class="fbtn" onclick="certModal()">Download certificate</button>
+    <button class="fbtn" onclick="location.reload()">File another grievance</button>
+  </div>
+</div>
+
+<footer class="meta">
+  GFA LAW, PLLC · Office of Grievance Intake · <b>Your patience is appreciated.</b><br>
+  Session ID <span id="sess"></span> · All submissions are timestamped and logged.
+</footer>
+
+<div id="overlay"><div class="modal" id="modal"></div></div>
+<div id="toast"><small id="toast-head">Notification</small><span id="toast-body"></span></div>
+
+<script>
+/* ===================== STATE ===================== */
+const S = { start: Date.now(), phoneFails: 0, codeAttempts: 0, capAttempts: 0 };
+const STEP_NAMES = ['Notice','Narrative','Identity','Details','Impact','Summary','Verification','Queue','Terms','Review'];
+const ETA = ['about 4 minutes','about 5 minutes','about 8 minutes','about 7 minutes','about 10 minutes','about 9 minutes','about 12 minutes','about 18 minutes','about 15 minutes','less than 1 minute'];
+const BUBBLE = [
+  "\"Thank you for contacting the GFA Office of Grievance Intake. I'll be personally handling your file today.\"",
+  "\"Let's start with what happened. Please describe it in your own words, with as much detail as you can.\"",
+  "\"Thank you. Before your statement can be docketed, I'll need to verify who you are.\"",
+  "\"Now I need a few specifics about the statement at issue for the file.\"",
+  "\"Next I need to classify the impact of the statement for review purposes.\"",
+  "\"For the docket entry, I'll also need a brief summary of what you wrote earlier.\"",
+  "\"Just a quick security step so we know we're speaking with you.\"",
+  "\"I'm attaching your file to the review queue now. Please hold.\"",
+  "\"Almost there. Please review the Terms of Submission before we finalize.\"",
+  "\"Everything looks in order. Sign below and I'll file this for you.\"",
+];
+let cur = 0;
+
+const $ = id => document.getElementById(id);
+const q = s => document.querySelector(s);
+const qa = s => [...document.querySelectorAll(s)];
+const val = id => ($(id).value || '').trim();
+const radio = n => (q(`input[name="${n}"]:checked`) || {}).value || '';
+function err(id, msg){ const e = $('err-'+id); if(!e) return; e.textContent = msg||''; e.classList.toggle('show', !!msg); }
+function clearErrs(el){ el.querySelectorAll('.error').forEach(e=>e.classList.remove('show')); }
+function bubble(t){ $('hr-text').textContent = t; }
+
+const caseId = 'GFA-' + String(Math.floor(100000 + Math.random()*900000));
+$('case-id').textContent = caseId; $('final-case').textContent = caseId;
+$('sess').textContent = Math.random().toString(36).slice(2,10).toUpperCase() + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
+
+function go(n){
+  cur = n;
+  qa('.step').forEach(el => el.classList.toggle('active', +el.dataset.step === n));
+  $('pfill').style.width = Math.round((n / (STEP_NAMES.length)) * 100) + '%';
+  $('plabel').textContent = `Step ${n+1} of ${STEP_NAMES.length}: ${STEP_NAMES[n]}`;
+  $('ptime').textContent = 'Est. remaining: ' + ETA[n];
+  bubble(BUBBLE[n]);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (onEnter[n]) onEnter[n]();
+}
+const onEnter = {};
+
+/* ===================== MODALS / TOAST ===================== */
+function modal(html){ $('modal').innerHTML = html; $('overlay').classList.add('show'); }
+function closeModal(){ $('overlay').classList.remove('show'); }
+function helpModal(){
+  const msgs = [
+    "Live assistance is not available at this time. Please continue completing the form; most questions are addressed in the instructions for each section.",
+    "The Help Desk is experiencing higher than normal volume. Your request has been logged. Please continue completing the form.",
+    "For assistance with this form, please refer to the instructions provided at the top of each section.",
+    "Help requests are reviewed in the order received. Please continue completing the form while you wait.",
+  ];
+  modal(`<h4>Help Center</h4><p>${msgs[Math.floor(Math.random()*msgs.length)]}</p><div class="btns"><button class="submit-btn" onclick="closeModal()">Return to form</button></div>`);
+}
+function saveModal(){
+  modal(`<h4>Save Progress</h4><p>Progress cannot be saved. For security reasons, grievances must be completed in a single session. If you leave this page, your submission will be lost.</p><div class="btns"><button class="submit-btn" onclick="closeModal()">Return to form</button></div>`);
+}
+function appealModal(){
+  modal(`<h4>Notice of Appeal</h4><p>Appeals are heard by the shredder.</p><p>The shredder has reviewed your appeal.</p><p><b>Denied.</b></p><div class="btns"><button class="submit-btn" onclick="closeModal()">Accept ruling</button></div>`);
+}
+function certModal(){
+  modal(`<h4>Certificate of Completion</h4><p>Your certificate has been generated and placed in the Remnants Box with the rest of your submission. It is available for pickup at the Office of Appeals (see: drawer).</p><div class="btns"><button class="submit-btn" onclick="closeModal()">Close</button></div>`);
+}
+let toastT;
+function toast(head, body, ms=9000){
+  $('toast-head').textContent = head; $('toast-body').textContent = body;
+  $('toast').classList.add('show'); clearTimeout(toastT);
+  toastT = setTimeout(()=> $('toast').classList.remove('show'), ms);
+}
+
+/* ===================== STEP 0 ===================== */
+(function(){
+  const b = $('btn0');
+  b.onclick = ()=>{
+    const all = qa('.ack').every(c=>c.checked);
+    err('ack', all ? '' : 'All four acknowledgments are required.');
+    if(all) go(1);
+  };
+})();
+
+/* ===================== STEP 1 ===================== */
+$('btn1').onclick = ()=>{
+  const st = q('[data-step="1"]'); clearErrs(st); let ok = true;
+  const name = val('f-name'); if(!name){ err('name','Full legal name is required.'); ok=false; } else if(!/\s/.test(name)){ err('name','Please enter your full legal name, including surname.'); ok=false; }
+  const em = val('f-email'); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ err('email','Enter a valid email address.'); ok=false; }
+  if(val('f-email2') !== em || !em){ err('email2','Email addresses do not match.'); ok=false; }
+  const ph = val('f-phone'); if(!ph){ err('phone','Phone number is required.'); ok=false; }
+  if(!/^\d{5}$/.test(val('f-zip'))){ err('zip','ZIP code must be exactly 5 digits.'); ok=false; }
+  if(!val('f-rel')){ err('rel','Please select your relationship to the Firm.'); ok=false; }
+  if(!radio('f-off')){ err('off','This question is mandatory.'); ok=false; }
+  if(!ok) return;
+  $('btn1').disabled = true; $('phone-fail').style.display='none';
+  const stl = $('st1'); stl.classList.add('show');
+  const msgs = ['Verifying identity…','Checking records…','Validating contact information…','Contacting carrier…'];
+  let i=0; const iv = setInterval(()=>{ i=(i+1)%msgs.length; $('st1-text').textContent=msgs[i]; }, 900);
+  setTimeout(()=>{
+    clearInterval(iv); stl.classList.remove('show'); $('btn1').disabled=false;
+    if(ph.replace(/\D/g,'').length < 10){
+      err('phone','Please enter a valid 10-digit phone number.'); $('f-phone').focus(); return;
+    }
+    S.name=name; S.email=em; S.phone=ph; S.zip=val('f-zip'); S.rel=val('f-rel'); S.off=radio('f-off');
+    go(3);
+  }, 2500);
+};
+
+/* ===================== STEP 2 ===================== */
+qa('input[name="f-forced"]').forEach(r=> r.onchange = ()=> $('forced-who').style.display = radio('f-forced')==='Yes'?'block':'none');
+$('btn2').onclick = ()=>{
+  const st = q('[data-step="2"]'); clearErrs(st); let ok=true;
+  const cat = val('f-cat'); if(!cat){ err('cat','Please select a category.'); ok=false; }
+  if(!val('f-opinion')){ err('opinion','Please identify the statement at issue.'); ok=false; }
+  const d = val('f-date');
+  if(!d){ err('date','Date of occurrence is required.'); ok=false; }
+  else { const diff = (Date.now() - new Date(d+'T00:00:00').getTime())/36e5; if(diff < -24){ err('date','Date of occurrence cannot be in the future.'); ok=false; } }
+  if(!val('f-time')){ err('time','Approximate time of occurrence is required.'); ok=false; }
+  if(val('f-reread')===''){ err('reread','Enter a number.'); ok=false; }
+  if(!radio('f-forced')){ err('forced','This question is mandatory.'); ok=false; }
+  if(!ok) return;
+  S.cat=cat; S.opinion=val('f-opinion'); S.date=d; S.time=val('f-time'); S.reread=val('f-reread'); S.forced=radio('f-forced'); S.forcer=val('f-forcer');
+  go(4);
+};
+
+/* ===================== STEP 3 ===================== */
+const SEV = ['Minimal','Very low','Low','Low to moderate','Moderate','Moderate','Moderate to high','High','Very high','Severe','Severe'];
+$('f-sev').oninput = e => { const v=+e.target.value; $('sev-num').textContent=v; $('sev-desc').textContent=SEV[v]; };
+$('rem-money').onchange = e => $('money-box').style.display = e.target.checked?'block':'none';
+$('btn3').onclick = ()=>{
+  const st = q('[data-step="3"]'); clearErrs(st); let ok=true;
+  const sev = +$('f-sev').value;
+  if(!radio('f-phys')){ err('phys','This question is mandatory.'); ok=false; }
+  if(!radio('f-logoff')){ err('logoff','This question is mandatory.'); ok=false; }
+  const rems = qa('.rem:checked').map(c=>c.value); if(!rems.length){ err('rem','Select at least one option.'); ok=false; }
+  if(rems.includes('Monetary damages') && !(+val('f-amount')>0)){ err('rem','Enter the amount of monetary compensation requested.'); ok=false; }
+  if(!ok) return;
+  S.sev=sev; S.phys=radio('f-phys'); S.rem=rems; S.amount=val('f-amount');
+  go(5);
+};
+
+/* ===================== STEP 4 ===================== */
+$('f-narr').oninput = e => { $('narr-count').textContent = `${e.target.value.length} characters`; };
+$('btn4').onclick = ()=>{
+  err('narr','');
+  const t = val('f-narr');
+  if(!t){ err('narr','A narrative statement is required.'); return; }
+  S.narr = t;
+  $('btn4').disabled=true; $('st4').classList.add('show');
+  setTimeout(()=>{
+    $('st4').classList.remove('show'); $('btn4').disabled=false;
+    modal(`<h4>Session Expired</h4><p>Your session has expired due to inactivity. For your security, sessions are limited in duration. You may attempt to restore your session below.</p><div class="btns"><button class="submit-btn" onclick="restoreSession()">Restore session</button></div>`);
+  }, 2600);
+};
+function restoreSession(){
+  modal(`<h4>Restoring Session</h4><p id="rs-text">Locating your session…</p><div class="bar"><div id="rs-bar"></div></div>`);
+  const steps = [[8,'Locating your session…'],[31,'Re-authenticating…'],[62,'Recovering form data…'],[87,'Recovering narrative…'],[100,'Session restored.']];
+  let i=0; const iv=setInterval(()=>{
+    const [p,t]=steps[i]; $('rs-bar').style.width=p+'%'; $('rs-text').textContent=t; i++;
+    if(i>=steps.length){ clearInterval(iv); setTimeout(()=>{
+      modal(`<h4>Session Restored</h4><p>Your session has been restored and your form data has been recovered. Please continue.</p><div class="btns"><button class="submit-btn" onclick="closeModal();go(2)">Continue</button></div>`);
+    }, 700); }
+  }, 1100);
+}
+
+/* ===================== STEP 5 ===================== */
+$('f-sum').oninput = e => $('sum-count').textContent = `${e.target.value.length} / 40`;
+$('btn5').onclick = ()=>{
+  const st = q('[data-step="5"]'); clearErrs(st); let ok=true;
+  if(!val('f-sum')){ err('sum','A summary is required.'); ok=false; }
+  if(!ok) return;
+  S.sum=val('f-sum');
+  go(6);
+};
+
+/* ===================== STEP 6 ===================== */
+let codeTimer;
+function sendCode(resend){
+  S.code = String(Math.floor(100000+Math.random()*900000));
+  $('code-status').classList.add('show'); $('code-status-text').textContent = resend ? 'Resending code…' : 'Sending code…';
+  $('code-sub').textContent = `For your security, a 6-digit verification code has been sent to ${S.phone || 'the phone number on file'}. Enter it below to continue.`;
+  clearTimeout(codeTimer);
+  const delay = resend ? 4000 : 8000;
+  let t = Math.round(delay/1000);
+  const iv = setInterval(()=>{ t--; if(t>0) $('code-status-text').textContent = `Code sent. Typical delivery time: ${t}s`; }, 1000);
+  codeTimer = setTimeout(()=>{
+    clearInterval(iv); $('code-status-text').textContent = 'Code delivered.';
+    toast('Text Message · GFA Intake', `Your GFA verification code is ${S.code}. Do not share this code.`, 16000);
+  }, delay);
+}
+onEnter[6] = ()=> sendCode(false);
+$('btn6').onclick = ()=>{
+  err('code','');
+  if($('code-lock').style.display==='block') return;
+  const c = val('f-code');
+  if(!S.code || c !== S.code){
+    S.codeAttempts++;
+    if(S.codeAttempts >= 3){
+      S.codeAttempts = 0; $('code-lock').style.display='block'; $('btn6').disabled=true; let s=30;
+      const iv=setInterval(()=>{ s--; $('lock-sec').textContent=s; if(s<=0){ clearInterval(iv); $('code-lock').style.display='none'; $('btn6').disabled=false; $('lock-sec').textContent='30'; } },1000);
+      return;
+    }
+    err('code', c ? `Incorrect code. ${3-S.codeAttempts} attempt${3-S.codeAttempts===1?'':'s'} remaining.` : 'Enter the 6-digit code.');
+    return;
+  }
+  go(7);
+};
+
+/* ===================== STEP 8 ===================== */
+const TIPS = [
+  'Your grievance is important to us.',
+  'Grievances are processed in the order received.',
+  'Please continue to hold. Your position may change as files ahead of you are processed.',
+  'You may review the Terms of Submission in the next section while you wait.',
+  'Thank you for your patience.',
+  'Leaving this page will forfeit your place in the queue.',
+  'A representative will be with you shortly.',
+];
+onEnter[7] = ()=>{
+  const seq = [9,8,7,6,5,4,3,2,1];
+  let i=0, tip=0;
+  const fill = $('hold-fill');
+  $('q-tip').textContent = TIPS[0];
+  const tipIv = setInterval(()=>{ tip=(tip+1)%TIPS.length; $('q-tip').textContent=TIPS[tip]; }, 4200);
+  const iv = setInterval(()=>{
+    const n = seq[i]; $('q-num').textContent = n;
+    $('q-sub').textContent = `Estimated wait: ${n} minute${n===1?'':'s'}`;
+    fill.style.width = Math.round(((i+1)/seq.length)*100)+'%';
+    i++;
+    if(i>=seq.length){
+      clearInterval(iv); clearInterval(tipIv);
+      $('q-num').textContent='0'; $('q-sub').textContent='A representative is now available.'; $('q-tip').textContent='Thank you for holding.';
+      $('btn8').disabled=false; $('btn8').textContent='Join Session';
+      bubble("\"Thank you for holding. Your file has been attached to the queue. Let's finish up.\"");
+    }
+  }, 2200);
+};
+$('btn8').onclick = ()=> go(8);
+
+/* ===================== STEP 9 ===================== */
+$('terms').addEventListener('scroll', e=>{ const el=e.target; if(el.scrollTop + el.clientHeight >= el.scrollHeight - 8){ $('f-terms').disabled=false; $('terms-hint').textContent='You may now acknowledge the Terms.'; } });
+$('btn9').onclick = ()=>{
+  err('init','');
+  if(!$('f-terms').checked){ err('init','You must read and accept the Terms of Submission. Scroll to the end to enable the checkbox.'); return; }
+  const initials = (S.name||'').split(/\s+/).filter(Boolean).map(w=>w[0].toUpperCase()).join('');
+  const bad = qa('.init').some(i => i.value.trim().toUpperCase() !== initials);
+  if(bad){ err('init', `Initials do not match the name provided in Section B ("${S.name}"). Please initial all three sections.`); return; }
+  go(9);
+};
+
+/* ===================== STEP 10 ===================== */
+onEnter[9] = ()=>{
+  const rows = [
+    ['Case number', caseId],['Complainant', S.name],['Email', S.email],['Phone', S.phone],['Relationship', S.rel],['Prior grievance', S.off],
+    ['Category', S.cat],['Statement at issue', S.opinion],['Date / time of occurrence', `${S.date} at ${S.time}`],['Times viewed', S.reread],
+    ['Brought to attention by another', S.forced + (S.forcer? ` (${S.forcer})`:'')],['Severity', `${S.sev} / 10: ${SEV[S.sev]}`],['Physical impact', S.phys],
+    ['Resolution requested', S.rem.join(', ') + (S.amount? ` ($${(+S.amount).toLocaleString()})`:'')],['Docket summary', `"${S.sum}"`],['Narrative', S.narr.slice(0,140) + (S.narr.length>140?'…':'') + ` [${S.narr.length} characters]`],
+  ];
+  $('review-table').innerHTML = rows.map(([k,v])=>`<tr><th>${k}</th><td>${String(v||'').replace(/</g,'&lt;')}</td></tr>`).join('');
+};
+$('btn10').onclick = ()=>{
+  err('sig','');
+  if(val('f-sig') !== S.name){ err('sig', 'Signature must match your full legal name exactly as entered in Section B.'); return; }
+  modal(`<h4>Confirm Submission</h4><p>Are you sure you want to file this grievance? Once filed, a grievance cannot be edited or withdrawn. By filing, you certify that the information provided is accurate and complete.</p><div class="btns"><button class="ghost-btn" onclick="closeModal()">Cancel</button><button class="submit-btn" onclick="closeModal();fileIt()">Yes, file it</button></div>`);
+};
+function confirm2(){
+  modal(`<h4>Please Confirm</h4><p>Many complainants choose to review their submission once more before filing. Would you like to review your submission again?</p><div class="btns"><button class="ghost-btn" onclick="closeModal()">Review again</button><button class="submit-btn" onclick="confirm3()">No, file now</button></div>`);
+}
+function confirm3(){
+  modal(`<h4>Final Confirmation</h4><p>By clicking "File," you certify that the information in this grievance is accurate and complete and that you have read and agreed to the Terms of Submission.</p><div class="btns"><button class="submit-btn" onclick="closeModal();fileIt()">File Official Grievance</button></div>`);
+}
+
+/* ===================== SHREDDER + FINAL ===================== */
+function fileIt(){
+  bubble("\"Thank you. Let me go ahead and file that for you right now.\"");
+  $('steps').style.display='none';
+  const az=$('action-zone'), flyer=$('flyer'), container=$('strips-container'), pile=$('pile-visual'), status=$('status-text');
+  flyer.textContent = `GRIEVANCE ${caseId}\n${S.name}\n${S.sum}\n\n${S.narr}`;
+  az.style.display='block';
+  const say = (t, d) => setTimeout(()=> status.textContent=t, d);
+  say('Reviewing for legal merit…', 100);
+  say('Merit not found.', 1600);
+  say('Applying "Who Cares" standard…', 2900);
+  setTimeout(()=> flyer.style.transform='translateY(160px)', 1200);
+  setTimeout(()=>{
+    flyer.style.opacity='0'; container.style.display='block'; container.innerHTML='';
+    for(let i=0;i<10;i++){ const s=document.createElement('div'); s.className='strip'; s.style.transitionDelay=(i*0.1)+'s'; container.appendChild(s); }
+    say('Filing in the appropriate location.', 400);
+    setTimeout(()=>{ qa('.strip').forEach(s=>{ s.style.transform='translateY(180px)'; s.style.opacity='0.1'; }); }, 60);
+    setTimeout(()=>{
+      pile.style.display='block'; status.textContent='Grievance respectfully ignored.';
+      setTimeout(()=>{
+        bubble("\"There. Filed exactly where it belongs. Have a nice day.\"");
+        setTimeout(()=>{
+          const desk=$('main-desk'); desk.style.transition='opacity .6s'; desk.style.opacity='0';
+          setTimeout(()=>{
+            desk.style.display='none'; q('.progress').style.display='none';
+            const sec = Math.round((Date.now()-S.start)/1000);
+            $('elapsed').textContent = `${Math.floor(sec/60)} minute${Math.floor(sec/60)===1?'':'s'} and ${sec%60} second${sec%60===1?'':'s'}`;
+            $('final-screen').style.display='block';
+            window.scrollTo({top:0,behavior:'smooth'});
+          }, 650);
+        }, 1800);
+      }, 1200);
+    }, 2400);
+  }, 2300);
+}
+
+/* Discourage leaving mid-form */
+window.addEventListener('beforeunload', e => { if(cur>0 && $('final-screen').style.display!=='block'){ e.preventDefault(); e.returnValue=''; } });
+</script>
+</body>
+</html>

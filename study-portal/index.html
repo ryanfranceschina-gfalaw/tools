@@ -1,0 +1,532 @@
+<!doctype html><html lang="en"><head><meta name="robots" content="noindex,nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GFA Study Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0d1f11;--bg2:#13291a;--card:#183320;--card2:#1e3d27;--gold:#D4AF5A;--gold2:#f0d48a;--cream:#F4EEDC;--mut:#b9b39a;--line:rgba(212,175,90,.28);--ok:#4fbf7a;--bad:#e06a5b;--blue:#6fa8dc}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--cream);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.45}
+button{font-family:inherit;color:inherit}
+#app{max-width:560px;margin:0 auto;height:100%;display:flex;flex-direction:column;position:relative;background:radial-gradient(120% 60% at 50% 0%,#1d3d26 0%,var(--bg) 60%)}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px 8px;border-bottom:1px solid var(--line);background:rgba(13,31,17,.92);backdrop-filter:blur(6px);position:sticky;top:0;z-index:5}
+.brand{font:800 18px 'Playfair Display',Georgia,serif;color:var(--gold);letter-spacing:.2px;flex:1;white-space:nowrap}
+.brand small{display:block;font:600 10.5px Inter;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+.who{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.who button{border:0;background:none;padding:6px 11px;border-radius:999px;font-weight:700;font-size:13px;color:var(--mut)}
+.who button.on{background:var(--gold);color:#1a2a1a}
+main{flex:1;overflow-y:auto;padding-block:14px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));-webkit-overflow-scrolling:touch}
+nav{position:absolute;bottom:0;left:0;right:0;display:flex;background:rgba(10,24,13,.97);border-top:1px solid var(--line);padding:6px 4px calc(8px + env(safe-area-inset-bottom));z-index:6}
+nav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--mut);padding:4px 0}
+nav button .ic{font-size:21px;line-height:1;filter:grayscale(.6);opacity:.8}
+nav button.on{color:var(--gold)}nav button.on .ic{filter:none;opacity:1;transform:translateY(-1px)}
+h2{font:800 22px 'Playfair Display',Georgia,serif;color:var(--gold);margin:4px 0 10px}
+h3{font:700 15px Inter;margin:18px 0 8px;color:var(--gold2);letter-spacing:.02em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.hero{display:flex;gap:14px;align-items:center}
+.ring{--p:0;width:78px;height:78px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),rgba(255,255,255,.08) 0);display:grid;place-items:center;flex:none}
+.ring div{width:64px;height:64px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center;font:800 20px Inter;color:var(--gold)}
+.ring small{display:block;font:600 9.5px Inter;color:var(--mut);letter-spacing:.08em}
+.lvl{font:800 19px 'Playfair Display',serif}
+.mut{color:var(--mut);font-size:13.5px}
+.stats{display:flex;gap:8px;margin-top:10px}
+.stat{flex:1;background:var(--bg2);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:18px;color:var(--gold2)}.stat span{font-size:11px;color:var(--mut)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 16px;font-weight:800;font-size:16px;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a2a1a;box-shadow:0 4px 0 #8f7333;margin-top:8px;active:none}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8f7333}
+.btn.ghost{background:transparent;border:1.5px solid var(--gold);color:var(--gold);box-shadow:none}
+.btn.small{padding:10px 12px;font-size:14px;width:auto}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;text-align:left;min-height:96px;display:flex;flex-direction:column;gap:4px}
+.tile .e{font-size:26px}.tile b{font-size:15px}.tile span{font-size:12px;color:var(--mut)}
+.tile:active{background:var(--card2)}
+.alert{border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(212,175,90,.12),transparent 70%)}
+.alert b{color:var(--gold2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--bg2);border-radius:999px;padding:9px 13px;font-size:14px;font-weight:600}
+.chip.on{background:var(--gold);color:#1a2a1a;border-color:var(--gold)}
+.bar{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:99px;transition:width .4s}
+.tp{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(212,175,90,.12)}.tp:last-child{border:0}
+.tp .n{flex:1;font-size:14px}.tp .pct{font-size:12px;color:var(--mut);width:42px;text-align:right}.tp .bar{width:90px}
+/* quiz */
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}.qtop .bar{flex:1}
+.combo{font-weight:800;color:var(--gold2);font-size:13px;min-width:54px;text-align:right}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px}
+.qtag{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between}
+.qtxt{font-size:18px;font-weight:600;line-height:1.38}
+.opt{display:block;width:100%;text-align:left;margin-top:10px;background:var(--bg2);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;font-size:15.5px;line-height:1.35;min-height:52px}
+.opt:active{border-color:var(--gold)}
+.opt.ok{border-color:var(--ok);background:rgba(79,191,122,.16)}.opt.bad{border-color:var(--bad);background:rgba(224,106,91,.15)}.opt.dim{opacity:.5}
+.exp{margin-top:12px;padding:12px;border-radius:12px;background:rgba(212,175,90,.09);font-size:14.5px}
+.cite{display:block;margin-top:6px;font-size:12.5px;color:var(--gold);font-weight:600}
+.ver{font-size:10.5px;background:rgba(79,191,122,.18);color:#9fe0b5;border-radius:6px;padding:2px 6px;letter-spacing:.04em}
+.timer{height:5px;background:rgba(255,255,255,.1);border-radius:9px;overflow:hidden;margin-top:12px}.timer i{display:block;height:100%;background:var(--bad);width:100%}
+.big{font:800 46px 'Playfair Display',serif;color:var(--gold);text-align:center;margin:6px 0}
+.miss{border-left:3px solid var(--bad);padding:8px 10px;margin:8px 0;background:var(--bg2);border-radius:8px;font-size:14px}
+/* flashcards */
+.flip{perspective:1000px;height:330px;margin:6px 0 12px}
+.fc{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+.fc.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;padding:20px;display:flex;flex-direction:column;justify-content:center;background:var(--card);border:1px solid var(--line);overflow:auto}
+.face.back{transform:rotateY(180deg);background:linear-gradient(160deg,#21452c,#173020)}
+.face .hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:var(--mut)}
+.face .ans{font-size:18px;font-weight:700;color:var(--gold2)}
+table.sh{width:100%;border-collapse:collapse;font-size:13.5px}
+table.sh td{padding:8px 6px;border-bottom:1px solid rgba(212,175,90,.12);vertical-align:top}
+table.sh td:first-child{font-weight:700;color:var(--gold2);width:34%}
+table.sh td:last-child{color:var(--gold);font-size:11.5px;width:22%}
+/* sims */
+.path{position:relative;padding-left:22px}
+.path:before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),rgba(212,175,90,.15))}
+.step{position:relative;margin-bottom:12px}
+.step:before{content:"";position:absolute;left:-19px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--gold)}
+.step.cur:before{background:var(--gold);box-shadow:0 0 0 5px rgba(212,175,90,.25)}
+.step .card{margin:0}
+.day{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+.chosen{font-size:13px;color:var(--mut);margin-top:6px;font-style:italic}
+.choice{display:block;width:100%;text-align:left;margin-top:8px;border:1.5px solid var(--gold);background:rgba(212,175,90,.07);color:var(--cream);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:600}
+.choice:active{background:rgba(212,175,90,.2)}
+.end{text-align:center}.end .e{font-size:44px}
+.end.win{border-color:var(--ok)}.end.loss{border-color:var(--bad)}
+.tree{font-size:13.5px}
+.tree .tn{padding:6px 8px;border-radius:8px;margin:3px 0;background:var(--bg2);border-left:3px solid var(--line)}
+.tree .tn.seen{border-left-color:var(--gold)}.tree .tn.endw{border-left-color:var(--ok)}.tree .tn.endl{border-left-color:var(--bad)}
+.tree .kids{margin-left:5px;border-left:2px solid rgba(212,175,90,.22);padding-left:7px}
+.lib a{display:flex;gap:10px;align-items:center;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;color:var(--cream);text-decoration:none}
+.lib a b{display:block;font-size:14.5px}.lib a span{font-size:12px;color:var(--mut)}.lib a i{margin-left:auto;color:var(--gold);font-style:normal}
+input.s{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg2);color:var(--cream);font-size:16px;font-family:inherit;margin-bottom:12px}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bd{text-align:center;background:var(--bg2);border-radius:12px;padding:8px 4px;font-size:10.5px;color:var(--mut);line-height:1.2}
+.bd .e{font-size:24px;display:block;filter:grayscale(1);opacity:.35}
+.bd.got{color:var(--cream);border:1px solid var(--gold)}.bd.got .e{filter:none;opacity:1}
+.toast{position:absolute;left:50%;top:70px;transform:translate(-50%,-20px);background:var(--gold);color:#1a2a1a;font-weight:800;padding:10px 16px;border-radius:999px;opacity:0;transition:.3s;z-index:20;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.xpf{position:absolute;right:18px;top:60px;font-weight:800;color:var(--gold2);animation:up 1s forwards;z-index:15;pointer-events:none}
+@keyframes up{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-40px)}}
+canvas#cf{position:absolute;inset:0;pointer-events:none;z-index:30}
+.seg{display:flex;background:var(--bg2);border-radius:12px;padding:4px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;padding:9px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--mut)}
+.seg button.on{background:var(--card2);color:var(--gold)}
+.foot{font-size:11.5px;color:var(--mut);text-align:center;margin-top:16px}
+</style></head><body><div id="app">
+<header><div class="brand">GFA LAW<small>Study Portal</small></div><div class="who" id="who"></div></header>
+<main id="main"></main>
+<nav id="nav"></nav>
+<div class="toast" id="toast"></div>
+<canvas id="cf"></canvas>
+</div>
+<script>
+const TOPICS={
+civ:{n:"Texas Civil Procedure",i:"⚖️",s:"TX Civil"},
+fed:{n:"Federal Civil Procedure",i:"🏛️",s:"Federal"},
+s83:{n:"§1983 & Civil Rights",i:"🛡️",s:"§1983"},
+ttca:{n:"Gov't Immunity & TTCA",i:"🏢",s:"TTCA"},
+crim:{n:"Texas Criminal Procedure",i:"🚔",s:"TX Criminal"},
+gun:{n:"Firearms Law",i:"🎯",s:"Guns"},
+fa:{n:"First Amendment & TCPA",i:"🗣️",s:"1st Am / TCPA"},
+app:{n:"Appeals",i:"📜",s:"Appeals"}
+};
+/* Question bank. a = index of correct option. c = authority. Lexis-checked items are marked v:1 (statute/rule text pulled from Lexis+ 11/3/2026). */
+const Q=[
+/* ---------- Texas civil ---------- */
+{t:"civ",v:1,q:"A defendant is served with citation on Wednesday, March 4, 2026. When is the answer due?",o:["Tuesday, March 24, 2026","Monday, March 23, 2026 at 5:00 p.m.","Monday, March 30, 2026 at 10:00 a.m.","Friday, April 3, 2026"],a:2,e:"Count 20 days from service (March 24), then go to the next Monday at 10:00 a.m.",c:"Tex. R. Civ. P. 99(b)"},
+{t:"civ",v:1,q:"A Rule 91a motion to dismiss must be filed within how long?",o:["30 days after the defendant answers","60 days after the first pleading containing the challenged cause of action is served on the movant","90 days after suit is filed","Any time before trial"],a:1,e:"91a also requires filing at least 21 days before the hearing, and the court must rule within 45 days after the motion is filed.",c:"Tex. R. Civ. P. 91a.3(a)"},
+{t:"civ",v:1,q:"Once a Rule 91a motion is filed, the court must rule within:",o:["21 days","30 days","45 days","60 days"],a:2,e:"Granted or denied within 45 days after the motion is filed.",c:"Tex. R. Civ. P. 91a.3(c)"},
+{t:"civ",v:1,q:"Under amended Rule 166a (effective March 1, 2026), when is the nonmovant's summary-judgment response due?",o:["7 days before the hearing","21 days after the motion is filed","14 days after service of the motion","30 days after the motion is filed"],a:1,e:"The 2026 rewrite ties the response to the motion's filing date, not the hearing date. The old ‘7 days before the hearing’ rule is gone. Leave of court or agreement can change it.",c:"Tex. R. Civ. P. 166a(d)(1) (eff. Mar. 1, 2026)"},
+{t:"civ",v:1,q:"Under amended Rule 166a, when is the movant's reply due?",o:["3 days before the hearing","Within 7 days after the response is filed","Within 14 days after the response is filed","There is no reply"],a:1,e:"A reply is optional, but it must be filed within 7 days after the response unless leave or agreement says otherwise. It must not raise new grounds.",c:"Tex. R. Civ. P. 166a(e) (eff. Mar. 1, 2026)"},
+{t:"civ",v:1,q:"Under amended Rule 166a, a summary-judgment hearing or submission date may NOT be set within:",o:["21 days after the motion is filed","35 days after the motion is filed","45 days after the motion is filed","60 days after the motion is filed"],a:1,e:"No setting within 35 days of filing. The court must set it within 60 days of filing (or 90 days if the docket requires it, for good cause, or if the movant agrees).",c:"Tex. R. Civ. P. 166a(g)(1)"},
+{t:"civ",v:1,q:"Under amended Rule 166a, once a summary-judgment motion is heard or submitted, the court must rule within:",o:["30 days","45 days","60 days","90 days"],a:3,e:"The court must sign a written ruling, file it, and provide it to the parties within 90 days after the hearing or submission date.",c:"Tex. R. Civ. P. 166a(i)"},
+{t:"civ",v:1,q:"When may a party file a NO-EVIDENCE summary-judgment motion?",o:["Any time after the defendant answers","After adequate time for discovery","Only after the discovery period closes","Only with leave of court"],a:1,e:"A traditional motion may be filed any time after the nonmovant has appeared or answered (absent an order). A no-evidence motion waits for adequate time for discovery.",c:"Tex. R. Civ. P. 166a(b)(3)"},
+{t:"civ",v:1,q:"Is live testimony allowed at a Texas summary-judgment hearing?",o:["Yes, if the court allows it","Only from experts","No oral testimony is received","Only on a no-evidence motion"],a:2,e:"The evidence is the written record. Under the 2026 amendments, each side must also submit a proposed order before the hearing or submission date.",c:"Tex. R. Civ. P. 166a(g)(3)–(4)"},
+{t:"civ",v:1,q:"Expedited actions under Rule 169 apply when all claimants plead they seek only monetary relief of:",o:["$100,000 or less","$250,000 or less","$325,000 or less","$1,000,000 or less"],a:2,e:"The threshold is now $325,000 (excluding interest, statutory or punitive damages, penalties, fees and costs). The Rule 47(c) tiers match.",c:"Tex. R. Civ. P. 169(a); 47(c)"},
+{t:"civ",v:1,q:"Your client seeks $600,000 in damages. Which Rule 47(c) statement goes in the petition?",o:["Only monetary relief of $325,000 or less","Monetary relief over $325,000 but not more than $1,000,000","Monetary relief over $1,000,000","No statement is needed"],a:1,e:"Rule 47(c) categories: ≤$325k; ≤$325k plus non-monetary; over $325k up to $1M; over $1M; only non-monetary.",c:"Tex. R. Civ. P. 47(c)"},
+{t:"civ",v:1,q:"In a Level 2 case (non-family), the discovery period ends on the earlier of:",o:["60 days before trial or 6 months after the answer","30 days before trial or 9 months after the first initial disclosures are due","The pretrial conference or 1 year after filing","90 days before trial"],a:1,e:"The period begins when the first initial disclosures are due.",c:"Tex. R. Civ. P. 190.3(b)(1)(A)"},
+{t:"civ",v:1,q:"Level 2 limits each party to how many interrogatories (not counting ones that only identify or authenticate documents)?",o:["15","25","30","50"],a:1,e:"Each discrete subpart counts as a separate interrogatory.",c:"Tex. R. Civ. P. 190.3(b)(3)"},
+{t:"civ",v:1,q:"Under Level 2, each side gets how many total hours of oral depositions of the other side's parties and experts?",o:["6","20","50","Unlimited"],a:2,e:"50 hours per side.",c:"Tex. R. Civ. P. 190.3(b)(2)"},
+{t:"civ",v:1,q:"A defendant in Texas state court wants to remove to federal court. The deadline is generally:",o:["20 days after service","30 days after receipt of the initial pleading (through service or otherwise)","60 days after the answer","Any time before trial"],a:1,e:"Diversity removal also has a 1-year outer limit from commencement unless the plaintiff acted in bad faith.",c:"28 U.S.C. § 1446(b)(1), (c)(1)"},
+{t:"civ",q:"Initial disclosures in Texas state court are generally due:",o:["Within 30 days after the filing of the first answer or general appearance","Only on request","14 days after the scheduling order","With the original petition"],a:0,e:"Since 2021, Texas uses mandatory initial disclosures; no request is needed.",c:"Tex. R. Civ. P. 194.2(a)"},
+/* ---------- Federal ---------- */
+{t:"fed",v:1,q:"How long does a plaintiff have to serve a defendant in federal court?",o:["60 days after filing","90 days after the complaint is filed","120 days after filing","No limit if good cause"],a:1,e:"Without service in 90 days, the court must dismiss without prejudice or order service within a set time. Good cause requires an extension.",c:"Fed. R. Civ. P. 4(m)"},
+{t:"fed",v:1,q:"A defendant who timely WAIVED service must answer within:",o:["21 days after service","30 days after the waiver is signed","60 days after the waiver request was sent","90 days after filing"],a:2,e:"Formal service: 21 days. Waiver: 60 days after the request was sent (90 if sent outside the U.S.).",c:"Fed. R. Civ. P. 12(a)(1)(A)"},
+{t:"fed",q:"The officer files a Rule 12(b)(6) motion. When can you amend once as a matter of course?",o:["Never without leave","No later than 21 days after service of the 12(b) motion","Within 14 days after the motion","Any time before the scheduling order"],a:1,e:"Rule 15(a)(1)(B): 21 days after service of a responsive pleading or a 12(b), (e) or (f) motion, whichever is earlier. Often the best answer to a pleading-based qualified-immunity motion.",c:"Fed. R. Civ. P. 15(a)(1)(B)"},
+{t:"fed",q:"Which defense is NOT waived by leaving it out of a first Rule 12 motion?",o:["Lack of personal jurisdiction","Improper venue","Insufficient service of process","Lack of subject-matter jurisdiction"],a:3,e:"Personal jurisdiction, venue, process and service are waived under 12(h)(1). Subject-matter jurisdiction can be raised at any time.",c:"Fed. R. Civ. P. 12(h)(1), (h)(3)"},
+{t:"fed",q:"Initial disclosures under Rule 26(a)(1) are due:",o:["With the answer","Within 14 days after the Rule 26(f) conference","30 days after the scheduling order","Only on request"],a:1,e:"Unless a stipulation or order sets a different time.",c:"Fed. R. Civ. P. 26(a)(1)(C)"},
+{t:"fed",q:"A Rule 59 motion for new trial must be filed:",o:["Within 14 days after entry of judgment","Within 28 days after entry of judgment","Within 30 days after entry of judgment","Within 60 days after entry of judgment"],a:1,e:"A timely Rule 59 motion also resets the appeal clock under FRAP 4(a)(4).",c:"Fed. R. Civ. P. 59(b)"},
+{t:"fed",q:"Absent a local rule or order, a federal summary-judgment motion may be filed:",o:["Only after discovery closes","At any time until 30 days after the close of all discovery","Only before the 26(f) conference","Within 60 days after the answer"],a:1,e:"Check the W.D./N.D./E.D./S.D. Tex. local rules and the scheduling order. They often set earlier dispositive-motion deadlines.",c:"Fed. R. Civ. P. 56(b)"},
+/* ---------- 1983 ---------- */
+{t:"s83",q:"A city can be liable under §1983 when:",o:["Any employee violates the Constitution on duty","Its own policy or custom was the moving force behind the violation","The officer was negligent","The city fails to indemnify the officer"],a:1,e:"No respondeat superior. You need an official policy, a widespread custom, or a final policymaker's decision that caused the violation.",c:"Monell v. Dep't of Soc. Servs., 436 U.S. 658 (1978)"},
+{t:"s83",q:"Can you sue the State of Texas for damages under §1983?",o:["Yes, the State is a ‘person’","No, a State is not a ‘person’ under §1983","Only for injunctive relief through the AG","Only in state court"],a:1,e:"States and state officials sued in their official capacity for damages are not ‘persons.’ Officials can be sued individually (Hafer v. Melo) or for prospective relief (Ex parte Young).",c:"Will v. Mich. Dep't of State Police, 491 U.S. 58 (1989)"},
+{t:"s83",v:1,q:"What is the limitations period for a §1983 claim arising in Texas?",o:["1 year","2 years","3 years","4 years"],a:1,e:"§1983 borrows the forum state's personal-injury period. In Texas that is 2 years. Federal law decides when the claim accrues.",c:"Owens v. Okure, 488 U.S. 235 (1989); Tex. Civ. Prac. & Rem. Code § 16.003"},
+{t:"s83",q:"When does limitations begin to run on a §1983 false-arrest claim?",o:["When charges are dismissed","When the arrestee is held under legal process (e.g., arraigned or bound over)","At conviction","When the client hires counsel"],a:1,e:"False arrest ends once legal process begins; anything after that sounds in malicious prosecution or Fourth Amendment unlawful pretrial detention.",c:"Wallace v. Kato, 549 U.S. 384 (2007)"},
+{t:"s83",q:"Your client pleaded guilty to resisting arrest. Can he bring a §1983 claim?",o:["Never","Only claims that would not necessarily imply the conviction is invalid. Excessive force can survive if it is consistent with the conviction","Yes, all claims, because a plea is not a trial","Only after the sentence is served"],a:1,e:"Heck bars claims that would necessarily imply the conviction is invalid unless it has been reversed, expunged or otherwise invalidated. Plead the facts carefully so the force claim does not contradict the conviction.",c:"Heck v. Humphrey, 512 U.S. 477 (1994)"},
+{t:"s83",q:"Qualified immunity has two prongs (constitutional violation; clearly established law). Which must a court decide first?",o:["Violation first, always","Clearly established first, always","Either, in the court's discretion","Both must be decided together"],a:2,e:"Pearson overruled Saucier's mandatory sequence.",c:"Pearson v. Callahan, 555 U.S. 223 (2009)"},
+{t:"s83",q:"The district court denies an officer's qualified-immunity motion. Can the officer appeal now?",o:["No, he must wait for final judgment","Yes, if the denial turns on a question of law (collateral order doctrine)","Only with the district court's permission","Only the city can appeal"],a:1,e:"A denial that turns on genuinely disputed facts is not immediately appealable (Johnson v. Jones, 515 U.S. 304 (1995)).",c:"Mitchell v. Forsyth, 472 U.S. 511 (1985)"},
+{t:"s83",q:"Can a city assert qualified immunity?",o:["Yes, the same as officers","No, municipalities have no qualified immunity","Only for good-faith policies","Only in the Fifth Circuit"],a:1,e:"That is why the Monell claim often survives after the officers win on qualified immunity.",c:"Owen v. City of Independence, 445 U.S. 622 (1980)"},
+{t:"s83",q:"Which standard governs an excessive-force claim during an arrest?",o:["Fourteenth Amendment substantive due process","Eighth Amendment deliberate indifference","Fourth Amendment objective reasonableness","Shocks the conscience"],a:2,e:"Graham factors: severity of the crime, immediate threat to safety, active resistance or flight. Judged from the scene, without 20/20 hindsight.",c:"Graham v. Connor, 490 U.S. 386 (1989)"},
+{t:"s83",q:"A Monell failure-to-train claim requires showing the city was:",o:["Negligent","Deliberately indifferent to the known or obvious consequences","Grossly negligent","Strictly liable"],a:1,e:"Usually requires a pattern of similar violations. Single-incident liability is rare.",c:"City of Canton v. Harris, 489 U.S. 378 (1989); Connick v. Thompson, 563 U.S. 51 (2011)"},
+{t:"s83",q:"Can a single decision create Monell liability?",o:["Never","Yes, if made by an official with final policymaking authority on that subject","Only if written down","Only in a city council vote"],a:1,e:"State law identifies who the final policymaker is.",c:"Pembaur v. City of Cincinnati, 475 U.S. 469 (1986)"},
+{t:"s83",q:"For a Fourth Amendment malicious-prosecution claim, ‘favorable termination’ means:",o:["An affirmative indication of innocence","Only that the prosecution ended without a conviction","An acquittal by a jury","A dismissal with prejudice"],a:1,e:"Thompson v. Clark. Chiaverini (2024): a valid charge does not insulate a baseless charge brought with it.",c:"Thompson v. Clark, 596 U.S. 36 (2022); Chiaverini v. City of Napoleon, 602 U.S. 556 (2024)"},
+{t:"s83",q:"When can a prevailing DEFENDANT recover §1988 fees from a civil-rights plaintiff?",o:["Always","Only if the plaintiff's claim was frivolous, unreasonable, or without foundation","Never","Whenever the plaintiff loses at summary judgment"],a:1,e:"The Christiansburg standard (applied to §1983 in Hughes v. Rowe). Fox v. Vice adds that the defendant gets fees only for work it would not have done but for the frivolous claims.",c:"42 U.S.C. § 1988(b); Hughes v. Rowe, 449 U.S. 5 (1980); Fox v. Vice, 563 U.S. 826 (2011)"},
+{t:"s83",q:"Should you plead a Bivens claim against a federal officer in a new context?",o:["Yes, Bivens is broadly available","Rarely. Courts almost never extend Bivens to new contexts","Yes, if no state remedy exists","Only for First Amendment retaliation"],a:1,e:"If Congress could provide a remedy or there is an alternative remedial structure, the claim fails.",c:"Egbert v. Boule, 596 U.S. 482 (2022)"},
+{t:"s83",q:"To defeat qualified immunity, must you find a prior case with materially identical facts?",o:["Yes","No. Officials can have fair warning even in novel factual circumstances","Only in the Fifth Circuit","Only for deadly force"],a:1,e:"Hope v. Pelzer. Still, the Fifth Circuit demands specificity, so lead with your closest on-point authority.",c:"Hope v. Pelzer, 536 U.S. 730 (2002)"},
+{t:"s83",q:"At summary judgment on qualified immunity, the court must:",o:["Credit the officer's account","View the evidence in the light most favorable to the nonmovant","Weigh the credibility of witnesses","Resolve disputes on the papers for the movant"],a:1,e:"The Supreme Court summarily reversed the Fifth Circuit for failing to do this.",c:"Tolan v. Cotton, 572 U.S. 650 (2014)"},
+{t:"s83",q:"Probable cause existed for a retaliatory arrest. Is the First Amendment claim dead?",o:["Always","Not if there is objective evidence that similarly situated people not engaged in protected speech were not arrested","Only if the officer admits retaliation","Only for misdemeanors"],a:1,e:"Gonzalez v. Trevino: that evidence need not be a virtually identical comparator.",c:"Nieves v. Bartlett, 587 U.S. 391 (2019); Gonzalez v. Trevino, 602 U.S. 653 (2024)"},
+/* ---------- TTCA ---------- */
+{t:"ttca",v:1,q:"Under the Texas Tort Claims Act, written notice of a claim must reach the governmental unit within:",o:["90 days","6 months","1 year","2 years"],a:1,e:"Not later than six months after the incident. City charters may set shorter periods, and the statute ratifies them.",c:"Tex. Civ. Prac. & Rem. Code § 101.101(a)–(b)"},
+{t:"ttca",v:1,q:"TTCA notice must reasonably describe:",o:["Only the damages amount","The damage or injury, the time and place of the incident, and the incident","The legal theory and the statute waived","The employee's name and badge number"],a:1,e:"Send it early, and send it to the right entity.",c:"Tex. Civ. Prac. & Rem. Code § 101.101(a)"},
+{t:"ttca",v:1,q:"Your client missed the 6-month TTCA notice deadline. Is there any way out?",o:["No","Yes, if the unit had ACTUAL notice of the death, injury or property damage","Yes, if the client was unrepresented","Yes, by filing suit within 2 years"],a:1,e:"Actual notice requires the unit's subjective awareness of its alleged fault in producing the injury, not just knowledge of the accident.",c:"Tex. Civ. Prac. & Rem. Code § 101.101(c)"},
+{t:"ttca",v:1,q:"What is a CITY's maximum TTCA liability for bodily injury?",o:["$100,000 per person / $300,000 per occurrence","$250,000 per person / $500,000 per occurrence","$500,000 per person / $1,000,000 per occurrence","No cap"],a:1,e:"Property damage: $100,000 per occurrence. The state has the same caps as cities.",c:"Tex. Civ. Prac. & Rem. Code § 101.023(a), (c)"},
+{t:"ttca",v:1,q:"What is a COUNTY's (local unit other than a city) maximum TTCA liability for bodily injury?",o:["$100,000 per person / $300,000 per occurrence","$250,000 per person / $500,000 per occurrence","$50,000 per person","No cap"],a:0,e:"$100,000 per occurrence for property damage.",c:"Tex. Civ. Prac. & Rem. Code § 101.023(b)"},
+{t:"ttca",q:"You sued the officer individually for conduct within the scope of employment that could have been brought against the city. The officer moves to dismiss. What now?",o:["The case continues against the officer","The officer is dismissed unless you amend within 30 days to dismiss him and name the city","You must refile in federal court","The claim converts to §1983"],a:1,e:"The ‘election of remedies’ trap. This is one reason federal claims usually go in a §1983 count against the officer individually.",c:"Tex. Civ. Prac. & Rem. Code § 101.106(f)"},
+{t:"ttca",q:"Does the TTCA waive immunity for intentional torts like assault or false imprisonment?",o:["Yes","No, intentional torts are excluded","Only for police","Only up to $100,000"],a:1,e:"Use §1983 for intentional constitutional violations.",c:"Tex. Civ. Prac. & Rem. Code § 101.057"},
+{t:"ttca",v:1,q:"The trial court denies a city's plea to the jurisdiction. What happens next?",o:["Nothing until final judgment","The city may take an interlocutory appeal, which stays trial (and all proceedings if the plea was timely filed and set)","Only a mandamus is available","The case goes to trial"],a:1,e:"An (a)(8) appeal always stays trial. It stays ALL proceedings only if the plea was filed and set for hearing or submission by the later of the scheduling-order date or 180 days after the original answer.",c:"Tex. Civ. Prac. & Rem. Code § 51.014(a)(8), (b), (c)"},
+{t:"ttca",v:1,q:"An individual officer's summary-judgment motion asserting official immunity is denied. Can he appeal immediately?",o:["No","Yes, under § 51.014(a)(5)","Only by mandamus","Only if the city joins"],a:1,e:"This applies to an officer or employee of the state or a political subdivision.",c:"Tex. Civ. Prac. & Rem. Code § 51.014(a)(5)"},
+{t:"ttca",q:"Which is NOT a TTCA waiver category?",o:["Use of a motor-driven vehicle by an employee","Condition or use of tangible personal property","Premises defects","Failure to enforce a law"],a:3,e:"The three waiver categories are motor vehicles, tangible personal property, and premises (with the § 101.022 limits).",c:"Tex. Civ. Prac. & Rem. Code § 101.021"},
+/* ---------- Criminal ---------- */
+{t:"crim",v:1,q:"After an arrest, the person must be taken before a magistrate without unnecessary delay but not later than:",o:["24 hours","48 hours","72 hours","The next business day"],a:1,e:"The magistrate gives the warnings, sets bail, and decides probable cause for warrantless arrests.",c:"Tex. Code Crim. Proc. art. 15.17(a)"},
+{t:"crim",v:1,q:"Warrantless MISDEMEANOR arrest, and no probable-cause determination by the 24th hour. What is the remedy?",o:["Nothing","Release on bond of no more than $5,000, or a personal bond if the person can't make it","Automatic dismissal","Release at the 48th hour"],a:1,e:"For a felony, the deadline is the 48th hour and the bond cap is $10,000.",c:"Tex. Code Crim. Proc. art. 17.033(a)"},
+{t:"crim",v:1,q:"Your client is jailed on a Class B misdemeanor. If the State is not ready for trial within ___ days of detention, he must be released on a personal bond or reduced bail.",o:["5","15","30","90"],a:1,e:"Felony: 90 days. Class A (jail over 180 days): 30. Class B (180 days or less): 15. Fine-only: 5. Exceptions apply.",c:"Tex. Code Crim. Proc. art. 17.151 § 1"},
+{t:"crim",v:1,q:"Where is the Texas expunction statute codified now?",o:["Art. 55.01","Code of Criminal Procedure Chapter 55A","Gov't Code § 411.0725","Penal Code ch. 12"],a:1,e:"Expunction was recodified from Art. 55.01 into Chapter 55A. Update old forms and templates that cite Art. 55.01.",c:"Tex. Code Crim. Proc. ch. 55A"},
+{t:"crim",v:1,q:"Your client completed deferred adjudication on a Class B misdemeanor. Is expunction available?",o:["Yes, automatically","Generally no. Court-ordered community supervision under Ch. 42A (other than for Class C) blocks it, so look at nondisclosure","Yes, after 2 years","Only with the DA's consent"],a:1,e:"Art. 55A.051 requires that there was no court-ordered community supervision for the offense, other than for a Class C misdemeanor.",c:"Tex. Code Crim. Proc. art. 55A.051(3)"},
+{t:"crim",v:1,q:"Where is the petition for nondisclosure after deferred adjudication (felonies and certain misdemeanors) found?",o:["Code Crim. Proc. art. 55A.051","Gov't Code § 411.0725","Penal Code § 12.44","Code Crim. Proc. art. 42.12"],a:1,e:"Nondisclosure lives in Gov't Code ch. 411, subch. E-1.",c:"Tex. Gov't Code § 411.0725"},
+{t:"crim",q:"On your request, the State must produce offense reports, witness statements and other material evidence. What is the source of that duty?",o:["Brady only","Tex. Code Crim. Proc. art. 39.14 (the Michael Morton Act)","Tex. R. Evid. 615","There is no criminal discovery in Texas"],a:1,e:"Send the 39.14 request early, in writing. Exculpatory, impeachment and mitigating evidence must be disclosed regardless (39.14(h)).",c:"Tex. Code Crim. Proc. art. 39.14"},
+{t:"crim",q:"Which is NOT a Barker v. Wingo speedy-trial factor?",o:["Length of delay","Reason for delay","Defendant's assertion of the right","Strength of the State's evidence"],a:3,e:"The fourth factor is prejudice to the defendant.",c:"Barker v. Wingo, 407 U.S. 514 (1972)"},
+{t:"crim",q:"Deferred adjudication community supervision is governed by:",o:["Code Crim. Proc. ch. 42A, subch. C","Penal Code ch. 12","Gov't Code ch. 411","Code Crim. Proc. art. 17.151"],a:0,e:"Deferred is not a conviction for most purposes, but it can still count for some collateral consequences, including firearms and immigration.",c:"Tex. Code Crim. Proc. ch. 42A"},
+{t:"crim",q:"In a Texas criminal case, the notice of appeal is due:",o:["Within 30 days after sentence is imposed or suspended in open court (90 if a timely motion for new trial)","Within 20 days","Within 60 days","Within 6 months"],a:0,e:"A motion for new trial is due within 30 days after sentencing (Tex. R. App. P. 21.4).",c:"Tex. R. App. P. 26.2(a)"},
+/* ---------- Guns ---------- */
+{t:"gun",v:1,q:"Who may carry a handgun in Texas without a license?",o:["Anyone 18+","A person 21 or older who is not otherwise prohibited","Only veterans","Only on their own property"],a:1,e:"Penal Code § 46.02 makes carrying an offense for people under 21 (and certain recent offenders) outside their premises or vehicle.",c:"Tex. Penal Code § 46.02(a)"},
+{t:"gun",v:1,q:"Minimum age for a Texas License to Carry?",o:["18 for everyone","21, or 18 for members and veterans of the armed forces (with conditions)","25","No minimum"],a:1,e:"411.172(g) is the military exception for ages 18–20.",c:"Tex. Gov't Code § 411.172(a)(2), (g)"},
+{t:"gun",v:1,q:"An LTC holder is carrying and an officer demands ID. What must she show?",o:["Only her driver's license","Both her driver's license or ID card and her handgun license","Nothing, because Texas is permitless","Only her LTC"],a:1,e:"Permitless carriers have no statutory duty to disclose, but tell clients to stay calm and keep their hands visible.",c:"Tex. Gov't Code § 411.205"},
+{t:"gun",q:"Under Bruen, how is a gun regulation tested?",o:["Intermediate scrutiny","Text and history: if the plain text covers the conduct, the government must show the law fits the nation's historical tradition of firearm regulation","Rational basis","Strict scrutiny"],a:1,e:"Rahimi (2024) clarified that the law need not be a ‘historical twin,’ only consistent with the principles behind the tradition.",c:"N.Y. State Rifle & Pistol Ass'n v. Bruen, 597 U.S. 1 (2022)"},
+{t:"gun",q:"What did United States v. Rahimi hold?",o:["§ 922(g)(1) is unconstitutional","§ 922(g)(8) is facially constitutional; people found to pose a credible threat may be temporarily disarmed","Bruen was overruled","Permitless carry is required"],a:1,e:"Rahimi upheld the restraining-order prohibitor against a facial challenge.",c:"United States v. Rahimi, 602 U.S. 680 (2024)"},
+{t:"gun",q:"Who administers federal firearm rights restoration under 18 U.S.C. § 925(c) now?",o:["ATF","The DOJ Office of the Pardon Attorney under 28 C.F.R. Part 107","The FBI NICS section","State DPS"],a:1,e:"Per the firm's FFRR process (CJ, 11/2/2026): it covers all § 922(g) disabilities, is federal relief only, and is discretionary.",c:"18 U.S.C. § 925(c); 28 C.F.R. pt. 107; GFA FFRR Process (925c)"},
+{t:"gun",q:"Federal 925(c) relief is granted. Does the client get his Texas LTC back?",o:["Yes","No. Federal relief does not remove Texas disabilities; the LTC bar and Penal Code 46.04 still apply","Only after 5 years","Only with a pardon"],a:1,e:"Flag state options such as a pardon, a set-aside or nondisclosure, and keep the engagement scope federal-only unless state relief is added.",c:"Tex. Gov't Code § 411.172; Tex. Penal Code § 46.04; GFA FFRR Process"},
+{t:"gun",q:"A Texas felon finished his sentence and supervision 6 years ago. Where may he possess a firearm under Texas law?",o:["Nowhere","Only at the premises where he lives","Anywhere except schools","Anywhere with an LTC"],a:1,e:"After the 5th anniversary, possession is limited to the residence. Federal § 922(g)(1) still applies separately.",c:"Tex. Penal Code § 46.04(a)"},
+{t:"gun",v:1,q:"What does Maryland require to carry a handgun?",o:["Nothing for adults over 21","A Wear and Carry permit, which must be carried whenever carrying, wearing or transporting the handgun","Only an HQL","A Texas LTC is honored"],a:1,e:"Maryland is not a permitless-carry state.",c:"Md. Code, Pub. Safety §§ 5-303, 5-308"},
+{t:"gun",q:"Which Penal Code section governs the sign that bars CONCEALED carry by license holders?",o:["§ 30.05","§ 30.06","§ 30.07","§ 46.035"],a:1,e:"§ 30.07 covers open carry. Check the exact sign language required by the statute.",c:"Tex. Penal Code §§ 30.06, 30.07"},
+/* ---------- First Amendment / TCPA ---------- */
+{t:"fa",v:1,q:"A TCPA motion to dismiss must be filed within:",o:["30 days after service of the legal action","60 days after service of the legal action","90 days after the answer","Any time before trial"],a:1,e:"The parties can agree to extend, or the court can extend for good cause.",c:"Tex. Civ. Prac. & Rem. Code § 27.003(b)"},
+{t:"fa",v:1,q:"Who CANNOT use the TCPA?",o:["Individual citizens","A government entity, agency, or official acting in an official capacity","Media defendants","Corporations"],a:1,e:"This matters when GFA is suing officials who might try to turn the TCPA against our clients.",c:"Tex. Civ. Prac. & Rem. Code § 27.003(a)"},
+{t:"fa",v:1,q:"What happens to discovery once a TCPA motion is filed?",o:["It continues normally","All discovery is suspended until the court rules (except limited court-ordered discovery)","Only depositions are stayed","Only written discovery is stayed"],a:1,e:"Under § 27.006(b), the court may allow specified, limited discovery relevant to the motion.",c:"Tex. Civ. Prac. & Rem. Code § 27.003(c)"},
+{t:"fa",v:1,q:"A TCPA hearing must be set within ___ days of service of the motion, and in no event later than ___ days (subject to the discovery exception).",o:["30 / 60","60 / 90","45 / 120","21 / 45"],a:1,e:"Docket conditions, good cause or agreement can push it past 60, but not past 90 (except under subsection (c)).",c:"Tex. Civ. Prac. & Rem. Code § 27.004(a)"},
+{t:"fa",v:1,q:"The court must rule on a TCPA motion within:",o:["10 days after the hearing","30 days after the hearing concludes","45 days after filing","60 days after the hearing"],a:1,e:"If the court doesn't rule in time, the motion is overruled by operation of law, and the movant can appeal.",c:"Tex. Civ. Prac. & Rem. Code §§ 27.005(a), 27.008(a)"},
+{t:"fa",v:1,q:"The court denies a TCPA motion. What is the effect of an appeal?",o:["No appeal until final judgment","Interlocutory appeal, which stays all trial-court proceedings","Mandamus only","The appeal stays only discovery"],a:1,e:"The denial is appealable under (a)(12), and subsection (b) stays everything.",c:"Tex. Civ. Prac. & Rem. Code § 51.014(a)(12), (b)"},
+{t:"fa",q:"Once the movant shows the suit is based on protected expression, what must the plaintiff do to survive a TCPA motion?",o:["Show a fact issue","Establish by clear and specific evidence a prima facie case for each essential element","Prove the claim by a preponderance","Nothing more"],a:1,e:"Even then, the movant still wins by establishing a valid defense as a matter of law (§ 27.005(d)).",c:"Tex. Civ. Prac. & Rem. Code § 27.005(c)"},
+{t:"fa",q:"If a TCPA motion is granted, are attorney's fees mandatory?",o:["No, they are discretionary","Yes. The court shall award court costs and reasonable attorney's fees to the movant","Only if the suit was frivolous","Only for media defendants"],a:1,e:"Sanctions are discretionary under § 27.009(a)(2).",c:"Tex. Civ. Prac. & Rem. Code § 27.009(a)(1)"},
+{t:"fa",q:"Is there a First Amendment right to film police in public in the Fifth Circuit?",o:["No","Yes, subject to reasonable time, place and manner restrictions","Only for journalists","Only with audio turned off"],a:1,e:"Texas has no fixed-distance buffer law. Penal Code § 38.15 (interference) has a speech-only defense.",c:"Turner v. Driver, 848 F.3d 678 (5th Cir. 2017); Tex. Penal Code § 38.15(d)"},
+{t:"fa",q:"A public employee gives truthful sworn testimony under subpoena, outside his ordinary job duties. Under Lane v. Franks, that testimony is:",o:["Employee speech, with no protection","Citizen speech on a matter of public concern","Unprotected if it embarrasses the employer","Protected only if the employee is a whistleblower"],a:1,e:"Garcetti doesn't apply just because the information was learned on the job.",c:"Lane v. Franks, 573 U.S. 228 (2014)"},
+/* ---------- Appeals ---------- */
+{t:"app",v:1,q:"In a Texas civil case, the default notice-of-appeal deadline is:",o:["20 days after judgment is signed","30 days after judgment is signed","60 days after judgment is signed","90 days after judgment is signed"],a:1,e:"It extends to 90 days with a timely motion for new trial, motion to modify or reinstate, or a qualifying request for findings.",c:"Tex. R. App. P. 26.1, 26.1(a)"},
+{t:"app",q:"An accelerated appeal (for example, from an interlocutory order) must be perfected within:",o:["10 days","20 days","30 days","90 days"],a:1,e:"Post-judgment motions do NOT extend accelerated deadlines. This is a classic malpractice trap.",c:"Tex. R. App. P. 26.1(b), 28.1(b)"},
+{t:"app",v:1,q:"A party that did not participate in the hearing that produced the judgment may file a restricted appeal within:",o:["30 days","90 days","6 months after judgment is signed","1 year"],a:2,e:"The error must appear on the face of the record.",c:"Tex. R. App. P. 26.1(c), 30"},
+{t:"app",q:"You missed a Texas appellate deadline by a few days. What can you do?",o:["Nothing","File the notice and a motion to extend within 15 days after the deadline, with a reasonable explanation","Ask for a new judgment","File a bill of review"],a:1,e:"Under Verburgt v. Dorner, a bona fide notice filed within the 15-day window implies a motion to extend, but you still need the reasonable explanation.",c:"Tex. R. App. P. 26.3"},
+{t:"app",v:1,q:"Federal civil notice of appeal (no U.S. party):",o:["14 days after entry of judgment","28 days","30 days after entry of judgment","60 days"],a:2,e:"It is 60 days if the United States, its agency, or officer is a party. Timely Rule 50, 52, 59 or 60 motions toll it under FRAP 4(a)(4).",c:"Fed. R. App. P. 4(a)(1)"}
+];
+
+/* Quick-reference sheets */
+const SHEETS=[
+{t:"Texas civil deadlines",rows:[
+["Answer","10:00 a.m. Monday after 20 days from service","TRCP 99(b)"],
+["Initial disclosures","30 days after first answer/appearance","TRCP 194.2(a)"],
+["Rule 91a motion","60 days after pleading served; 21 days before hearing; ruling within 45 days of filing","TRCP 91a.3"],
+["TCPA motion","60 days after service of the legal action","CPRC 27.003(b)"],
+["TCPA hearing / ruling","Within 60 days of the motion (max 90); ruling 30 days after the hearing","CPRC 27.004–.005"],
+["Removal","30 days after receipt of initial pleading","28 USC 1446(b)"],
+["MSJ response (2026)","21 days after motion filed","TRCP 166a(d)"],
+["MSJ reply (2026)","7 days after response","TRCP 166a(e)"],
+["MSJ setting (2026)","Not within 35 days; set within 60 (90 for cause)","TRCP 166a(g)"],
+["MSJ ruling (2026)","90 days after hearing or submission","TRCP 166a(i)"],
+["Level 2 discovery period","Ends earlier of 30 days before trial or 9 months after first disclosures due","TRCP 190.3"],
+["Expedited action","$325,000 or less","TRCP 169; 47(c)"]]},
+{t:"Federal civil deadlines",rows:[
+["Service","90 days after the complaint is filed","FRCP 4(m)"],
+["Answer","21 days after service; 60 after a waiver request","FRCP 12(a)"],
+["Amend as of course","21 days after service, or after an answer or 12(b) motion","FRCP 15(a)(1)"],
+["Initial disclosures","14 days after the 26(f) conference","FRCP 26(a)(1)(C)"],
+["New trial","28 days after judgment","FRCP 59(b)"],
+["Notice of appeal","30 days (60 if a U.S. party)","FRAP 4(a)(1)"]]},
+{t:"Gov't claims & immunity",rows:[
+["TTCA notice","6 months after incident (shorter city charter controls)","CPRC 101.101"],
+["City caps","$250k per person / $500k per occurrence / $100k property","CPRC 101.023(c)"],
+["County caps","$100k / $300k / $100k","CPRC 101.023(b)"],
+["101.106(f) swap","Amend within 30 days to dismiss the employee and name the unit","CPRC 101.106(f)"],
+["Plea to jurisdiction appeal","Interlocutory; stays all proceedings if the plea was filed and set within 51.014(c)'s deadline (otherwise only trial)","CPRC 51.014(a)(8),(b),(c)"],
+["§1983 limitations (TX)","2 years; federal accrual rules","Owens; CPRC 16.003"]]},
+{t:"Criminal deadlines",rows:[
+["Magistrate","Within 48 hours of arrest","CCP 15.17"],
+["No PC finding","Misdemeanor: 24 hours, ≤$5,000 bond / PR. Felony: 48 hours, ≤$10,000","CCP 17.033"],
+["State not ready","Felony 90 / Class A 30 / Class B 15 / fine-only 5 days","CCP 17.151"],
+["Notice of appeal","30 days after sentence (90 with a motion for new trial)","TRAP 26.2(a)"],
+["Expunction","Now Chapter 55A (formerly Art. 55.01)","CCP ch. 55A"],
+["Nondisclosure (deferred)","Automatic for an eligible first-time misdemeanor (411.072); otherwise a petition (411.0725)","GC 411.072, .0725"]]},
+{t:"Texas appeals",rows:[
+["Civil notice of appeal","30 days after judgment signed","TRAP 26.1"],
+["Extended","90 days with a timely MNT, motion to modify or reinstate, or findings request","TRAP 26.1(a)"],
+["Accelerated","20 days; NOT extended by post-judgment motions","TRAP 26.1(b), 28.1"],
+["Restricted appeal","6 months","TRAP 26.1(c), 30"],
+["Grace period","15 days, with a motion and a reasonable explanation","TRAP 26.3"]]}
+];
+
+/* What changed — alert cards on Home */
+const CHANGES=[
+{h:"Summary judgment rewritten",d:"Rule 166a was overhauled effective March 1, 2026. The response is now due 21 days after the motion is filed (not 7 days before the hearing), the reply 7 days after the response, no hearing within 35 days, a setting within 60 days, and a ruling within 90 days. Proposed orders are required, and a hearing request must appear in the motion's title.",c:"TRCP 166a (Misc. Dkt. 26-9012)"},
+{h:"Expunction moved to Chapter 55A",d:"Art. 55.01 is gone. Expunction is now Code of Criminal Procedure Chapter 55A (e.g., art. 55A.051 for acquittals and dismissals). Update our forms and templates.",c:"CCP ch. 55A"},
+{h:"Expedited actions now $325,000",d:"The Rule 169 threshold and the first Rule 47(c) tier are $325,000. Check every new petition's Rule 47 statement.",c:"TRCP 169; 47(c)"},
+{h:"FFRR is live",d:"Per CJ's FFRR checklist: the Office of the Pardon Attorney opens § 925(c) applications 11/4/2026 (first 5,000), with 500 more and a $30 fee starting 1/4/2027. Confirm the dates on the OPA site before quoting them to a client.",c:"28 C.F.R. pt. 107"}
+];
+
+/* Case-flow simulations. Each node: t title, d day/phase label, x text, c cite, ch choices [label, next], end: "win"|"loss"|"mixed" */
+const SIMS={
+tx_city:{name:"Texas Suit vs. a City",sub:"TTCA claim + plea to the jurisdiction",icon:"🏢",start:"incident",nodes:{
+incident:{t:"Squad car crash",d:"Day 0",x:"An on-duty officer runs a red light and T-bones our client's car, then a delivery truck rear-ends him. The client's arm is broken. The client calls GFA in week 3.",c:"",ch:[["Send written TTCA notice to the city this week","notice"],["Wait and gather records first; send notice at month 7","late"]]},
+late:{t:"Notice deadline blown",d:"Month 7",x:"TTCA notice was due within 6 months, and the city charter may set an even shorter period. Your only path is ACTUAL notice: the city's subjective awareness that its fault produced the injury.",c:"CPRC 101.101(a)–(c)",ch:[["The crash report shows the officer at fault and the city's risk manager opened a claim file","notice"],["The city only knew a wreck happened","end_notice"]]},
+end_notice:{t:"Dismissed for want of jurisdiction",d:"Month 14",end:"loss",x:"Notice is a jurisdictional prerequisite in suits against governmental units. Knowing an accident happened is not actual notice. Lesson: send notice in week one, every time.",c:"CPRC 101.101; Gov't Code 311.034"},
+notice:{t:"Notice served on time",d:"Week 3",x:"The notice describes the injury, the time and place, and the incident. Now you draft the petition. Limitations is 2 years, and the petition needs a Rule 47(c) damages statement.",c:"CPRC 101.101(a); 16.003; TRCP 47(c)",ch:[["Sue the city (TTCA motor-vehicle waiver) and the delivery company","filed"],["Sue both the city and the officer individually","both"]]},
+both:{t:"Election-of-remedies trap",d:"Day 40",x:"You sued the city AND its employee over the same subject matter. The city moves to dismiss the officer under 101.106(e), and the statute says he SHALL be dismissed immediately. (101.106(f) is the provision for suits against the employee alone.)",c:"CPRC 101.106(e), (f); Mission Consol. ISD v. Garcia, 253 S.W.3d 653 (Tex. 2008)",ch:[["Agree to the dismissal; keep the claim against the city","filed"],["Fight the motion","end_106"]]},
+end_106:{t:"Officer dismissed; time lost",d:"Month 4",end:"mixed",x:"The court grants the motion, as 101.106(e) requires. You spent months and fees on a fight the statute decides. Bring state tort claims against the governmental unit; constitutional claims against the officer go in a §1983 count.",c:"CPRC 101.106(e)"},
+filed:{t:"Petition filed and served",d:"Day 0 of suit",x:"The citation runs: answer due at 10:00 a.m. on the Monday after 20 days from service. Initial disclosures follow 30 days after the answer.",c:"TRCP 99(b); 194.2",ch:[["The city answers and files a plea to the jurisdiction","plea"],["The city files nothing","default"]]},
+default:{t:"No answer?",d:"Day 30",x:"Governmental defaults are rare, and courts look hard at them. You must still prove unliquidated damages with evidence at a hearing, and jurisdiction must exist on the face of the pleadings.",c:"TRCP 239, 243",ch:[["Request a default with a damages hearing","plea"]]},
+plea:{t:"Plea to the jurisdiction",d:"Month 3",x:"The city says the officer was on an emergency call, so the emergency exception (101.055(2)) applies, and he wasn't reckless. The court can consider evidence, and fact issues on jurisdiction go to the fact-finder.",c:"CPRC 101.055; Tex. Dep't of Parks & Wildlife v. Miranda, 133 S.W.3d 217 (Tex. 2004)",ch:[["Court DENIES the plea","plea_denied"],["Court GRANTS the plea","plea_granted"]]},
+plea_granted:{t:"Plea granted",d:"Month 4",x:"The claim against the delivery company is still pending, so this order is interlocutory, not final. The appeal under 51.014(a)(8) is ACCELERATED: the notice is due in 20 days, and a motion to reconsider does NOT extend it. (If the plea had disposed of every party and claim, it would be a final judgment with the regular 30/90-day clock.)",c:"CPRC 51.014(a)(8); TRAP 26.1(b), 28.1; Lehmann v. Har-Con Corp., 39 S.W.3d 191 (Tex. 2001)",ch:[["File the notice of appeal on day 15","appeal_ok"],["File a motion to reconsider first, then the notice on day 35","end_late"]]},
+end_late:{t:"Appeal dismissed",d:"Month 6",end:"loss",x:"Because the order was interlocutory, a motion to reconsider doesn't extend the accelerated deadline, and day 35 is past even the 15-day grace window under TRAP 26.3. Lesson: first ask whether the order is final or interlocutory, then calendar the matching clock.",c:"TRAP 26.1(b), 26.3, 28.1(b)"},
+appeal_ok:{t:"Court of appeals reverses",d:"Month 14",x:"There is evidence the officer acted recklessly, which takes the case outside the emergency exception, so the fact issue goes to the jury. The case is remanded.",c:"CPRC 101.055(2)",ch:[["Proceed to discovery","discovery"]]},
+plea_denied:{t:"City takes an interlocutory appeal",d:"Month 4",x:"Because the city filed and set its plea within 51.014(c)'s deadline (the later of the scheduling-order date or 180 days after its answer), the appeal stays ALL trial-court proceedings, not just trial. Plan the client's expectations: this usually adds many months.",c:"CPRC 51.014(a)(8), (b), (c)",ch:[["Court of appeals affirms the denial","discovery"]]},
+discovery:{t:"Discovery (Level 2)",d:"Month 16",x:"The discovery period ends at the earlier of 30 days before trial or 9 months after the first initial disclosures were due. Each party may serve 25 interrogatories on any other party, and each side gets 50 hours of depositions.",c:"TRCP 190.3",ch:[["The city moves for summary judgment","msj"],["Go to mediation","mediate"]]},
+msj:{t:"Summary judgment (2026 rule)",d:"Month 22",x:"The motion is filed today. Your response is due in 21 days. The city's reply is due 7 days later. The court can't set it within 35 days and must set it within 60. A ruling comes within 90 days after the hearing.",c:"TRCP 166a(d), (e), (g), (i)",ch:[["File a response with the officer's dash-cam and expert affidavit on day 20","msj_denied"],["Calendar it the old way, ‘7 days before the hearing’","end_msj"]]},
+end_msj:{t:"Response late",d:"Month 23",end:"loss",x:"Under the 2026 rule the response was due 21 days after filing, not 7 days before the hearing. Without leave, your evidence may not be considered. Update every docketing template!",c:"TRCP 166a(d)(1)"},
+msj_denied:{t:"MSJ denied",d:"Month 24",x:"A fact issue on recklessness survives.",c:"",ch:[["Try the case","trial"],["Mediate","mediate"]]},
+mediate:{t:"Mediation",d:"Month 24",x:"The city's adjuster knows the caps: a municipality's liability tops out at $250,000 per person for bodily injury.",c:"CPRC 101.023(c)",ch:[["Settle for $185,000","end_settle"],["Reject and try the case","trial"]]},
+end_settle:{t:"Settled",d:"Month 25",end:"win",x:"A good result inside the cap, with no appeal risk. Close the file and run the trust distribution through IOLTA.",c:"CPRC 101.023"},
+trial:{t:"Jury verdict: $410,000",d:"Month 30",end:"mixed",x:"The judgment is capped at $250,000 per person against a municipality. Lesson: know the cap before you value the case.",c:"CPRC 101.023(c)"}
+}},
+fed1983:{name:"Federal §1983 Excessive Force",sub:"W.D. Tex. • qualified immunity • Monell",icon:"🛡️",start:"intake",nodes:{
+intake:{t:"Intake",d:"Day 0",x:"The client was tased while handcuffed. He later pleaded guilty to resisting arrest. The incident was 20 months ago.",c:"",ch:[["Check Heck and limitations first","heck"],["File tomorrow; sort it out later","heck_bad"]]},
+heck_bad:{t:"Rushed complaint",d:"Day 1",x:"The complaint alleges he ‘never resisted.’ That claim necessarily implies the resisting conviction is invalid.",c:"Heck v. Humphrey, 512 U.S. 477 (1994)",ch:[["Defense moves to dismiss on Heck","end_heck"]]},
+end_heck:{t:"Heck-barred",d:"Month 5",end:"loss",x:"The excessive-force theory as pleaded contradicts the conviction. The fix is to plead force used AFTER he was restrained, which is consistent with the conviction. Lesson: plead around Heck from day one.",c:"Heck v. Humphrey"},
+heck:{t:"Heck and limitations",d:"Day 2",x:"Limitations is 2 years (Texas personal injury), so you have about 4 months left. The force came after the handcuffs, so the claim doesn't challenge the resisting conviction.",c:"Owens v. Okure; CPRC 16.003; Heck",ch:[["File against the officer (individually) and the city (Monell)","served"]]},
+served:{t:"Service",d:"Day 10",x:"You must serve within 90 days. You can send waiver requests, which give defendants 60 days to answer, or serve formally (21 days).",c:"FRCP 4(m), 4(d), 12(a)",ch:[["Formal service on both","mtd"]]},
+mtd:{t:"Motions to dismiss",d:"Day 35",x:"The officer moves under 12(b)(6) on qualified immunity. The city says there are no facts of a policy or custom.",c:"Monell; Pearson v. Callahan",ch:[["Amend as of right within 21 days with prior-incident facts and the training records","amended"],["Rest on the complaint","end_monell"]]},
+end_monell:{t:"Monell claim dismissed",d:"Month 6",end:"mixed",x:"Conclusory policy allegations fail. You still have the officer, but you lost the deep pocket and must seek leave to amend. Lesson: use the free Rule 15(a)(1)(B) amendment.",c:"FRCP 15(a)(1)(B); Monell"},
+amended:{t:"QI denied",d:"Month 7",x:"The court finds it was clearly established that tasing a restrained, compliant arrestee is excessive force. The officer files a notice of interlocutory appeal within 30 days.",c:"Mitchell v. Forsyth; FRAP 4(a)(1)",ch:[["Fifth Circuit AFFIRMS","affirm"],["Fifth Circuit REVERSES (not clearly established)","reverse"]]},
+reverse:{t:"QI granted on appeal",d:"Month 18",x:"The officer is out. But a city has NO qualified immunity, so the Monell claim continues, with evidence of the pattern of prior tasings.",c:"Owen v. City of Independence, 445 U.S. 622 (1980)",ch:[["Litigate the Monell claim","discovery"]]},
+affirm:{t:"Back in district court",d:"Month 18",x:"Rule 26(f) conference; initial disclosures 14 days later.",c:"FRCP 26(a)(1)(C), 26(f)",ch:[["Proceed to discovery","discovery"]]},
+discovery:{t:"Discovery and expert reports",d:"Month 24",x:"Defendants move for summary judgment again. The court must view the evidence in your client's favor, including the body-cam timeline.",c:"Tolan v. Cotton; FRCP 56",ch:[["Opposition with body-cam stills and an expert","trial"],["Settle at mediation","end_settle"]]},
+end_settle:{t:"Settled",d:"Month 26",end:"win",x:"The settlement includes fees. Make sure the release language covers §1988 fees expressly.",c:"42 U.S.C. § 1988"},
+trial:{t:"Verdict for plaintiff",d:"Month 32",end:"win",x:"You recover compensatory damages and fees as the prevailing party. The notice of appeal is due 30 days after judgment, and a Rule 59 motion (28 days) tolls it.",c:"42 U.S.C. § 1988(b); FRAP 4(a)(1), (a)(4); FRCP 59(b)"}
+}},
+misd:{name:"Texas Class B Misdemeanor",sub:"Arrest → bond → plea or trial → record relief",icon:"🚔",start:"arrest",nodes:{
+arrest:{t:"Warrantless arrest",d:"Hour 0",x:"Class B possession charge. The client sits in jail.",c:"",ch:[["Hour 30: still no magistrate probable-cause finding","pc24"],["Seen by a magistrate at hour 10","bond"]]},
+pc24:{t:"24-hour rule",d:"Hour 30",x:"For a warrantless misdemeanor arrest with no probable-cause determination by the 24th hour, he must be released on a bond of no more than $5,000, or a personal bond if he can't make it.",c:"CCP 17.033(a)",ch:[["Demand release","bond"]]},
+bond:{t:"Bond set, but he can't afford it",d:"Day 2",x:"The State must be ready for trial within 15 days of detention on a Class B, or he must be released on a personal bond or reduced bail.",c:"CCP 17.151 § 1(3)",ch:[["Day 16: file a 17.151 motion","released"]]},
+released:{t:"Released on a personal bond",d:"Day 18",x:"Now build the defense. Send a written art. 39.14 discovery request.",c:"CCP 39.14",ch:[["Motion to suppress the search","suppress"],["Take the State's deferred-adjudication offer","deferred"],["Set it for jury trial","trial"]]},
+suppress:{t:"Suppression hearing",d:"Month 4",x:"The officer admits there was no consent and no warrant exception.",c:"U.S. Const. amend. IV; CCP art. 38.23",ch:[["Granted, and the State dismisses","end_expunge"],["Denied","trial"]]},
+deferred:{t:"Deferred adjudication completed",d:"Month 10",end:"mixed",x:"No conviction. But court-ordered community supervision under Ch. 42A blocks expunction (for anything other than a Class C). The path is nondisclosure: for an eligible first-time misdemeanor deferred, the court must issue the order on discharge under Gov't Code 411.072 (no petition; a $28 fee). Otherwise, petition under 411.0725. Warn the client about firearm and immigration consequences before the plea.",c:"CCP 55A.051(3); GC 411.072, 411.0725; CCP ch. 42A"},
+trial:{t:"Jury trial",d:"Month 6",x:"The State's witness contradicts the body-cam.",c:"",ch:[["Not guilty","end_expunge"],["Guilty, sentenced in open court","convicted"]]},
+convicted:{t:"Convicted",d:"Month 6",x:"The motion for new trial and the notice of appeal are both due within 30 days after sentencing. A timely motion for new trial extends the notice to 90 days.",c:"TRAP 21.4, 26.2(a)",ch:[["File both on time; the conviction is reversed, and on remand the State dismisses","end_expunge"]]},
+end_expunge:{t:"Case ends without a conviction → expunction",d:"Later",end:"win",x:"File for expunction under Chapter 55A (formerly art. 55.01) once eligible. An acquittal qualifies right away; for a dismissal, check Chapter 55A's waiting periods and conditions. The arrest records are then destroyed.",c:"CCP ch. 55A"}
+}},
+tcpa:{name:"TCPA Defense",sub:"Client sued for defamation over a Facebook post",icon:"🗣️",start:"served",nodes:{
+served:{t:"Client served with a defamation suit",d:"Day 0",x:"A city council member sues over a post criticizing his votes. That is speech on a matter of public concern.",c:"CPRC 27.001(3), (7)",ch:[["File the TCPA motion on day 45","filed"],["Answer and conduct discovery first; file the TCPA motion on day 75","end_late"]]},
+end_late:{t:"Motion untimely",d:"Day 75",end:"loss",x:"The motion is due within 60 days of service unless the parties agree or the court extends for good cause. Lesson: calendar the TCPA deadline the day the client is served.",c:"CPRC 27.003(b)"},
+filed:{t:"Motion filed: discovery frozen",d:"Day 45",x:"All discovery is suspended except limited, court-ordered discovery. The hearing must be within 60 days of service of the motion (90 at most, except under subsection (c)).",c:"CPRC 27.003(c), 27.004(a), 27.006(b)",ch:[["Hearing held on day 100","hearing"]]},
+hearing:{t:"The burden-shifting framework",d:"Day 100",x:"Step 1: we show the suit is based on protected expression. Step 2: the plaintiff must show by clear and specific evidence a prima facie case for each element. Step 3: we can still win by establishing a defense as a matter of law (opinion, truth).",c:"CPRC 27.005(b)–(d)",ch:[["Judge grants the motion","granted"],["Judge never rules","overruled"],["Judge denies the motion","denied"]]},
+granted:{t:"Dismissed",d:"Day 120",end:"win",x:"The court SHALL award court costs and reasonable attorney's fees to the movant. Sanctions are discretionary.",c:"CPRC 27.009(a)"},
+overruled:{t:"No ruling in 30 days",d:"Day 131",x:"The motion is overruled by operation of law. Treat that as a denial.",c:"CPRC 27.005(a), 27.008(a)",ch:[["File an accelerated interlocutory appeal","appeal"]]},
+denied:{t:"Motion denied",d:"Day 115",x:"Interlocutory appeal under 51.014(a)(12). All trial-court proceedings are stayed. The appeal is accelerated, so the notice is due in 20 days.",c:"CPRC 51.014(a)(12), (b); TRAP 26.1(b)",ch:[["File the notice of appeal on day 10","appeal"]]},
+appeal:{t:"Court of appeals reverses and renders",d:"Month 9",end:"win",x:"The court renders dismissal and remands for fees. Our interlocutory appeal stayed the plaintiff's entire case the whole time.",c:"CPRC 51.014(b); 27.009"}
+}}
+};
+
+/* Library: public, official sources + firm Lexis PDFs (Drive) */
+const D='https://drive.google.com/file/d/';
+const LIB=[
+{g:"Firm PDFs (Lexis Practical Guidance)",items:[
+["Monell v. Dep't of Social Services (1978)","Case",D+"1yiXmjb2uAv6009ij8wZs-df_rJNUPIXV/view"],
+["Personal Immunities Under Section 1983","Practice note",D+"1YHetwuCH5oDWCwxlVVPhYorxIobOxwaY/view"],
+["Section 1983: Violations Under Color of State Law","Practice note",D+"1WnPi0Ko2VV8yXJ6-5RzHIwBa6K8msekE/view"],
+["Section 1983: Case Intake (defense-side)","Practice note",D+"1OW5wFTuN8qDYXIYCgrHTdkjjkOEX5ZRY/view"],
+["Commencing a Civil Action (TX)","Practice note",D+"1QAwP_f32pvgwf4Jwxn6d9vNJ_qaTCur6/view"],
+["Commencing a Civil Action Resource Kit (TX)","Resource kit",D+"169hwZBHCnI6KvbsQSPovcRXb-ktvf1JM/view"],
+["Process Map: Responsive Pleadings (TX)","Process map",D+"1p0sG4vkNov0yV8dRZIN5s7KnLZwI5FmO/view"],
+["ECA: Evaluating Potential Legal Claims (TX)","Practice note",D+"1SLC_cnBt8oP8YbYE3e-am55_YayszKZV/view"],
+["ECA: Researching a Potential Client (TX)","Practice note",D+"1c67ZBsMMQ4B0xmgwJgy0s0OLnLI9fgTe/view"],
+["Marijuana Laws: Employer 50-State Survey","Survey",D+"1pjVZh5yVR-yTnFHgbkga1tL_QALzQ1u8/view"]]},
+{g:"Texas rules & codes (official)",items:[
+["Texas Rules of Civil Procedure, Appellate Procedure & Evidence","Texas Judicial Branch","https://www.txcourts.gov/rules-forms/rules-standards/"],
+["Texas Statutes (all codes)","Texas Legislature","https://statutes.capitol.texas.gov/"],
+["Texas Disciplinary Rules of Professional Conduct","State Bar of Texas","https://www.texasbar.com/"],
+["Texas Ethics Opinions","Professional Ethics Committee","https://www.legalethicstexas.com/"]]},
+{g:"Federal rules & statutes",items:[
+["Federal Rules of Civil Procedure","Cornell LII","https://www.law.cornell.edu/rules/frcp"],
+["Federal Rules of Appellate Procedure","Cornell LII","https://www.law.cornell.edu/rules/frap"],
+["Federal Rules of Evidence","Cornell LII","https://www.law.cornell.edu/rules/fre"],
+["42 U.S.C. § 1983","Cornell LII","https://www.law.cornell.edu/uscode/text/42/1983"],
+["42 U.S.C. § 1988 (fees)","Cornell LII","https://www.law.cornell.edu/uscode/text/42/1988"],
+["18 U.S.C. § 922 (prohibited persons)","Cornell LII","https://www.law.cornell.edu/uscode/text/18/922"],
+["18 U.S.C. § 925 (relief from disabilities)","Cornell LII","https://www.law.cornell.edu/uscode/text/18/925"]]},
+{g:"Courts",items:[
+["Fifth Circuit","Rules & opinions","https://www.ca5.uscourts.gov/"],
+["W.D. Tex.","Local rules","https://www.txwd.uscourts.gov/"],
+["N.D. Tex.","Local rules","https://www.txnd.uscourts.gov/"],
+["E.D. Tex.","Local rules","https://www.txed.uscourts.gov/"],
+["S.D. Tex.","Local rules","https://www.txs.uscourts.gov/"]]},
+{g:"Maryland",items:[
+["Maryland Code & statutes","Md. General Assembly","https://mgaleg.maryland.gov/mgawebsite/Laws/Statutes"],
+["Maryland Judiciary","Rules & courts","https://www.mdcourts.gov/"]]},
+{g:"Research",items:[["Lexis+","Firm subscription","https://plus.lexis.com/"],["Protégé","Lexis AI","https://protege.lexis.com/ai"]]}
+];
+
+</script>
+<script>
+Q.forEach((q,i)=>q.id=i);
+const $=s=>document.querySelector(s), M=$('#main');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+/* ---------- storage (per player) ---------- */
+let MEM={};
+const store={get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):MEM[k]}catch(e){return MEM[k]}},set(k,v){MEM[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let who=store.get('gfa_who')||'Ryan';
+const blank=()=>({xp:0,streak:0,last:'',qs:{},missed:[],badges:[],ends:{},box:{},daily:'',answered:0,correct:0});
+let P=store.get('gfa_p_'+who)||blank();
+let CLOUD=null,LB=[],SAVING=Promise.resolve(),SAVE_T=null;
+const save=()=>{if(CLOUD){clearTimeout(SAVE_T);SAVE_T=setTimeout(()=>{const body=JSON.parse(JSON.stringify(P));SAVING=SAVING.then(()=>CLOUD.ref.set(body)).catch(e=>{if(e&&e.code==='invalid_argument'){CLOUD.ro=true;toast('Progress is read-only for you on this page')}})},1200);return}store.set('gfa_p_'+who,P)};
+async function cloudInit(){try{if(!window.claude||!claude.use)return;const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db||!user)return;const me=await user.me();if(!me.id)return;
+const ref=db.doc('progress/'+me.id);const s=await ref.get();CLOUD={db,user,ref,me,id:me.id};
+if(s.exists){P=Object.assign(blank(),JSON.parse(JSON.stringify(s.data())))}else{const loc=store.get('gfa_p_'+who);if(loc&&loc.xp){P=loc;save()}}
+renderWho();
+db.collection('progress').onSnapshot(q=>{LB=q.docs.map(d=>({id:d.id,xp:d.data().xp||0,streak:d.data().streak||0,correct:d.data().correct||0,answered:d.data().answered||0,last:d.data().last||''}));if(TAB==='home')drawLB()},()=>{});
+go(TAB)}catch(e){}}
+async function drawLB(){const el=document.getElementById('lb');if(!el||!CLOUD)return;const rows=LB.slice().sort((a,b)=>b.xp-a.xp);if(!rows.length){el.innerHTML='<div class="mut">No scores yet.</div>';return}
+const ps=await CLOUD.user.profiles(rows.map(r=>r.id));el.innerHTML='';rows.forEach((r,i)=>{const p=ps[r.id];const d=document.createElement('div');d.className='tp';const L=lvl(r.xp);
+d.innerHTML=`<span style="width:22px;font-weight:800;color:var(--gold)">${['🥇','🥈','🥉'][i]||i+1}</span><img style="width:30px;height:30px;border-radius:50%" alt=""><span class="n"><b class="nm"></b><br><span class="mut" style="font-size:12px">${esc(L.name)} · 🔥${r.streak} · ${r.answered?Math.round(r.correct/r.answered*100):0}%</span></span><span style="font-weight:800;color:var(--gold2)">${r.xp} XP</span>`;
+d.querySelector('img').src=p.avatarUrl;d.querySelector('.nm').textContent=(p.name||'Someone')+(r.id===CLOUD.id?' (you)':'');el.appendChild(d)})}
+/* ---------- levels / badges ---------- */
+const LV=[[0,'Law Clerk'],[100,'Associate'],[250,'Litigator'],[500,'Senior Associate'],[900,'Trial Lawyer'],[1400,'Of Counsel'],[2000,'Partner'],[2800,'Senior Partner'],[3800,'Name Partner'],[5000,'Legend of the Bar']];
+function lvl(x){let i=0;while(i<LV.length-1&&x>=LV[i+1][0])i++;const lo=LV[i][0],hi=LV[i+1]?LV[i+1][0]:lo+1500;return{i,name:LV[i][1],pct:Math.min(100,Math.round((x-lo)/(hi-lo)*100)),next:LV[i+1]?LV[i+1][1]:'—',need:Math.max(0,hi-x)}}
+const BADGES=[['first','⚡','First Answer'],['ten','🔟','10 Correct'],['perfect','💯','Perfect Docket'],['speed','⏱️','Speed Demon'],['streak3','🔥','3-Day Streak'],['streak7','🏆','7-Day Streak'],['path','🗺️','Pathfinder'],['allsims','🧭','Every Ending'],['clean','🧹','Clean Slate'],['spec','🎓','Specialist'],['r2026','📅','2026 Ready'],['duel','⚔️','Duelist']];
+function badge(id){if(P.badges.includes(id))return;P.badges.push(id);save();const b=BADGES.find(x=>x[0]===id);toast(b[1]+' Badge: '+b[2]);confetti()}
+function addXP(n){const before=lvl(P.xp).i;P.xp+=n;touchStreak();save();const f=document.createElement('div');f.className='xpf';f.textContent='+'+n+' XP';$('#app').appendChild(f);setTimeout(()=>f.remove(),1000);if(lvl(P.xp).i>before){setTimeout(()=>{toast('🎉 Promoted: '+lvl(P.xp).name);confetti()},400)}}
+function touchStreak(){const t=today();if(P.last===t)return;const y=new Date();y.setDate(y.getDate()-1);const ys=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();P.streak=(P.last===ys)?P.streak+1:1;P.last=t;if(P.streak>=3)badge('streak3');if(P.streak>=7)badge('streak7')}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function confetti(){const c=$('#cf'),r=$('#app').getBoundingClientRect();c.width=r.width;c.height=r.height;const x=c.getContext('2d');const ps=Array.from({length:90},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.4,v:2+Math.random()*3,s:4+Math.random()*5,c:['#D4AF5A','#f0d48a','#F4EEDC','#4fbf7a'][Math.floor(Math.random()*4)],r:Math.random()*6}));let n=0;(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.y+=p.v;p.x+=Math.sin((p.y+p.r)/20);x.fillStyle=p.c;x.fillRect(p.x,p.y,p.s,p.s*.6)});if(++n<140)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+/* ---------- chrome ---------- */
+function renderWho(){if(CLOUD){const w=$('#who');w.innerHTML='';const s=document.createElement('button');s.className='on';s.textContent=CLOUD.me.name||'You';w.appendChild(s);return}$('#who').innerHTML=['Ryan','CJ'].map(n=>`<button class="${n===who?'on':''}" onclick="setWho('${n}')">${n}</button>`).join('')}
+function setWho(n){who=n;store.set('gfa_who',n);P=store.get('gfa_p_'+n)||blank();renderWho();go(TAB)}
+const TABS=[['home','🏠','Home'],['quiz','🧠','Quiz'],['review','🃏','Review'],['sims','🗺️','Sims'],['lib','📚','Library']];
+let TAB='home';
+function go(t){if(R)clearTimeout(R.to);TAB=t;$('#nav').innerHTML=TABS.map(x=>`<button class="${x[0]===t?'on':''}" onclick="go('${x[0]}')"><span class="ic">${x[1]}</span>${x[2]}</button>`).join('');({home:Home,quiz:QuizSetup,review:Review,sims:SimList,lib:Lib})[t]();M.scrollTop=0}
+/* ---------- mastery ---------- */
+function topicStats(t){const qs=Q.filter(q=>q.t===t);let seen=0,mast=0;qs.forEach(q=>{const s=P.qs[q.id];if(s){seen++;if(s.c>=2&&s.c>s.w)mast++}});return{n:qs.length,seen,pct:Math.round(mast/qs.length*100)}}
+/* ---------- HOME ---------- */
+function Home(){setTimeout(drawLB,0);const L=lvl(P.xp);const acc=P.answered?Math.round(P.correct/P.answered*100):0;const dailyDone=P.daily===today();
+M.innerHTML=`<div class="card hero"><div class="ring" style="--p:${L.pct}"><div>${L.i+1}<small>LEVEL</small></div></div><div style="flex:1"><div class="lvl">${L.name}</div><div class="mut">${P.xp} XP · ${L.need} to ${L.next}</div><div class="bar" style="margin-top:8px"><i style="width:${L.pct}%"></i></div></div></div>
+<div class="stats"><div class="stat"><b>🔥 ${P.streak}</b><span>day streak</span></div><div class="stat"><b>${acc}%</b><span>accuracy</span></div><div class="stat"><b>${P.missed.length}</b><span>to fix</span></div></div>
+${CLOUD?'':'<a class="card alert" style="display:block;text-decoration:none;color:var(--cream)" href="https://claude.ai/artifact/V1Hxajde4qw26iR7nFqEuC" target="_blank" rel="noopener"><b>💾 Want XP and streaks to stick?</b><div class="mut" style="color:var(--cream)">This website version resets when you reload. Open the synced version (Ryan and CJ only) to save progress and see the leaderboard. ↗</div></a>'}<button class="btn" onclick="startDaily()">${dailyDone?'✅ Daily Docket done. Run it again':'📅 Daily Docket: 5 questions · +30 XP'}</button>
+<div class="grid2" style="margin-top:12px">
+<button class="tile" onclick="go('quiz')"><span class="e">🧠</span><b>Quiz</b><span>10 / 15 / 20 · speed · duel</span></button>
+<button class="tile" onclick="startMissed()"><span class="e">🎯</span><b>Fix My Misses</b><span>${P.missed.length} waiting. Retake until perfect</span></button>
+<button class="tile" onclick="go('sims')"><span class="e">🗺️</span><b>Case Sims</b><span>Choose a path; see it unfold</span></button>
+<button class="tile" onclick="go('review')"><span class="e">🃏</span><b>Flashcards</b><span>Plus deadline cheat sheets</span></button></div>
+<h3>⚠️ Recent rule changes (Lexis-verified)</h3>${CHANGES.map(c=>`<div class="card alert"><b>${esc(c.h)}</b><div class="mut" style="margin-top:4px;color:var(--cream)">${esc(c.d)}</div><span class="cite">${esc(c.c)}</span></div>`).join('')}
+<h3>Mastery by subject</h3><div class="card">${Object.keys(TOPICS).map(t=>{const s=topicStats(t);return`<div class="tp" onclick="quickTopic('${t}')"><span>${TOPICS[t].i}</span><span class="n">${TOPICS[t].n}</span><span class="bar"><i style="width:${s.pct}%"></i></span><span class="pct">${s.pct}%</span></div>`}).join('')}</div>
+${CLOUD?'<h3>🏆 Leaderboard</h3><div class="card" id="lb"><div class="mut">Loading…</div></div>':''}<h3>Badges</h3><div class="badges">${BADGES.map(b=>`<div class="bd ${P.badges.includes(b[0])?'got':''}"><span class="e">${b[1]}</span>${b[2]}</div>`).join('')}</div>
+<div class="foot">${CLOUD?'Progress syncs to your account across devices.':'Progress on the website version lasts only until you reload the page; open the synced version to keep XP and streaks.'} Mastery = answered right at least twice, with more rights than misses.<br>Rules and statutes checked against Lexis+ on 11/3/2026. Questions marked ✓ LEXIS were checked word for word.</div>`}
+function quickTopic(t){QS.topics=[t];go('quiz')}
+/* ---------- QUIZ ---------- */
+const QS={topics:Object.keys(TOPICS),n:10,mode:'std'};
+function QuizSetup(){M.innerHTML=`<h2>Quiz</h2>
+<div class="seg">${[['std','Standard'],['speed','⏱️ Speed'],['duel','⚔️ Duel']].map(m=>`<button class="${QS.mode===m[0]?'on':''}" onclick="QS.mode='${m[0]}';QuizSetup()">${m[1]}</button>`).join('')}</div>
+<div class="mut" style="margin-bottom:10px">${QS.mode==='speed'?'20 seconds per question. Bonus XP for fast answers.':QS.mode==='duel'?'Pass-the-phone: Ryan and CJ answer the same questions. High score wins.':'Untimed. Read the explanation after every answer.'}</div>
+<button class="btn" style="margin:0 0 6px" onclick="startQuiz()">Start ▶</button><h3>Subjects</h3><div class="chips">${Object.keys(TOPICS).map(t=>`<button class="chip ${QS.topics.includes(t)?'on':''}" onclick="togT('${t}')">${TOPICS[t].i} ${TOPICS[t].n}</button>`).join('')}</div>
+<div class="row" style="margin-top:8px"><button class="btn ghost small" onclick="QS.topics=Object.keys(TOPICS);QuizSetup()">All</button><button class="btn ghost small" onclick="QS.topics=[];QuizSetup()">None</button></div>
+<h3>Questions</h3><div class="chips">${[10,15,20].map(n=>`<button class="chip ${QS.n===n?'on':''}" onclick="QS.n=${n};QuizSetup()">${n}</button>`).join('')}</div>
+<button class="btn" style="margin-top:18px" onclick="startQuiz()">Start ▶</button>
+<button class="btn ghost" onclick="startMissed()">🎯 Retake my misses (${P.missed.length})</button>`}
+function togT(t){const i=QS.topics.indexOf(t);i<0?QS.topics.push(t):QS.topics.splice(i,1);QuizSetup()}
+let R=null;
+function pool(){return Q.filter(q=>QS.topics.includes(q.t))}
+function startQuiz(){const p=pool();if(!p.length){toast('Pick at least one subject');return}
+/* weight unseen and missed questions first */
+const w=shuffle(p).sort((a,b)=>score(a)-score(b));const set=shuffle(w.slice(0,Math.min(QS.n,p.length)));
+if(QS.mode==='duel'){R={set,i:0,mode:'duel',turn:0,scores:[0,0],names:['Ryan','CJ'],missed:[]};return duelIntro()}
+run(set,QS.mode)}
+function score(q){const s=P.qs[q.id];if(!s)return 0;return (s.c-s.w*2)+Math.random()*2}
+function startDaily(){const set=shuffle(Q).sort((a,b)=>score(a)-score(b)).slice(0,5);run(shuffle(set),'daily')}
+function startMissed(){const set=Q.filter(q=>P.missed.includes(q.id));if(!set.length){toast('No misses. Nice!');return}run(shuffle(set),'missed')}
+function run(set,mode){R={set,i:0,mode,right:0,combo:0,best:0,missed:[],t0:Date.now()};ask()}
+function ask(){const q=R.set[R.i];const order=shuffle(q.o.map((o,i)=>i));R.order=order;R.locked=false;
+M.innerHTML=`<div class="qtop"><button class="btn ghost small" style="margin:0;padding:6px 10px" onclick="go('quiz')">✕</button><div class="bar"><i style="width:${R.i/R.set.length*100}%"></i></div><span class="combo">${R.combo>1?'🔥x'+R.combo:''} ${R.i+1}/${R.set.length}</span></div>
+${R.mode==='duel'?`<div class="mut" style="text-align:center;margin-bottom:8px">⚔️ ${R.names[R.turn]}'s turn</div>`:''}
+<div class="qcard"><div class="qtag"><span>${TOPICS[q.t].i} ${TOPICS[q.t].n}</span>${q.v?'<span class="ver">✓ LEXIS</span>':''}</div><div class="qtxt">${esc(q.q)}</div>
+${order.map((oi,k)=>`<button class="opt" id="o${k}" onclick="pick(${k})">${String.fromCharCode(65+k)}. ${esc(q.o[oi])}</button>`).join('')}
+${R.mode==='speed'?'<div class="timer"><i id="tm"></i></div>':''}<div id="fb"></div></div>`;
+if(R.mode==='speed'){const el=$('#tm');el.style.transition='none';el.style.width='100%';requestAnimationFrame(()=>{el.style.transition='width 20s linear';el.style.width='0%'});R.qt=Date.now();clearTimeout(R.to);R.to=setTimeout(()=>{if($('#o0'))pick(-1)},20000)}}
+function pick(k){if(R.locked)return;R.locked=true;clearTimeout(R.to);const q=R.set[R.i];const chosen=k<0?-1:R.order[k];const ok=chosen===q.a;
+R.order.forEach((oi,j)=>{const b=$('#o'+j);b.classList.add(oi===q.a?'ok':(j===k?'bad':'dim'))});
+if(R.mode==='duel'){if(ok)R.scores[R.turn]++;}
+else{const s=P.qs[q.id]||(P.qs[q.id]={c:0,w:0});P.answered++;
+if(ok){s.c++;P.correct++;R.right++;R.combo++;R.best=Math.max(R.best,R.combo);let x=10+Math.min(10,(R.combo-1)*2);if(R.mode==='speed'&&Date.now()-R.qt<8000)x+=5;addXP(x);if(s.c>=2&&P.missed.includes(q.id)&&R.mode==='missed'){P.missed=P.missed.filter(i=>i!==q.id)}}
+else{s.w++;R.combo=0;R.missed.push(q);if(!P.missed.includes(q.id))P.missed.push(q.id)}
+if(R.mode==='missed'&&ok)P.missed=P.missed.filter(i=>i!==q.id);
+save();if(P.answered===1)badge('first');if(P.correct>=10)badge('ten')}
+$('#fb').innerHTML=`<div class="exp"><b>${ok?'✅ Correct.':(k<0?'⏰ Time!':'❌ Not quite.')}</b> ${esc(q.e)}<span class="cite">📖 ${esc(q.c)}</span></div><button class="btn" onclick="nextQ()">${R.i+1<R.set.length?'Next →':'Finish'}</button>`;
+setTimeout(()=>{const f=$('#fb');if(f)f.scrollIntoView({behavior:'smooth',block:'nearest'})},50)}
+function nextQ(){R.i++;if(R.i<R.set.length)return ask();if(R.mode==='duel')return duelNext();done()}
+function done(){const n=R.set.length,pct=Math.round(R.right/n*100);
+if(R.mode==='daily'&&P.daily!==today()){P.daily=today();save();addXP(30)}
+if(pct===100&&n>=10){badge('perfect');confetti()}else if(pct===100)confetti();
+if(R.mode==='speed'&&pct>=80&&n>=10)badge('speed');
+if(R.mode==='missed'&&P.missed.length===0)badge('clean');
+const r26=Q.filter(q=>/166a/.test(q.c));if(r26.every(q=>P.qs[q.id]&&P.qs[q.id].c>0))badge('r2026');
+Object.keys(TOPICS).forEach(t=>{if(topicStats(t).pct>=90)badge('spec')});
+M.innerHTML=`<div class="card" style="text-align:center"><div class="mut">${R.mode==='missed'?'Misses round':'Results'}</div><div class="big">${R.right}/${n}</div><div class="mut">${pct}% · best combo 🔥${R.best}</div>
+<div style="font-size:15px;margin-top:8px">${pct===100?'Flawless. That is how the bar was passed.':pct>=80?'Strong. Clean up the misses below.':'Review the misses, then retake them until it is perfect.'}</div></div>
+${R.missed.length?`<button class="btn" onclick="run(shuffle(R.missed),'missed')">🎯 Retake these ${R.missed.length} until perfect</button><h3>Review your misses</h3>${R.missed.map(q=>`<div class="miss"><b>${esc(q.q)}</b><br>✔ ${esc(q.o[q.a])}<span class="cite">${esc(q.c)}</span></div>`).join('')}`:''}
+<button class="btn ghost" onclick="go('quiz')">New quiz</button><button class="btn ghost" onclick="go('home')">Home</button>`}
+/* duel */
+function duelIntro(){M.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:44px">⚔️</div><h2>Duel</h2><div class="mut">${R.set.length} questions. <b>${R.names[R.turn]}</b> goes ${R.turn?'second':'first'}. No peeking.</div><button class="btn" onclick="R.i=0;ask()">${R.names[R.turn]}: Start</button></div>`}
+function duelNext(){if(R.turn===0){R.turn=1;return duelIntro()}
+const[a,b]=R.scores;const w=a===b?'Tie. Run it back.':(a>b?R.names[0]:R.names[1])+' wins!';confetti();badge('duel');addXP(20);
+M.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:44px">🏆</div><h2>${w}</h2><div class="row" style="margin-top:10px"><div class="stat"><b>${a}</b><span>Ryan</span></div><div class="stat"><b>${b}</b><span>CJ</span></div></div><button class="btn" onclick="go('quiz')">Rematch</button></div>`}
+/* ---------- REVIEW ---------- */
+let RV={mode:'cards',t:'all',deck:[],i:0};
+function Review(){M.innerHTML=`<h2>Review</h2><div class="seg"><button class="${RV.mode==='cards'?'on':''}" onclick="RV.mode='cards';Review()">🃏 Flashcards</button><button class="${RV.mode==='sheets'?'on':''}" onclick="RV.mode='sheets';Review()">📋 Cheat sheets</button></div><div id="rv"></div>`;
+RV.mode==='cards'?cards():sheets()}
+function cards(){const ts=['all',...Object.keys(TOPICS)];
+$('#rv').innerHTML=`<div class="chips" style="margin-bottom:10px">${ts.map(t=>`<button class="chip ${RV.t===t?'on':''}" onclick="RV.t='${t}';RV.deck=[];cards()">${t==='all'?'All':TOPICS[t].i+' '+TOPICS[t].s}</button>`).join('')}</div><div id="fcw"></div>`;
+if(!RV.deck.length){const p=Q.filter(q=>RV.t==='all'||q.t===RV.t);RV.deck=shuffle(p).sort((a,b)=>(P.box[a.id]||0)-(P.box[b.id]||0));RV.i=0}
+showCard()}
+function showCard(){const q=RV.deck[RV.i%RV.deck.length];const bx=P.box[q.id]||0;
+$('#fcw').innerHTML=`<div class="mut" style="text-align:center">Card ${RV.i%RV.deck.length+1} of ${RV.deck.length} · box ${bx}/3 ${'⭐'.repeat(bx)}</div>
+<div class="flip"><div class="fc" id="fc" onclick="this.classList.toggle('on')"><div class="face"><div class="qtag"><span>${TOPICS[q.t].i} ${TOPICS[q.t].n}</span></div><div class="qtxt">${esc(q.q)}</div><div class="hint">Tap to flip</div></div>
+<div class="face back"><div class="ans">${esc(q.o[q.a])}</div><div style="margin-top:10px;font-size:14.5px">${esc(q.e)}</div><span class="cite">📖 ${esc(q.c)}</span></div></div></div>
+<div class="row"><button class="btn ghost" onclick="rate(0)">↺ Again</button><button class="btn" onclick="rate(1)">✓ Knew it</button></div>`}
+function rate(k){const q=RV.deck[RV.i%RV.deck.length];P.box[q.id]=k?Math.min(3,(P.box[q.id]||0)+1):0;if(k)addXP(2);save();RV.i++;showCard()}
+function sheets(){$('#rv').innerHTML=SHEETS.map(s=>`<div class="card"><b style="color:var(--gold)">${esc(s.t)}</b><table class="sh">${s.rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</table></div>`).join('')+`<div class="foot">Check the live rule in Lexis before relying on a deadline in a filing. Local rules and orders can change these.</div>`}
+/* ---------- SIMS ---------- */
+let SM=null;
+function endsOf(k){return Object.entries(SIMS[k].nodes).filter(([i,n])=>n.end).map(([i])=>i)}
+function SimList(){M.innerHTML=`<h2>Case-Flow Sims</h2><div class="mut" style="margin-bottom:12px">Make the calls, watch the case evolve, and hit every ending. Each new ending is +25 XP.</div>`+
+Object.entries(SIMS).map(([k,s])=>{const e=endsOf(k),got=(P.ends[k]||[]).length;return`<button class="tile" style="width:100%;margin-bottom:10px;min-height:0" onclick="simStart('${k}')"><span class="e">${s.icon}</span><b>${esc(s.name)}</b><span>${esc(s.sub)}</span><div class="bar" style="margin-top:6px"><i style="width:${got/e.length*100}%"></i></div><span>${got}/${e.length} endings found</span></button>`}).join('')}
+function simStart(k){SM={k,path:[{id:SIMS[k].start}],view:'play'};simRender()}
+function simRender(){const s=SIMS[SM.k];
+const tabs=`<div class="seg"><button class="${SM.view==='play'?'on':''}" onclick="SM.view='play';simRender()">▶ Play</button><button class="${SM.view==='map'?'on':''}" onclick="SM.view='map';simRender()">🗺️ Full map</button></div>`;
+if(SM.view==='map'){M.innerHTML=`<div class="qtop"><button class="btn ghost small" style="margin:0;padding:6px 10px" onclick="go('sims')">←</button><b style="flex:1">${esc(s.name)}</b></div>${tabs}<div class="card tree">${tree(s.start,new Set())}</div><div class="foot">Gold = visited · Green = good ending · Red = bad ending</div>`;return}
+M.innerHTML=`<div class="qtop"><button class="btn ghost small" style="margin:0;padding:6px 10px" onclick="go('sims')">←</button><b style="flex:1">${esc(s.name)}</b></div>${tabs}<div class="path">${SM.path.map((p,ix)=>{const n=s.nodes[p.id];const cur=ix===SM.path.length-1;
+if(n.end&&cur){return`<div class="step cur"><div class="card end ${n.end}"><div class="e">${n.end==='win'?'🏆':n.end==='loss'?'💥':'⚖️'}</div><div class="day">${esc(n.d)}</div><h2 style="margin:4px 0">${esc(n.t)}</h2><div style="text-align:left">${esc(n.x)}</div>${n.c?`<span class="cite" style="text-align:left">📖 ${esc(n.c)}</span>`:''}<button class="btn" onclick="simStart('${SM.k}')">↺ Play again: find another ending</button><button class="btn ghost" onclick="SM.view='map';simRender()">See the full map</button></div></div>`}
+return`<div class="step ${cur?'cur':''}"><div class="card"><div class="day">${esc(n.d)}</div><b style="font-size:16.5px">${esc(n.t)}</b><div style="margin-top:4px;font-size:14.5px">${esc(n.x)}</div>${n.c?`<span class="cite">📖 ${esc(n.c)}</span>`:''}${cur?n.ch.map((c,j)=>`<button class="choice" onclick="simGo(${j})">→ ${esc(c[0])}</button>`).join(''):`<div class="chosen">You chose: ${esc(p.pick||'')}</div>`}</div></div>`}).join('')}</div>`;
+setTimeout(()=>{const c=M.querySelectorAll('.step');c[c.length-1].scrollIntoView({behavior:'smooth',block:'start'})},60)}
+function simGo(j){const s=SIMS[SM.k];const last=SM.path[SM.path.length-1];const n=s.nodes[last.id];last.pick=n.ch[j][0];const nx=n.ch[j][1];SM.path.push({id:nx});
+const nn=s.nodes[nx];if(nn.end){const got=P.ends[SM.k]||(P.ends[SM.k]=[]);if(!got.includes(nx)){got.push(nx);addXP(25);badge('path');if(got.length===endsOf(SM.k).length){toast('🧭 Every ending found!');badge('allsims')}}save();if(nn.end==='win')confetti()}
+simRender()}
+function tree(id,seen){const s=SIMS[SM.k];const n=s.nodes[id];const vis=SM.path.some(p=>p.id===id)||(P.ends[SM.k]||[]).includes(id);const cls=n.end?(n.end==='win'?'endw':n.end==='loss'?'endl':'seen'):(vis?'seen':'');
+if(seen.has(id))return`<div class="tn ${cls}">↪ ${esc(n.t)}</div>`;seen.add(id);
+return`<div class="tn ${cls}"><span class="day">${esc(n.d)}</span> · <b>${esc(n.t)}</b>${n.end?' '+(n.end==='win'?'🏆':n.end==='loss'?'💥':'⚖️'):''}</div>${n.ch?`<div class="kids">${n.ch.map(c=>`<div class="mut" style="font-size:12px;margin-top:4px">if: ${esc(c[0])}</div>${tree(c[1],seen)}`).join('')}</div>`:''}`}
+/* ---------- LIBRARY ---------- */
+function Lib(){M.innerHTML=`<h2>Library</h2><input class="s" id="ls" type="search" placeholder="Search documents and rules" oninput="libDraw()"><div id="ll" class="lib"></div><div class="foot">Firm PDFs open in Google Drive and are licensed Lexis material: firm use only, do not share. Rules link to official sources. Check Lexis for the current version before filing.</div>`;libDraw()}
+function libDraw(){const t=($('#ls').value||'').toLowerCase();$('#ll').innerHTML=LIB.map(g=>{const it=g.items.filter(i=>(i[0]+i[1]+g.g).toLowerCase().includes(t));return it.length?`<h3>${esc(g.g)}</h3>`+it.map(i=>`<a href="${i[2]}" target="_blank" rel="noopener"><span style="font-size:20px">${/drive/.test(i[2])?'📄':'🔗'}</span><div><b>${esc(i[0])}</b><span>${esc(i[1])}</span></div><i>↗</i></a>`).join(''):''}).join('')||'<div class="mut">No matches.</div>'}
+/* boot */
+renderWho();go('home');cloudInit();
+
+</script>
+</body></html>
