@@ -67,7 +67,7 @@ var stHooks=[];function onState(f){stHooks.push(f);}
 function paintStates(){document.querySelectorAll('.states button').forEach(function(b){b.classList.toggle('on',b.dataset.st===ST);});}
 document.querySelectorAll('.states button').forEach(function(b){b.onclick=function(){ST=b.dataset.st;try{localStorage.setItem('gfaState',ST);}catch(e){}paintStates();stHooks.forEach(function(f){f();});};});
 paintStates();
-var CIVIL="https://law-offices-of-cj-grisham-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc",CRIM="https://law-offices-of-cj-grisham-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft";
+var CIVIL="https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc",CRIM="https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft";
 var $=function(id){return document.getElementById(id);};var st=$('st');
 function steps(){var md=ST==='MD';return {
  start:{q:'What do you need help with in '+stName()+'?',opts:[
@@ -79,7 +79,8 @@ function steps(){var md=ST==='MD';return {
  crim:{q:'Is the person charged in custody right now?',opts:[['Yes, in jail now','custody'],['No, out on bond or never arrested','court']]},
  court:{q:'Is there a court date in the next 7 days?',opts:[['Yes','soon'],['No, or I do not know','crimForm']]},
  civ:{q:'When did it happen?',opts:md?[['Within the last 9 months','civForm'],['9 months to 3 years ago','civSoon'],['More than 3 years ago','civOld']]:[['Within the last 4 months','civForm'],['4 months to 2 years ago','civSoon'],['More than 2 years ago','civOld']]},
- gun:{q:'Is there a criminal case still pending against you?',opts:[['Yes, the case is still open','crimForm'],['No, it was dismissed, never filed or is over','civForm'],['I am not sure','civForm']]}
+ gun:{q:'Which one fits you?',opts:[['Police seized my firearm and I want it back','gunSeized'],['I am barred from having firearms (felony, domestic violence or another federal bar) and want my rights restored','ffrr']]},
+ gunSeized:{q:'Is there a criminal case still pending against you?',opts:[['Yes, the case is still open','crimForm'],['No, it was dismissed, never filed or is over','civForm'],['I am not sure','civForm']]}
 };}
 function ask(key){var s=steps()[key];var h='<span class="pill">'+stName()+'</span><h2 style="margin-top:10px">'+s.q+'</h2>';
 s.opts.forEach(function(o){h+='<button class="opt" data-n="'+o[1]+'">'+o[0]+'</button>';});
@@ -97,6 +98,7 @@ h+='<div class="row"><button class="btn ghost" id="restart">Start over</button><
 function route(n){var S=steps();if(S[n])return ask(n);var md=ST==='MD';
  var C='Use the Criminal Case Review form. Have the charge, the arresting agency, the county and any case number or court date ready.';
  switch(n){
+  case 'ffrr':return result('Restore My Rights','The Department of Justice now accepts applications to restore federal firearm rights under 18 U.S.C. 925(c). Start with four screening questions on our Restore My Rights page. If you can continue, it takes you to our secure application.','https://www.gfalaw.us/tools/restore-my-rights','Go to Restore My Rights',false);
   case 'crimOther':return result('Criminal Case Review','You can fill out the Criminal Case Review form on their behalf. The form asks for your name and your relationship to the person charged. Have the charge, the arresting agency, the county and any case number or court date ready.',CRIM,'Open the Criminal Case Review form',false);
   case 'custody':case 'soon':return result('Criminal Case Review',C,CRIM,'Open the Criminal Case Review form',true);
   case 'crimForm':return result('Criminal Case Review',C,CRIM,'Open the Criminal Case Review form',false);
