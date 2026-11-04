@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Deadline Checker | GFA LAW, PLLC</title><meta name="description" content="Check key legal deadlines for civil rights claims and criminal cases in Texas and Maryland, from GFA LAW, PLLC."><link rel="canonical" href="https://ryanfranceschina-gfalaw.github.io/tools/deadline-checker.html"><style id="gfa-standalone">html,body{background:#24452a!important}body{min-height:100vh}
+.gfa-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#143a20;border-bottom:2px solid #C9A44A;padding:10px 16px;font:600 15px Inter,Arial,sans-serif}
+.gfa-bar a{color:#E2C676;text-decoration:none}.gfa-brand{font-family:'Playfair Display',Georgia,serif;font-size:18px;color:#F4EEDC!important}
+.gfa-links{display:flex;gap:16px}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#1E4D2B;--deep:#143a20;--gold:#C9A44A;--gold2:#E2C676;--cream:#F4EEDC;--ink:#1b2a1f;--muted:#5d6b60;--line:#d8cfb4;--ok:#2f7a45;--warn:#b7791f;--bad:#a33a2b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;font-family:Inter,Arial,sans-serif;color:var(--ink)}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 28px}
+.card{background:var(--cream);border:2px solid var(--gold);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden}
+.head{background:linear-gradient(135deg,var(--green),var(--deep));color:var(--cream);padding:20px 22px 16px;border-bottom:3px solid var(--gold);position:relative}
+.head .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);font-weight:700}
+.head h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;margin:4px 0 4px;color:#fff;line-height:1.15}
+.head p{margin:0;font-size:14px;color:#e9e2cb;line-height:1.45}
+.states{display:flex;gap:6px;margin-top:12px;align-items:center;flex-wrap:wrap}
+.states span{font-size:12px;color:#e9e2cb;margin-right:4px}
+.states button{border:1.5px solid var(--gold);background:transparent;color:var(--gold2);border-radius:99px;padding:5px 14px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}
+.states button.on{background:var(--gold);color:var(--deep)}
+.body{padding:20px 22px}
+h2{font-family:'Playfair Display',Georgia,serif;color:var(--green);font-size:21px;margin:0 0 10px;line-height:1.25}
+h3{font-family:'Playfair Display',Georgia,serif;color:var(--green);font-size:17px;margin:14px 0 6px}
+p{line-height:1.55;font-size:15px;margin:0 0 10px}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 5px;color:var(--green)}
+input[type=text],input[type=date],input[type=email],input[type=tel],select,textarea{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:8px;font:inherit;font-size:15px;background:#fffdf7;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,164,74,.25)}
+.btn{display:inline-block;background:var(--gold);color:var(--deep);border:0;border-radius:8px;padding:11px 18px;font:700 15px Inter,Arial,sans-serif;cursor:pointer;text-decoration:none;transition:transform .08s,background .15s}
+.btn:hover{background:var(--gold2)}.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;border:1.5px solid var(--green);color:var(--green)}
+.btn.green{background:var(--green);color:var(--cream)}
+.btn.green:hover{background:var(--deep)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.opt{display:block;width:100%;text-align:left;background:#fffdf7;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;font:600 15px Inter,Arial,sans-serif;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--gold);background:#fff8e6}
+.opt.right{border-color:var(--ok);background:#e3f2e6}
+.opt.wrong{border-color:var(--bad);background:#f7e3df}
+.note{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--green);color:var(--cream)}
+.alert{border-left:5px solid var(--bad);background:#fbeeea;padding:12px 14px;border-radius:8px;margin:12px 0;font-size:14.5px;line-height:1.5}
+.good{border-left:5px solid var(--ok);background:#e9f4ec;padding:12px 14px;border-radius:8px;margin:12px 0;font-size:14.5px;line-height:1.5}
+.info{border-left:5px solid var(--gold);background:#fff7e0;padding:12px 14px;border-radius:8px;margin:12px 0;font-size:14.5px;line-height:1.5}
+.src{font-size:12.5px;color:#4a564d;margin-top:6px}
+.progress{height:6px;background:rgba(255,255,255,.18);border-radius:9px;margin-top:12px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.hide{display:none}
+.fade{animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.cta{background:var(--green);color:var(--cream);border-radius:10px;padding:14px 16px;margin-top:16px}
+.cta p{color:#e9e2cb;margin:0 0 10px;font-size:14px}
+.cta b{color:#fff}
+@media (max-width:520px){.head h1{font-size:22px}.body{padding:16px}.wrap{padding:10px 6px 20px}}
+</style></head><body><div class="gfa-bar"><a class="gfa-brand" href="https://www.gfalaw.us/">GFA LAW, PLLC</a><span class="gfa-links"><a href="tel:+12544051726">254-405-1726</a><a href="https://www.gfalaw.us/tools/deadline-checker">Back to gfalaw.us</a></span></div><div class="wrap"><div class="card">
+<div class="head"><div class="kicker">GFA LAW Tools</div><h1>Deadline Checker</h1><p>Estimate the filing and notice deadlines for civil rights, government injury, criminal appeal and whistleblower cases in Texas and Maryland.</p>
+<div class="states"><span>State:</span><button data-st="TX">Texas</button><button data-st="MD">Maryland</button></div></div>
+<div class="body">
+<div id="s1" class="fade">
+ <h2>How much time do you have?</h2>
+ <p>Many claims are lost because a deadline passed before anyone called a lawyer. Pick the situation closest to yours and enter the date.</p>
+ <label for="type">What happened?</label>
+ <select id="type"></select>
+ <label for="d" id="dlab">Date</label>
+ <input type="date" id="d">
+ <div class="row"><button class="btn" id="go">Check my deadline</button></div>
+ <div id="err" class="alert hide"></div>
+</div>
+<div id="out" class="hide fade"></div>
+<div class="note">General information about Texas, Maryland and federal law, not legal advice for your situation. Using this tool does not create an attorney-client relationship with GFA LAW, PLLC. Laws change and every case is different. GFA LAW, PLLC | 4970 E. Business 190, Temple, TX 76501 | 254-405-1726 | intake@gfalaw.us. Lawyers responsible for this content: Ryan Franceschina (licensed in Texas and Maryland) and CJ Grisham. Maryland matters are handled by Ryan Franceschina. Content reviewed October 2026.</div>
+</div></div></div>
+<script>
+var ST='TX';try{var s=localStorage.getItem('gfaState');if(s==='MD'||s==='TX')ST=s;}catch(e){}
+function stName(){return ST==='MD'?'Maryland':'Texas';}
+var stHooks=[];function onState(f){stHooks.push(f);}
+function paintStates(){document.querySelectorAll('.states button').forEach(function(b){b.classList.toggle('on',b.dataset.st===ST);});}
+document.querySelectorAll('.states button').forEach(function(b){b.onclick=function(){ST=b.dataset.st;try{localStorage.setItem('gfaState',ST);}catch(e){}paintStates();stHooks.forEach(function(f){f();});};});
+paintStates();
+var T={"TX": {"c1983": {"label": "Police or another government official violated my constitutional rights (excessive force, false arrest, unlawful search, retaliation for speech)", "dateLabel": "Date the violation happened", "items": [{"name": "File a federal civil rights lawsuit (42 U.S.C. Section 1983)", "months": 24, "why": "Section 1983 claims in Texas borrow the two-year personal injury limitations period (Texas Civil Practice and Remedies Code Section 16.003). Claims for false arrest and excessive force generally accrue on the date of the arrest. Malicious prosecution claims generally accrue when the criminal case ends without a conviction (Thompson v. Clark, 2022)."}]}, "ttca": {"label": "I was injured by a Texas city, county or state employee or vehicle (for example, a crash with a police car)", "dateLabel": "Date of the injury", "items": [{"name": "Give the government written notice of your claim (Texas Tort Claims Act)", "months": 6, "why": "Texas Civil Practice and Remedies Code Section 101.101(a) requires notice within six months describing the injury, the time and place, and the incident. City charter notice periods are ratified by Section 101.101(b) and are often shorter, sometimes 30 to 90 days, so the real deadline may be earlier. Notice is not required if the government already had actual notice of the injury (Section 101.101(c))."}, {"name": "File the lawsuit", "months": 24, "why": "Most Texas personal injury claims must be filed within two years (Section 16.003)."}]}, "fed": {"label": "A federal officer or agency harmed me (FBI, ATF, Border Patrol, VA, a federal vehicle)", "dateLabel": "Date the harm happened", "items": [{"name": "Present a written administrative claim to the agency (Federal Tort Claims Act)", "months": 24, "why": "Under 28 U.S.C. Section 2401(b), a tort claim against the United States is barred unless it is presented in writing to the agency within two years after it accrues, usually on a Standard Form 95 stating a sum certain. If the agency denies the claim, suit generally must be filed within six months of the denial."}]}, "appeal": {"label": "I was convicted or sentenced in a Texas criminal case and want to challenge it", "dateLabel": "Date the sentence was imposed in open court", "items": [{"name": "File a motion for new trial", "days": 30, "why": "Texas Rule of Appellate Procedure 21.4(a) requires a motion for new trial within 30 days after the sentence is imposed or suspended in open court."}, {"name": "File a notice of appeal (no motion for new trial filed)", "days": 30, "why": "Texas Rule of Appellate Procedure 26.2(a)(1) requires notice of appeal within 30 days after sentencing. If a timely motion for new trial is filed, the deadline is 90 days (Rule 26.2(a)(2)). Rule 26.3 allows a 15-day extension only in limited circumstances."}]}, "whistle": {"label": "My Texas government employer retaliated against me for reporting a violation of law", "dateLabel": "Date of the retaliation (or the date you discovered it)", "items": [{"name": "Start the employer's grievance or appeal process (Texas Whistleblower Act)", "days": 90, "why": "Texas Government Code Section 554.006 requires a public employee to initiate the employer's grievance or appeal procedure within 90 days after the violation occurred or was discovered through reasonable diligence. Time spent in that process generally does not count against the lawsuit deadline in Section 554.005."}]}}, "MD": {"c1983": {"label": "Police or another government official violated my constitutional rights (excessive force, false arrest, unlawful search, retaliation for speech)", "dateLabel": "Date the violation happened", "items": [{"name": "File a federal civil rights lawsuit (42 U.S.C. Section 1983)", "months": 36, "why": "Section 1983 claims in Maryland borrow Maryland's general three-year limitations period (Courts and Judicial Proceedings Section 5-101). Malicious prosecution claims generally accrue when the criminal case ends without a conviction (Thompson v. Clark, 2022)."}]}, "lgtca": {"label": "I was injured by a Maryland county or city, or one of its employees (for example, a crash with a county police car)", "dateLabel": "Date of the injury", "items": [{"name": "Give written notice of your claim (Local Government Tort Claims Act)", "months": 12, "why": "Courts and Judicial Proceedings Section 5-304(b) requires notice within one year after the injury stating its time, place and cause. Notice must be delivered in person or by certified mail, return receipt requested, to the officials named in Section 5-304(c), for example the County Attorney or County Solicitor in several counties, the County Executive in Howard and Montgomery Counties, and the City Solicitor in Baltimore City. A court may excuse defective notice for good cause unless the government shows prejudice (Section 5-304(d))."}, {"name": "File the lawsuit", "months": 36, "why": "Maryland's general limitations period is three years (Courts and Judicial Proceedings Section 5-101)."}]}, "mtca": {"label": "I was injured by a Maryland State employee or agency (for example, a State Police trooper or a state hospital)", "dateLabel": "Date of the injury", "items": [{"name": "Submit a written claim to the State Treasurer (Maryland Tort Claims Act)", "months": 12, "why": "State Government Section 12-106(b) requires a written claim to the State Treasurer or the Treasurer's designee within one year after the injury, and the claim must be finally denied before suit."}, {"name": "File the lawsuit", "months": 36, "why": "Under State Government Section 12-106(b), the action must be filed within three years after the cause of action arises."}]}, "fed": {"label": "A federal officer or agency harmed me (FBI, ATF, Border Patrol, VA, a federal vehicle)", "dateLabel": "Date the harm happened", "items": [{"name": "Present a written administrative claim to the agency (Federal Tort Claims Act)", "months": 24, "why": "Under 28 U.S.C. Section 2401(b), a tort claim against the United States is barred unless it is presented in writing to the agency within two years after it accrues, usually on a Standard Form 95 stating a sum certain. If the agency denies the claim, suit generally must be filed within six months of the denial."}]}, "appeal": {"label": "I was convicted in a Maryland criminal case and want to challenge it", "dateLabel": "Date of the verdict (for a new trial) or judgment and sentencing (for an appeal)", "items": [{"name": "File a motion for new trial", "days": 10, "why": "Maryland Rule 4-331(a) requires a motion for new trial within ten days after the verdict. Count from the verdict date, which may be earlier than sentencing."}, {"name": "File a notice of appeal", "days": 30, "why": "Maryland Rule 7-104(a) (District Court to circuit court) and Rule 8-202(a) (circuit court to the Appellate Court of Maryland) require notice of appeal within 30 days after entry of the judgment. Count from the judgment, which in a criminal case is the sentence."}]}, "whistle": {"label": "My Maryland State employer retaliated against me for disclosing wrongdoing", "dateLabel": "Date you first knew, or reasonably should have known, of the retaliation", "items": [{"name": "File a whistleblower complaint with the Secretary of Budget and Management", "months": 6, "why": "State Personnel and Pensions Section 5-309(a)(2) requires a complaint within six months after the employee first knew or reasonably should have known of the violation. This covers employees subject to that subtitle; local government employees may have different rules."}]}}};
+var $=function(id){return document.getElementById(id);};var sel=$('type');
+function fill(){sel.innerHTML='<option value="">Choose one</option>';Object.keys(T[ST]).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=T[ST][k].label;sel.appendChild(o);});$('dlab').textContent='Date';$('out').classList.add('hide');$('s1').classList.remove('hide');$('err').classList.add('hide');}
+fill();onState(fill);
+sel.onchange=function(){$('dlab').textContent=sel.value?T[ST][sel.value].dateLabel:'Date';};
+function add(dt,it){var d=new Date(dt.getTime());if(it.months){var day=d.getDate();d.setMonth(d.getMonth()+it.months);if(d.getDate()!==day)d.setDate(0);}else{d.setDate(d.getDate()+it.days);}return d;}
+var fmt=function(d){return d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});};
+$('go').onclick=function(){var t=sel.value,v=$('d').value;var e=$('err');
+if(!t||!v){e.textContent='Choose what happened and enter a date.';e.classList.remove('hide');return;}e.classList.add('hide');
+var p=v.split('-').map(Number);var start=new Date(p[0],p[1]-1,p[2]);var today=new Date();today.setHours(0,0,0,0);
+if(start>today){e.textContent='That date is in the future. Enter the date it happened.';e.classList.remove('hide');return;}
+var C=T[ST][t];var h='<span class="pill">'+stName()+' estimate</span><h2 style="margin-top:10px">'+C.label.split(' (')[0]+'</h2>';var urgent=false,passed=false;
+C.items.forEach(function(it){var dl=add(start,it);var left=Math.round((dl-today)/86400000);var cls,status;
+if(left<0){cls='alert';status='This general deadline appears to have passed '+(-left)+' days ago. Exceptions sometimes apply, so talk to a lawyer before assuming the claim is gone.';passed=true;}
+else if(left<=45){cls='alert';status='<b>'+left+' days left.</b> This is urgent.';urgent=true;}
+else if(left<=120){cls='info';status='<b>'+left+' days left.</b> Do not wait.';}
+else{cls='good';status='<b>'+left+' days left.</b>';}
+h+='<div class="'+cls+'"><b>'+it.name+'</b><br>Estimated deadline: <b>'+fmt(dl)+'</b><br>'+status+'<div class="src">'+it.why+'</div></div>';});
+h+='<div class="info">These are general rules. Tolling, the discovery rule, local notice requirements, weekends and holidays, and the facts of your case can make a deadline shorter or longer. Treat the earliest date as the real one.</div>';
+h+='<div class="cta"><p><b>'+(urgent||passed?'Call now: 254-405-1726.':'Want a lawyer to look at it before time runs?')+'</b> GFA LAW reviews civil rights, government liability and criminal cases. Consultations are $350.</p><a class="btn" href="https://www.gfalaw.us/tools/case-review-finder" target="_blank" rel="noopener">Request a case review</a></div>';
+h+='<div class="row"><button class="btn ghost" id="back">Check another date</button></div>';
+$('out').innerHTML=h;$('out').classList.remove('hide');$('s1').classList.add('hide');$('back').onclick=function(){$('out').classList.add('hide');$('s1').classList.remove('hide');};};
+
+</script></body></html>
