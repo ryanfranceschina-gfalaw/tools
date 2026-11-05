@@ -1,0 +1,23 @@
+path: /search
+title: Search | GFA LAW, PLLC
+desc: Search every page, guide, press release and tool on the GFA LAW, PLLC website.
+short: Search
+noindex: 1
+head: <link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Find it fast</p><h1>Search the site</h1>
+<p class="lede">Search our guides, practice areas, press releases and tools.</p>
+</div></section>
+<section class="sec"><div class="wrap" style="max-width:860px">
+<div id="search"></div>
+<noscript><p>Search needs JavaScript. You can also browse the <a href="/resources/know-your-rights">Know Your Rights guides</a> or <a href="/about-the-firm/practice-areas">practice areas</a>.</p></noscript>
+</div></section>
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  var q=new URLSearchParams(location.search).get('q')||'';
+  var ui=new PagefindUI({element:'#search',showSubResults:true,showImages:false,resetStyles:false,translations:{placeholder:'Search the GFA LAW website'}});
+  if(q) ui.triggerSearch(q);
+});
+</script>

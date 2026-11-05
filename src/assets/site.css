@@ -392,3 +392,9 @@ h2.h3{font-size:21px;line-height:1.3}
 .vid .len{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.78);color:#fff;font:600 12px var(--sans);padding:2px 6px;border-radius:4px}
 .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .legal a{text-decoration:underline}
+/* site search (Pagefind) */
+#search{--pagefind-ui-scale:1;--pagefind-ui-primary:#E2C67C;--pagefind-ui-text:#F2EEE2;--pagefind-ui-background:#132613;--pagefind-ui-border:rgba(212,175,90,.35);--pagefind-ui-tag:#1d351c;--pagefind-ui-border-width:1px;--pagefind-ui-border-radius:10px;--pagefind-ui-font:var(--sans)}
+#search .pagefind-ui__result-link{color:var(--gold2)}
+#search mark{background:rgba(226,198,124,.25);color:inherit}
+.hsearch{display:flex;gap:8px;max-width:520px;margin:22px auto 0}
+.hsearch input{flex:1;min-width:0;padding:12px 14px;border-radius:10px;border:1px solid rgba(212,175,90,.35);background:#132613;color:#F2EEE2;font:500 16px var(--sans)}

@@ -59,7 +59,8 @@ NAV = [
    ('CJ Grisham', '/about-the-firm/cj-grisham', 'Senior Partner', 0),
    ('Ryan Franceschina', '/about-the-firm/ryan-franceschina', 'Managing Partner', 0),
    ('David T. Amad 1791 Scholarship', '/about-the-firm/david-t-amad-1791-scholarship-application', '', 0)]),
- ('Resources', [('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
+ ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
+   ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
    ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
    ('Can the Cop Do That?', '/tools/can-the-cop-do-that', '', 1), ('Deadline Checker', '/tools/deadline-checker', '', 1),
@@ -253,6 +254,62 @@ def faq_ld(body):
     return {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": clean(q),
             "acceptedAnswer": {"@type": "Answer", "text": clean(a)}} for q, a in qs]}
 
+def make_og(meta):
+    """Per-page share image (1200x630). Falls back to the default image if Pillow is missing."""
+    default = SITE + '/assets/img/og-gfa-law.jpg'
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return default
+    fdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts', 'fonts')
+    try:
+        tf = ImageFont.truetype(os.path.join(fdir, 'Playfair.ttf'), 64)
+        try: tf.set_variation_by_name('Bold')
+        except Exception: pass
+        sf = ImageFont.truetype(os.path.join(fdir, 'Inter.ttf'), 26)
+        try: sf.set_variation_by_name('SemiBold')
+        except Exception: pass
+    except Exception:
+        return default
+    title = (meta.get('ogtitle') or meta.get('short') or meta['title'].split(' | ')[0]).strip()
+    slug = meta['path'].strip('/').replace('/', '--') or 'home'
+    W, H = 1200, 630
+    im = Image.new('RGB', (W, H), (16, 33, 15))
+    d = ImageDraw.Draw(im)
+    for y in range(H):  # soft vertical gradient
+        t = y / H
+        d.line([(0, y), (W, y)], fill=(int(16 + 10 * (1 - t)), int(33 + 16 * (1 - t)), int(15 + 8 * (1 - t))))
+    seal = Image.open(os.path.join(SRC, 'assets', 'img', 'seal-300.png')).convert('RGBA').resize((300, 300))
+    im.paste(seal, (W - 300 - 70, (H - 300) // 2), seal)
+    gold = (201, 165, 75)
+    d.rectangle([70, 92, 130, 95], fill=gold)
+    d.text((146, 76), 'GFA LAW, PLLC', font=sf, fill=gold)
+    # wrap title to the left column
+    words, lines, cur = title.split(), [], ''
+    maxw = W - 70 - 300 - 70 - 60
+    size = 64
+    while True:
+        lines, cur = [], ''
+        for w in words:
+            test = (cur + ' ' + w).strip()
+            if d.textlength(test, font=tf) <= maxw: cur = test
+            else:
+                if cur: lines.append(cur)
+                cur = w
+        if cur: lines.append(cur)
+        if len(lines) <= 4 or size <= 40: break
+        size -= 6; tf = tf.font_variant(size=size)
+        try: tf.set_variation_by_name('Bold')
+        except Exception: pass
+    lh = int(size * 1.18)
+    y = (H - lh * len(lines)) // 2
+    for ln in lines:
+        d.text((70, y), ln, font=tf, fill=(247, 242, 229)); y += lh
+    d.text((70, H - 96), 'gfalaw.us  \u00b7  254-405-1726  \u00b7  Temple, Texas', font=sf, fill=(226, 198, 124))
+    os.makedirs(os.path.join(OUT, 'assets', 'og'), exist_ok=True)
+    im.save(os.path.join(OUT, 'assets', 'og', slug + '.jpg'), quality=86, optimize=True)
+    return SITE + '/assets/og/' + slug + '.jpg'
+
 def render(meta, body):
     path = meta['path']
     depth = 0 if path == '/' else len(path.strip('/').split('/'))
@@ -312,7 +369,7 @@ def render(meta, body):
 <a class="btn sm hdr-cta" href="/contact/contact-gfa-law">Request a Case Review</a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span></button>
 </div></header>
-<main id="main">
+<main id="main"{'' if (meta.get('noindex') or meta.get('hidden')) else ' data-pagefind-body'}>
 {body}
 </main>
 {foot_for(meta)}
@@ -484,6 +541,8 @@ if __name__ == '__main__':
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
         body = body.replace('{{home_news}}', home_news(R))
+        if not meta.get('noindex') and not meta.get('ogimg') and meta['path'] != '/':
+            meta['ogimg'] = make_og(meta)
         write(meta['path'], render(meta, body))
         if not meta.get('noindex'): urls.append(meta['path'])
         if meta['path'] == '/':
@@ -492,7 +551,8 @@ if __name__ == '__main__':
     # 404 uses absolute links, it is served at any depth
     m404 = {'path': '/404', 'title': 'Page not found | GFA LAW, PLLC', 'short': 'Page not found', 'desc': 'This page could not be found.', 'noindex': '1'}
     b404 = '''<section class="sec"><div class="wrap center"><p class="eyebrow">Error 404</p><h1>Page not found</h1><p class="lede">The page you are looking for has moved or no longer exists.</p>
-<div class="btns"><a class="btn" href="/">Go to the home page</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div></div></section>'''
+<div class="btns"><a class="btn" href="/">Go to the home page</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div>
+<form class="hsearch" action="/search/" method="get" role="search"><label class="vh" for="q404">Search the site</label><input id="q404" name="q" type="search" placeholder="Search the site"><button class="btn" type="submit">Search</button></form></div></section>'''
     d404 = render(m404, b404).replace('href="../', 'href="/').replace('src="../', 'src="/')
     open(os.path.join(OUT, '404.html'), 'w', encoding='utf-8').write(d404)
     # study portal: hidden page, never indexed or linked
