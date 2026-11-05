@@ -1,0 +1,326 @@
+<div id="gfa-legal-vetting-tool">
+    <div class="slider-header">
+        <h2 class="branding-text">Was Your Interaction Lawful?</h2>
+        <p>A substantive guide to help you determine if the police overstepped their constitutional boundaries.</p>
+    </div>
+
+    <div class="slider-wrapper">
+        <span class="label left-label">Reasonable Suspicion</span>
+        <input type="range" min="0" max="1" step="1" value="0" id="substantive-slider" aria-label="Toggle legal standards">
+        <span class="label right-label">Probable Cause</span>
+    </div>
+
+    <div class="content-area">
+        <div id="rs-sub-content" class="info-card active">
+            <div class="card-title">Reasonable Suspicion: The "Investigative" Standard</div>
+            <div class="legal-cite">Standard: <em>Terry v. Ohio</em></div>
+            
+            <div class="context-section">
+                <div class="context-box">
+                    <strong>🚶 Pedestrian Detentions</strong>
+                    <p>To stop you, an officer must point to "specific and articulable facts" suggesting that criminal activity is occurring or about to occur. A mere "hunch" or a person's presence in a high-crime area is not enough. While certain behaviors can contribute to Reasonable Suspicion, the officer must be able to explain exactly what they saw that was suspicious.</p>
+                </div>
+                <div class="context-box">
+                    <strong>🚗 Traffic Stops</strong>
+                    <p>A stop is lawful only if the officer has a reasonable belief that a traffic violation has occurred. However, the stop must stay focused on that violation. If an officer extends the stop to wait for a K-9 unit or to ask unrelated questions without new Reasonable Suspicion, the detention may become unlawful.</p>
+                </div>
+            </div>
+
+            <div class="vetting-zone">
+                <h4>Identify Potential Misconduct</h4>
+                <ul class="points">
+                    <li><strong>Lack of Justification:</strong> Did the officer fail to tell you why you were stopped, or did their reason feel like a fabrication?</li>
+                    <li><strong>Illegal Frisk:</strong> Did they reach into your pockets? Under this standard, they are only allowed a "pat-down" of outer clothing for weapons.</li>
+                    <li><strong>Extended Detention:</strong> Were you held for an unreasonable amount of time after the initial reason for the stop was resolved?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="pc-sub-content" class="info-card">
+            <div class="card-title">Probable Cause: The "Search & Arrest" Standard</div>
+            <div class="legal-cite">Standard: 4th Amendment</div>
+
+            <div class="context-section">
+                <div class="context-box">
+                    <strong>🚶 Search of Person or Home</strong>
+                    <p>This is a high burden. It requires a "fair probability" that a crime was committed or that evidence exists in a specific place. To search your person or home without a warrant, the police must prove an emergency exists or have your voluntary (un-coerced) consent.</p>
+                </div>
+                <div class="context-box">
+                    <strong>🚗 Search of a Vehicle</strong>
+                    <p>Under the <strong>Automobile Exception</strong>, police can search your car without a warrant only if they have Probable Cause—such as seeing contraband in plain view or smelling a substance. Without this, they generally cannot search your trunk or closed containers without your permission.</p>
+                </div>
+            </div>
+
+            <div class="vetting-zone">
+                <h4>Identify Potential Misconduct</h4>
+                <ul class="points">
+                    <li><strong>Coerced Consent:</strong> Did you feel "forced" to agree to a search because of threats or aggressive behavior?</li>
+                    <li><strong>Illegal Entry:</strong> Did officers enter your home without a warrant or a clear, life-threatening emergency?</li>
+                    <li><strong>Arrest Without Facts:</strong> Were you arrested based on an officer’s "gut feeling" rather than objective evidence of a crime?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="embed-footer">
+        <div class="footer-line"></div>
+        <p class="footer-contact">If your interaction with police does not align with these standards, your constitutional rights may have been violated.</p>
+        <a href="https://law-offices-of-cj-grisham-pllc.mycase.com/contact_us/C8BdMYhMyK8pMK6ni8aEM9nz" target="_blank" class="cta-button">Consult With GFA LAW, PLLC</a>
+        <p class="footer-text">Property of <strong>GFA LAW, PLLC</strong></p>
+        <p class="footer-subtext">Attorney Work Product | Educational Vetting Tool | © 2026</p>
+    </div>
+</div>
+
+<style>
+    #gfa-legal-vetting-tool {
+        background-color: #2D5A27; /* Forest Green */
+        color: #E2CE8F; /* Gold Highlights */
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 60px 5%;
+        border: 4px solid #4B4929; /* Olive Border */
+        border-radius: 12px;
+        width: 100%; 
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 20px 0;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .branding-text {
+        color: #B59344; /* Gold Mid-tone */
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+    }
+
+    .slider-header p {
+        color: #E2CE8F;
+        font-size: 1.3em;
+        margin-bottom: 50px;
+        opacity: 0.9;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .slider-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 70px;
+    }
+
+    .label {
+        font-weight: bold;
+        font-size: 1.2em;
+        text-transform: uppercase;
+        width: 300px;
+        transition: 0.3s ease;
+    }
+
+    input[type=range] {
+        -webkit-appearance: none;
+        width: 250px;
+        background: transparent;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+        height: 18px;
+        background: #4B4929;
+        border-radius: 9px;
+        border: 1px solid #B59344;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        height: 38px;
+        width: 38px;
+        border-radius: 50%;
+        background: #B59344;
+        -webkit-appearance: none;
+        margin-top: -11px;
+        border: 3px solid #E2CE8F;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        cursor: pointer;
+    }
+
+    .content-area {
+        display: flex;
+        justify-content: center;
+        min-height: 550px;
+    }
+
+    .info-card {
+        display: none;
+        animation: fadeInVetting 0.6s ease;
+        text-align: left;
+        background: rgba(255,255,255,0.03);
+        padding: 50px;
+        border-radius: 10px;
+        border-top: 6px solid #B59344;
+        width: 100%;
+        max-width: 1100px;
+    }
+
+    .info-card.active { display: block; }
+
+    .card-title {
+        font-size: 2.2em;
+        font-weight: bold;
+        color: #B59344;
+        margin-bottom: 5px;
+    }
+
+    .legal-cite {
+        font-size: 1.1em;
+        margin-bottom: 35px;
+        color: #E2CE8F;
+        font-style: italic;
+    }
+
+    .context-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .context-box {
+        background: rgba(75, 73, 41, 0.5);
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid rgba(181, 147, 68, 0.4);
+    }
+
+    .context-box strong {
+        display: block;
+        color: #B59344;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        font-size: 1em;
+        letter-spacing: 1px;
+    }
+
+    .vetting-zone {
+        background: rgba(226, 206, 143, 0.05);
+        padding: 30px;
+        border-radius: 10px;
+        border: 1px dashed #B59344;
+    }
+
+    .vetting-zone h4 {
+        color: #B59344;
+        margin-top: 0;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+    }
+
+    .points { list-style: none; padding: 0; }
+    .points li {
+        margin-bottom: 18px;
+        line-height: 1.6;
+        font-size: 1.1em;
+        padding-left: 45px;
+        position: relative;
+    }
+
+    .points li::before {
+        content: "⚖️";
+        position: absolute;
+        left: 0;
+        font-size: 1.1em;
+    }
+
+    .embed-footer {
+        margin-top: 60px;
+        padding-bottom: 20px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background-color: #B59344;
+        color: #2D5A27;
+        padding: 20px 50px;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 5px;
+        margin: 30px 0;
+        transition: all 0.3s ease;
+        font-size: 1.2em;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .cta-button:hover {
+        background-color: #E2CE8F;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .footer-line {
+        height: 2px;
+        background: linear-gradient(to right, transparent, #B59344, transparent);
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .footer-contact {
+        font-size: 1.4em;
+        color: #E2CE8F;
+        font-weight: bold;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+    }
+
+    .footer-text {
+        font-size: 1.1em;
+        color: #B59344;
+        margin-bottom: 5px;
+    }
+
+    .footer-subtext {
+        font-size: 0.8em;
+        color: #E2CE8F;
+        opacity: 0.6;
+        text-transform: uppercase;
+    }
+
+    @keyframes fadeInVetting {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .left-label { text-align: right; }
+    .right-label { text-align: left; opacity: 0.3; }
+    .pc-active .left-label { opacity: 0.3; }
+    .pc-active .right-label { opacity: 1; }
+
+    @media (max-width: 1000px) {
+        .context-section { grid-template-columns: 1fr; }
+        .slider-wrapper { flex-direction: column; }
+        .label { text-align: center; width: auto; }
+        .branding-text { font-size: 2em; }
+    }
+</style>
+
+<script>
+    const subSlider = document.getElementById('substantive-slider');
+    const rsSub = document.getElementById('rs-sub-content');
+    const pcSub = document.getElementById('pc-sub-content');
+    const subWrapper = document.querySelector('.slider-wrapper');
+
+    subSlider.addEventListener('input', function() {
+        if (this.value == 0) {
+            rsSub.classList.add('active');
+            pcSub.classList.remove('active');
+            subWrapper.classList.remove('pc-active');
+        } else {
+            pcSub.classList.add('active');
+            rsSub.classList.remove('active');
+            subWrapper.classList.add('pc-active');
+        }
+    });
+</script>
