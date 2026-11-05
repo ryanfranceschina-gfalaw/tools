@@ -1,0 +1,49 @@
+name: Legal page review reminder
+
+# Once a month, finds guides whose "Reviewed <Month> <Year>" date is more than
+# six months old and opens a GitHub issue listing them (GitHub emails the owner).
+on:
+  schedule:
+    - cron: '41 15 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Find guides due for review
+        id: find
+        run: |
+          python3 - <<'PY'
+          import re, glob, datetime, os
+          months = {m: i for i, m in enumerate(['January','February','March','April','May','June','July','August','September','October','November','December'], 1)}
+          today = datetime.date.today()
+          due = []
+          for f in sorted(glob.glob('src/pages/*.html')):
+              s = open(f, encoding='utf-8').read()
+              m = re.search(r'Reviewed (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})', s)
+              if not m: continue
+              y, mo = int(m.group(2)), months[m.group(1)]
+              age = (today.year - y) * 12 + today.month - mo
+              if age >= 6:
+                  path = re.search(r'^path: (.+)$', s, re.M).group(1).strip()
+                  due.append(f'- https://www.gfalaw.us{path}/ (last reviewed {m.group(1)} {y})')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as o:
+              o.write('count=%d\n' % len(due))
+          open('due.md', 'w').write('These legal guides have not been reviewed in six months or more. Check them against current law, then update the "Reviewed" date.\n\n' + '\n'.join(due) + '\n')
+          print('\n'.join(due) or 'Nothing due')
+          PY
+      - name: Open a reminder issue
+        if: steps.find.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Legal guides due for review ($(date +%B\ %Y))"
+          if ! gh issue list --state open --search "in:title Legal guides due for review" --json number --jq '.[0].number' | grep -q .; then
+            gh issue create --title "$title" --body-file due.md
+          fi
