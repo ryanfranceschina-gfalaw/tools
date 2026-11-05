@@ -424,7 +424,7 @@ def merch_page(M):
 def videos_page(V):
     secs = []
     for g in V:
-        cards = ''.join(f'''<div class="vcard rv"><button class="vid" type="button" data-yt="{esc(v["id"])}" aria-label="Play video: {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="len" aria-hidden="true">{esc(v["len"])}</span></button><div class="bd"><h3>{esc(v["title"])}</h3><p>{esc(v["note"])}</p><a class="more" href="https://www.youtube.com/watch?v={esc(v["id"])}" target="_blank" rel="noopener">Watch on YouTube</a></div></div>''' for v in g['items'])
+        cards = ''.join(f'''<div class="vcard rv"><button class="vid" type="button" data-yt="{esc(v["id"])}" aria-label="Play video: {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="len" aria-hidden="true">{esc(v["len"])}</span></button><div class="bd"><h3>{esc(v["title"])}</h3>{("<p>" + esc(v["note"]) + "</p>") if v["note"] else ""}<a class="more" href="https://www.youtube.com/watch?v={esc(v["id"])}" target="_blank" rel="noopener">Watch on YouTube</a></div></div>''' for v in g['items'])
         secs.append(f'<h2>{esc(g["group"])}</h2><div class="vgrid">{cards}</div>')
     body = f'''<section class="phero"><div class="wrap">{{{{crumbs}}}}
 <p class="eyebrow">Watch</p><h1>Videos</h1>

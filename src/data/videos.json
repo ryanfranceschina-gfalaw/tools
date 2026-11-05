@@ -1,23 +1,100 @@
 [
- {"group":"Know Your Rights","items":[
-  {"id":"ropsFDpiaR8","title":"How to Avoid Arrest, or Protect Your Rights","len":"20:18","note":"What to say, and what not to say, when police approach you."},
-  {"id":"FnO4EI6a0jo","title":"You Need to Move. No.","len":"16:49","note":"Standing your ground on a public sidewalk while officers order you to leave."},
-  {"id":"oRWi_ctlfe4","title":"Being Told to Leave for Protected Speech","len":"3:06","note":"What happens when officials try to remove someone for lawful speech."},
-  {"id":"S6otIob5Bro","title":"Don't Let the State Take Your Guns","len":"15:01","note":"How Texans protect their firearms and their rights."},
-  {"id":"jz5gvTLxuqs","title":"Rockwall Open Carry Education Rally","len":"12:37","note":"Teaching the public about lawful carry in Texas."}
- ]},
- {"group":"About the Firm","items":[
-  {"id":"--6DD1mnplc","title":"The Texas 2A Attorney","len":"3:09","note":"CJ Grisham on why he practices Second Amendment law."},
-  {"id":"A5uONDeT2qQ","title":"CJ and Quannell Go Way Back","len":"5:50","note":"GFA Law HQ and GFA LAW with Ryan Franceschina."}
- ]},
- {"group":"Cases and Commentary","items":[
-  {"id":"WdxZApE3SWc","title":"Update on Trinidad","len":"14:57","note":"An update on the firm's work in Trinidad, Texas."},
-  {"id":"RW9L8ejNLwQ","title":"Justice Gorsuch at the Hemani Oral Argument","len":"1:40","note":"A short look at a Supreme Court argument on federal gun law."}
- ]},
- {"group":"Speaking to Lawmakers and Local Government","items":[
-  {"id":"m8jCv5gKfTY","title":"SB 7 Testimony","len":"2:08","note":"Testimony at the Texas Capitol."},
-  {"id":"yxhoLXf3NY8","title":"SB 14 Testimony","len":"32:11","note":"Testimony at the Texas Capitol."},
-  {"id":"NXJYVJyWwJk","title":"Speech to City Council on Property Rights","len":"4:09","note":"Public comment on property rights."},
-  {"id":"jBm-cZqZg-Y","title":"Speech to the Hood County Commissioners Court","len":"4:56","note":"Public comment before a county commissioners court."}
- ]}
+ {
+  "group": "Know Your Rights",
+  "items": [
+   {
+    "id": "ropsFDpiaR8",
+    "title": "How to Avoid Arrest, or Protect Your Rights",
+    "len": "20:18",
+    "note": ""
+   },
+   {
+    "id": "FnO4EI6a0jo",
+    "title": "You Need to Move. No.",
+    "len": "16:49",
+    "note": ""
+   },
+   {
+    "id": "oRWi_ctlfe4",
+    "title": "Being Told to Leave for Protected Speech",
+    "len": "3:06",
+    "note": "What happens when officials try to remove someone for lawful speech."
+   },
+   {
+    "id": "S6otIob5Bro",
+    "title": "Don't Let the State Take Your Guns",
+    "len": "15:01",
+    "note": ""
+   },
+   {
+    "id": "jz5gvTLxuqs",
+    "title": "Rockwall Open Carry Education Rally",
+    "len": "12:37",
+    "note": "Teaching the public about lawful carry in Texas."
+   }
+  ]
+ },
+ {
+  "group": "About the Firm",
+  "items": [
+   {
+    "id": "--6DD1mnplc",
+    "title": "The Texas 2A Attorney",
+    "len": "3:09",
+    "note": ""
+   },
+   {
+    "id": "A5uONDeT2qQ",
+    "title": "CJ and Quannell Go Way Back",
+    "len": "5:50",
+    "note": ""
+   }
+  ]
+ },
+ {
+  "group": "Cases and Commentary",
+  "items": [
+   {
+    "id": "WdxZApE3SWc",
+    "title": "Update on Trinidad",
+    "len": "14:57",
+    "note": "An update on events in Trinidad, Texas."
+   },
+   {
+    "id": "RW9L8ejNLwQ",
+    "title": "Justice Gorsuch at the Hemani Oral Argument",
+    "len": "1:40",
+    "note": "A short look at a Supreme Court argument on federal gun law."
+   }
+  ]
+ },
+ {
+  "group": "Speaking to Lawmakers and Local Government",
+  "items": [
+   {
+    "id": "m8jCv5gKfTY",
+    "title": "SB 7 Testimony",
+    "len": "2:08",
+    "note": "Testimony at the Texas Capitol."
+   },
+   {
+    "id": "yxhoLXf3NY8",
+    "title": "SB 14 Testimony",
+    "len": "32:11",
+    "note": "Testimony at the Texas Capitol."
+   },
+   {
+    "id": "NXJYVJyWwJk",
+    "title": "Speech to City Council on Property Rights",
+    "len": "4:09",
+    "note": "Public comment on property rights."
+   },
+   {
+    "id": "jBm-cZqZg-Y",
+    "title": "Speech to the Hood County Commissioners Court",
+    "len": "4:56",
+    "note": "Public comment before a county commissioners court."
+   }
+  ]
+ }
 ]
