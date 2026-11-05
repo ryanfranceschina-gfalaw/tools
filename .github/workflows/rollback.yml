@@ -1,0 +1,49 @@
+name: Roll back the website
+
+# Puts an earlier version of the site back online.
+# Actions tab > "Roll back the website" > Run workflow, then paste the
+# commit code (from the repository's commit history) of the version you want.
+# The next normal publish goes back to the latest version.
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit code of the version to restore (from the commit history)'
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.commit }}
+      - name: Install image tools
+        run: python3 -m pip install --quiet --break-system-packages pillow || python3 -m pip install --quiet pillow || true
+      - name: Build that version
+        run: python3 build.py
+      - name: Build the site search index
+        run: npx -y pagefind@1.4.0 --site _site || true
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
