@@ -1,0 +1,8 @@
+# Keeps the tools used by the website's automations up to date.
+# GitHub opens a proposed update when a newer version is available.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
