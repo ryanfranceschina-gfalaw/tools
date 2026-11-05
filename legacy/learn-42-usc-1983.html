@@ -1,0 +1,272 @@
+<div id="gfa-civil-rights-master-container">
+    <div class="slider-header">
+        <h2 class="branding-text">Vindicating Your Rights: 42 U.S.C. § 1983</h2>
+        <p>Use this guide to understand the elements required to prevail in a federal civil rights lawsuit.</p>
+    </div>
+
+    <div class="slider-wrapper">
+        <input type="range" min="1" max="5" step="1" value="1" id="monell-slider" aria-label="1983 claim requirements">
+        <div class="step-labels">
+            <span class="step-label" data-step="1">1. Color of Law</span>
+            <span class="step-label" data-step="2">2. Federal Rights</span>
+            <span class="step-label" data-step="3">3. Monell Liability</span>
+            <span class="step-label" data-step="4">4. Causation</span>
+            <span class="step-label" data-step="5">5. The Hurdle</span>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div id="m-step-1" class="info-card active">
+            <div class="card-title">Acting Under "Color of Law"</div>
+            <div class="legal-cite">Requirement: State Action</div>
+            <ul class="points">
+                <li><strong>Official Authority:</strong> The defendant must have been acting in their capacity as a government official (police, sheriff, etc.).</li>
+                <li><strong>Misuse of Power:</strong> Even if the officer's actions were illegal under state law, they are acting under "Color of Law" if they used their official position to commit the act.</li>
+                <li><strong>Private Exclusions:</strong> Generally, you cannot sue private citizens or companies under § 1983 unless they were working in concert with the government.</li>
+            </ul>
+        </div>
+
+        <div id="m-step-2" class="info-card">
+            <div class="card-title">Deprivation of Federal Rights</div>
+            <div class="legal-cite">Requirement: The Violation</div>
+            <ul class="points">
+                <li><strong>4th Amendment:</strong> Covers excessive force, false arrest, and unreasonable searches or seizures.</li>
+                <li><strong>8th Amendment:</strong> Covers "cruel and unusual punishment" within the prison or jail system.</li>
+                <li><strong>14th Amendment:</strong> Covers Due Process violations and Equal Protection claims (discrimination).</li>
+                <li><strong>1st Amendment:</strong> Protects against retaliation for exercising free speech or filming the police.</li>
+            </ul>
+        </div>
+
+        <div id="m-step-3" class="info-card">
+            <div class="card-title">Monell Liability (Suing the City)</div>
+            <div class="legal-cite">Requirement: Policy or Custom</div>
+            <ul class="points">
+                <li><strong>No Automatic Liability:</strong> A city is not automatically liable just because its officer did something wrong (*Respondeat Superior* does not apply).</li>
+                <li><strong>Official Policy:</strong> You must prove the violation was caused by an official written policy or a decision by a high-ranking "final policy-maker."</li>
+                <li><strong>Custom or Practice:</strong> Liability exists if the violation was part of a widespread, persistent practice that the city knew about but failed to stop.</li>
+                <li><strong>Failure to Train:</strong> You can prevail if you show the city was "deliberately indifferent" by failing to train officers in a way that obviously leads to rights violations.</li>
+            </ul>
+        </div>
+
+        <div id="m-step-4" class="info-card">
+            <div class="card-title">Causation & Damages</div>
+            <div class="legal-cite">Requirement: The Moving Force</div>
+            <ul class="points">
+                <li><strong>Proximate Cause:</strong> You must show that the officer's (or city's) conduct was the direct "moving force" behind your injury.</li>
+                <li><strong>Tangible Harm:</strong> While "nominal damages" ($1) are possible for a rights violation, a successful claim usually requires proof of physical, emotional, or financial injury.</li>
+                <li><strong>Punitive Damages:</strong> In cases of "evil motive" or "reckless indifference," a jury may award extra damages to punish the individual officer.</li>
+            </ul>
+        </div>
+
+        <div id="m-step-5" class="info-card">
+            <div class="card-title">The Qualified Immunity Hurdle</div>
+            <div class="legal-cite">Standard: Clearly Established Law</div>
+            <ul class="points">
+                <li><strong>The Shield:</strong> Officers are immune from suit unless their conduct violated a right that was "clearly established" at the time.</li>
+                <li><strong>The Precedent Rule:</strong> To win, you often need to find a previous court case with very similar facts that put the officer on notice that their behavior was illegal.</li>
+                <li><strong>Our Role:</strong> Overcoming Qualified Immunity requires deep legal research into appellate court decisions to prove the law was clear.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="embed-footer">
+        <div class="footer-line"></div>
+        <p class="footer-contact">Please contact us if you feel that these rights were not honored in your interaction with the police.</p>
+        <p class="footer-text">Property of <strong>GFA LAW, PLLC</strong></p>
+        <p class="footer-subtext">Attorney Work Product | Educational Resource | © 2026</p>
+    </div>
+</div>
+
+<style>
+    #gfa-civil-rights-master-container {
+        background-color: #2D5A27; /* Forest Green */
+        color: #E2CE8F; /* Gold Highlights */
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 50px 5%;
+        border: 4px solid #4B4929; /* Olive Border */
+        border-radius: 12px;
+        width: 100%; 
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 20px 0;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+
+    .branding-text {
+        color: #B59344; /* Gold Mid-tone */
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+        font-size: 2.2em;
+    }
+
+    .slider-header p {
+        color: #E2CE8F;
+        font-size: 1.2em;
+        margin-bottom: 40px;
+        opacity: 0.9;
+    }
+
+    .slider-wrapper {
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #monell-slider {
+        -webkit-appearance: none;
+        width: 70%;
+        max-width: 800px;
+        background: transparent;
+        margin-bottom: 25px;
+    }
+
+    #monell-slider::-webkit-slider-runnable-track {
+        height: 14px;
+        background: #4B4929;
+        border-radius: 7px;
+        border: 1px solid #B59344;
+    }
+
+    #monell-slider::-webkit-slider-thumb {
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background: #B59344;
+        -webkit-appearance: none;
+        margin-top: -10px;
+        border: 3px solid #E2CE8F;
+        cursor: pointer;
+    }
+
+    .step-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        max-width: 1000px;
+    }
+
+    .step-label {
+        font-weight: bold;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        color: #E2CE8F;
+        opacity: 0.4;
+        transition: 0.3s;
+    }
+
+    .step-label.active-label {
+        opacity: 1;
+        color: #B59344;
+        transform: scale(1.1);
+    }
+
+    .content-area {
+        display: flex;
+        justify-content: center;
+        min-height: 480px;
+        margin-bottom: 30px;
+    }
+
+    .info-card {
+        display: none;
+        animation: fadeIn1983 0.6s ease;
+        text-align: left;
+        background: rgba(255,255,255,0.04);
+        padding: 40px;
+        border-radius: 10px;
+        border-left: 6px solid #B59344;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .info-card.active { display: block; }
+
+    .card-title {
+        font-size: 2em;
+        font-weight: bold;
+        color: #B59344;
+    }
+
+    .legal-cite {
+        font-size: 1em;
+        margin-bottom: 30px;
+        color: #E2CE8F;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .points { list-style: none; padding: 0; }
+    .points li {
+        margin-bottom: 18px;
+        line-height: 1.6;
+        font-size: 1.1em;
+        position: relative;
+        padding-left: 35px;
+    }
+
+    .points li::before {
+        content: "⚖️";
+        position: absolute;
+        left: 0;
+        font-size: 0.9em;
+    }
+
+    /* Footer */
+    .footer-line {
+        height: 2px;
+        background: linear-gradient(to right, transparent, #B59344, transparent);
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .footer-contact {
+        font-size: 1.25em;
+        color: #E2CE8F;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-style: italic;
+    }
+
+    .footer-text {
+        font-size: 1.1em;
+        color: #B59344;
+        margin-bottom: 5px;
+    }
+
+    .footer-subtext {
+        font-size: 0.8em;
+        color: #E2CE8F;
+        opacity: 0.6;
+        text-transform: uppercase;
+    }
+
+    @keyframes fadeIn1983 {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+        .step-labels { display: none; }
+        .branding-text { font-size: 1.7em; }
+    }
+</style>
+
+<script>
+    const mSlider = document.getElementById('monell-slider');
+    const mLabels = document.querySelectorAll('.step-label');
+    
+    function updateMonellStep(step) {
+        document.querySelectorAll('.info-card').forEach(card => card.classList.remove('active'));
+        document.getElementById(`m-step-${step}`).classList.add('active');
+        mLabels.forEach(label => {
+            label.classList.remove('active-label');
+            if(label.getAttribute('data-step') == step) label.classList.add('active-label');
+        });
+    }
+
+    mSlider.addEventListener('input', function() { updateMonellStep(this.value); });
+    updateMonellStep(1);
+</script>
