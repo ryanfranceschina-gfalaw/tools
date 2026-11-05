@@ -1,0 +1,33 @@
+path: /1791/certificate
+title: Your 1791 Hunt Certificate | GFA LAW, PLLC
+desc: Print your certificate for completing the GFA LAW 1791 Hunt.
+short: Certificate
+noindex: 1
+hidden: 1
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">The 1791 Hunt</p><h1>Your Certificate</h1>
+</div></section>
+<section class="sec tight"><div class="wrap">
+<div id="clocked" hidden><p class="lede">You have not found all ten seals yet. <a href="/1791">See your progress</a>.</p></div>
+<div id="copen" hidden>
+<form class="wc-form" style="max-width:480px" onsubmit="return false"><label for="cn">Name for your certificate</label><input type="text" id="cn" maxlength="48" autocomplete="name"></form>
+<div class="cert" id="cert">
+<img src="/assets/img/seal-300.png" alt="">
+<p style="letter-spacing:.2em;text-transform:uppercase;font-size:13px">GFA LAW, PLLC presents this</p>
+<h2>Certificate of Constitutional Vigilance</h2>
+<p>to</p>
+<div class="nm" id="cnm">A Free Citizen</div>
+<p>for finding all ten 1791 seals hidden across gfalaw.us, and for keeping a watchful eye on the rights secured by the Bill of Rights, ratified December 15, 1791.</p>
+<div class="sig"><span>Awarded <b id="cdt"></b></span><span>No. <b id="cno"></b></span></div>
+</div>
+<div class="btns" style="justify-content:center"><button class="btn" type="button" id="cpr">Print certificate</button><a class="btn ghost" href="/vault">Open the merch vault</a></div>
+</div>
+</div></section>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var G=window.GFA;if(!G)return;var ok=G.got().length>=G.SEALS.length;document.getElementById(ok?'copen':'clocked').hidden=false;if(!ok)return;
+ var st;try{st=JSON.parse(localStorage.getItem('gfa_cert')||'null')}catch(e){}if(!st){st={d:new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),n:'1791-'+Math.floor(100000+Math.random()*900000),name:''};try{localStorage.setItem('gfa_cert',JSON.stringify(st))}catch(e){}if(window.gtag)gtag('event','hunt_complete')}
+ var i=document.getElementById('cn'),nm=document.getElementById('cnm');i.value=st.name||'';function u(){nm.textContent=i.value.trim()||'A Free Citizen';st.name=i.value;try{localStorage.setItem('gfa_cert',JSON.stringify(st))}catch(e){}}i.addEventListener('input',u);u();
+ document.getElementById('cdt').textContent=st.d;document.getElementById('cno').textContent=st.n;
+ document.getElementById('cpr').onclick=function(){document.body.classList.add('printing-cert');setTimeout(function(){print();setTimeout(function(){document.body.classList.remove('printing-cert')},400)},60)}});
+</script>

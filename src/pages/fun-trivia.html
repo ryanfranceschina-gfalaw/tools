@@ -1,0 +1,44 @@
+path: /trivia
+title: Daily Constitution Trivia | GFA LAW, PLLC
+desc: One free Constitution and Texas history question every day. Build your streak, learn the Bill of Rights, and share your score.
+short: Daily Trivia
+ogsub: One question a day. How long can your streak last?
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Daily Trivia</p><h1>Daily Constitution Trivia</h1>
+<p class="lede">One question a day about the Constitution, the Bill of Rights and Texas history. Answer correctly on consecutive days to build your streak. A new question appears at midnight Central time.</p>
+</div></section>
+<section class="sec tight"><div class="wrap" style="max-width:820px">
+<div class="game" id="tv"><p class="q">Loading today's question...</p></div>
+<p class="sm" style="margin-top:22px">Your streak is saved in this browser only. Questions are general information, not legal advice. Want the source text? Read the <a href="/constitution">Pocket Constitution</a>.</p>
+</div></section>
+<script>
+(function(){
+var box=document.getElementById('tv'),G={};
+function st(v){try{if(v===undefined)return JSON.parse(localStorage.getItem('gfa_trivia')||'{}');localStorage.setItem('gfa_trivia',JSON.stringify(v))}catch(e){return{}}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function start(){
+ G=window.GFA||{};
+ var T=G.today||{y:new Date().getFullYear(),m:new Date().getMonth()+1,d:new Date().getDate()},day=Math.round((Date.UTC(T.y,T.m-1,T.d)-Date.UTC(2026,10,5))/864e5);
+ fetch('/assets/fun/trivia.json').then(function(r){return r.json()}).then(function(Q){
+  var s=st(),n=((day*37)%Q.length+Q.length)%Q.length,num=day+1;
+  if(s.streak&&s.lastWin!==day&&s.lastWin!==day-1&&s.last!==day){s.streak=0;st(s)}
+  function stats(){s=st();return '<div class="stats"><span class="stat">Streak <b>'+(s.streak||0)+'</b></span><span class="stat">Best <b>'+(s.best||0)+'</b></span><span class="stat">Played <b>'+(s.played||0)+'</b></span><span class="stat">Correct <b>'+(s.wins||0)+'</b></span></div>'}
+  function render(q,daily,prior){
+   var h=(daily?'<p class="eyebrow">Question #'+num+'</p>':'<p class="eyebrow">Practice question</p>')+(daily?stats():'')+'<p class="q">'+esc(q.q)+'</p><ul class="opts">'+q.choices.map(function(c,i){return'<li><button class="opt" type="button" data-i="'+i+'">'+esc(c)+'</button></li>'}).join('')+'</ul><div id="tvfb"></div>';
+   box.innerHTML=h;var bs=box.querySelectorAll('.opt');
+   function answer(i,save){bs.forEach(function(b,j){b.disabled=true;if(j===q.a)b.classList.add('ok');else if(j===i)b.classList.add('no')});var ok=i===q.a;
+    if(save){s=st();s.last=day;s.pick=i;s.played=(s.played||0)+1;if(ok){s.wins=(s.wins||0)+1;s.streak=(s.lastWin===day-1?(s.streak||0):0)+1;s.lastWin=day;s.best=Math.max(s.best||0,s.streak)}else s.streak=0;st(s);if(window.gtag)gtag('event','trivia_answer',{correct:ok});if(ok&&G.find)G.find('trivia')}
+    var share='GFA LAW Constitution Trivia #'+num+': '+(ok?'Correct':'Missed it')+(st().streak?' | Streak '+st().streak:'')+' | gfalaw.us/trivia';
+    document.getElementById('tvfb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'Correct.':'Not quite.')+'</b> '+esc(q.why)+'</div>'+(daily?stats():'')+'<div class="btns" style="margin-top:0">'+(daily?'<button class="btn sm" type="button" id="tvsh">Share your result</button>':'')+'<button class="btn sm ghost" type="button" id="tvpr">Practice question</button></div>'+(daily?'<p class="sm" style="margin-top:16px">Come back tomorrow for question #'+(num+1)+'.</p>':'');
+    var sh=document.getElementById('tvsh');if(sh)sh.onclick=function(){if(navigator.share)navigator.share({text:share}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(share).then(function(){sh.textContent='Copied'})};
+    document.getElementById('tvpr').onclick=function(){var k;do{k=Math.floor(Math.random()*Q.length)}while(k===n&&Q.length>1);render(Q[k],false)}}
+   if(prior!==undefined)answer(prior,false);else bs.forEach(function(b){b.onclick=function(){answer(+b.dataset.i,daily)}});
+  }
+  render(Q[n],true,s.last===day?s.pick:undefined);
+ }).catch(function(){box.innerHTML='<p>Trivia could not load right now. Please try again later.</p>'});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
+</script>
+{{band}}

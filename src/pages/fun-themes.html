@@ -1,0 +1,19 @@
+path: /themes
+title: Holiday Theme Preview | GFA LAW, PLLC
+desc: Preview the holiday themes on the GFA LAW website.
+short: Holiday Themes
+noindex: 1
+hidden: 1
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Behind the scenes</p><h1>Holiday Theme Preview</h1>
+<p class="lede">The site switches themes automatically on these dates (Central time). Click any theme to preview it on the home page.</p>
+</div></section>
+<section class="sec tight"><div class="wrap" style="max-width:860px"><ol class="hunt-list" id="thl"></ol></div></section>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var G=window.GFA;if(!G)return;var y=G.today.y,seen={},o='';
+ G.holidays(y).slice().sort(function(a,b){return a.s-b.s}).forEach(function(h){if(seen[h.id])return;seen[h.id]=1;
+  function f(n){return new Date(n*864e5).toLocaleDateString('en-US',{timeZone:'UTC',month:'short',day:'numeric'})}
+  o+='<li><span class="n" style="min-width:120px">'+f(h.s)+(h.e>h.s?' to '+f(h.e):'')+'</span><span><a href="/?theme='+h.id+'"><b>'+h.id+'</b></a>: '+h.msg.replace(/<[^>]+>/g,'')+(h.fx?' <span class="sm">(effect: '+h.fx+')</span>':'')+'</span></li>'});
+ document.getElementById('thl').innerHTML=o});
+</script>

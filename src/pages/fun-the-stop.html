@@ -1,0 +1,69 @@
+path: /tools/the-stop
+title: The Stop: A Texas Traffic Stop Simulator | GFA LAW, PLLC
+desc: Play through a Texas traffic stop one decision at a time and learn what the law says about IDs, questions, searches, handguns and detentions.
+short: The Stop
+ogsub: Can you handle a Texas traffic stop like a pro?
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Free Tool</p><h1>The Stop</h1>
+<p class="lede">Red and blue lights fill your mirror. Make your choices one at a time and see what Texas and federal law say about each one. Score 14 out of 14 to earn a perfect stop.</p>
+</div></section>
+<section class="sec tight"><div class="wrap" style="max-width:820px">
+<div class="game" id="stop" aria-live="polite"></div>
+<p class="sm" style="margin-top:22px">The Stop is a simplified training game, not legal advice. Every encounter is different, and officers do not always follow the law. Never physically resist; challenge an unlawful stop or search later in court. Learn more in our guides to <a href="/resources/know-your-rights/police-stops-and-arrests-in-texas">police stops and arrests</a> and <a href="/resources/know-your-rights/carrying-a-handgun-in-texas">carrying a handgun</a>.</p>
+</div></section>
+<script>
+(function(){
+var S=[
+ {t:'It is 10:40 p.m. You are driving home on I-35 when a patrol car lights up behind you. You are carrying a handgun in a holster, and you do not have a License to Carry. What do you do?',
+  c:[{x:'Signal, pull over at the first safe spot, turn on the dome light, and put both hands on the wheel.',p:2,f:'Exactly right. Making it easy for the officer to see your hands lowers the tension for everyone.'},
+     {x:'Start digging in the glove box for your insurance card before the officer reaches the window.',p:0,f:'Reaching around the car before the officer can see what you are doing is one of the riskiest things you can do. Wait, and tell the officer before you reach for anything.'},
+     {x:'Keep driving a few miles until you reach your exit.',p:0,f:'Pull over at the first safe place and signal so the officer knows you see them. Continuing to drive can be treated as fleeing.'}]},
+ {t:'The officer walks up and says, "License and insurance, please."',
+  c:[{x:'"My license is in my wallet in my back pocket. Is it OK if I reach for it?"',p:2,f:'Correct. A driver must show a driver\'s license when an officer asks (Transportation Code 521.025), and announcing your movements first is the safest way to do it.'},
+     {x:'"I do not have to identify myself."',p:0,f:'That is true for a passenger or someone on foot who has not been arrested, but not for a driver. Since 2023, a driver lawfully detained for an alleged violation who does not show a license and then refuses to give a name, license number, address or date of birth commits a separate offense (Penal Code 38.02(b-1)).'},
+     {x:'Hand over a friend\'s license because yours is expired.',p:0,f:'Never do this. Giving false identifying information to an officer who has lawfully detained you is a crime (Penal Code 38.02).'}]},
+ {t:'"Do you have any weapons in the vehicle?"',
+  c:[{x:'Keep your hands on the wheel and calmly say, "Yes, I have a handgun holstered on my right hip. How would you like me to proceed?"',p:2,f:'Good choice. Texas law does not require a person carrying without a license to tell an officer about a handgun, but once you are asked, a calm, direct answer with your hands visible is the safest practice. (A License to Carry holder must show the license with ID when asked for identification.)'},
+     {x:'Stay quiet and say nothing about the gun.',p:1,f:'Not unlawful for a permitless carrier, and you never have to answer questions. Once asked directly, though, silence about a gun the officer may discover can escalate a routine stop. Never lie about it.'},
+     {x:'Pull the holster off your belt to show the officer.',p:0,f:'Never handle or reach for a firearm during a stop unless the officer specifically tells you to. Tell the officer where it is and let them direct what happens next.'}]},
+ {t:'"Where are you headed tonight? Been drinking at all?"',
+  c:[{x:'"Officer, I prefer not to answer questions."',p:2,f:'You do not have to answer questions about where you are going or what you have been doing. If you choose to remain silent, say so out loud. The Supreme Court has held that simply staying quiet may not be enough to invoke the right (Salinas v. Texas; Berghuis v. Thompkins).'},
+     {x:'Give a short, polite, truthful answer.',p:1,f:'That is your choice to make, but anything you say can be used against you. You are never required to explain your plans.'},
+     {x:'Make up a story about where you were.',p:0,f:'Do not lie to police. A false story can become evidence against you, and giving false identifying information to an officer who has lawfully detained you is a crime. Choosing not to answer is always safer than lying.'}]},
+ {t:'"Mind if I take a quick look in your car?"',
+  c:[{x:'"I do not consent to any searches."',p:2,f:'Correct. Officers do not have to tell you that you can say no. If you agree, the search is usually legal. If an officer searches anyway, do not resist; it can be challenged in court later.'},
+     {x:'"Sure, I have nothing to hide."',p:0,f:'Consent gives up your Fourth Amendment protection for that search, even if you have done nothing wrong.'},
+     {x:'Stand in front of the door so the officer cannot get in.',p:0,f:'Never physically resist. State that you do not consent, and let a court sort out whether the search was legal.'}]},
+ {t:'The officer comes back: "Here is a warning for speeding. I am going to hold you here while a K-9 unit comes to sniff the car."',
+  c:[{x:'"Officer, I do not consent to searches. Am I being detained, or am I free to go?"',p:2,f:'A traffic stop can last only as long as it takes to handle the reason for the stop. Officers may not extend it to wait for a drug dog without reasonable suspicion (Rodriguez v. United States). Asking whether you are free to go puts the officer on the record.'},
+     {x:'Drive away, since the warning means the stop is over.',p:0,f:'Never leave until the officer tells you that you are free to go. Driving off can turn a warning into an arrest.'},
+     {x:'Wait silently for the dog.',p:1,f:'Staying calm is good, but you can ask, "Am I being detained, or am I free to go?" If the stop was extended without reasonable suspicion, that matters later.'}]},
+ {t:'"Step out of the vehicle, please."',
+  c:[{x:'Comply calmly, keep your hands visible, and repeat that you do not consent to any searches.',p:2,f:'Correct. During a lawful stop, officers may order the driver and passengers out of the car. Comply, do not resist, and keep stating your objections out loud.'},
+     {x:'Refuse to get out until a supervisor arrives.',p:0,f:'Officers may order you out of the car during a lawful stop. Refusing can lead to force or an arrest. Comply now and challenge it later.'},
+     {x:'Get out and start filming while walking toward the officer.',p:1,f:'You may record the police in public, but do not approach the officer or interfere. Keep your distance, keep your hands visible, and follow lawful orders.'}]}
+];
+var box=document.getElementById('stop'),i=0,score=0,max=S.length*2;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function shuffle(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function show(){
+ if(i>=S.length)return end();
+ var s=S[i],cs=shuffle(s.c);
+ box.innerHTML='<div class="meter" aria-hidden="true"><i style="width:'+(i/S.length*100)+'%"></i></div><p class="eyebrow">Decision '+(i+1)+' of '+S.length+'</p><p class="q">'+esc(s.t)+'</p><ul class="opts">'+cs.map(function(c,k){return'<li><button class="opt" type="button" data-k="'+k+'">'+esc(c.x)+'</button></li>'}).join('')+'</ul><div id="sfb"></div>';
+ box.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){var c=cs[+b.dataset.k];score+=c.p;box.querySelectorAll('.opt').forEach(function(o,k){o.disabled=true;if(cs[k].p===2)o.classList.add('ok');else if(o===b)o.classList.add('no')});
+  document.getElementById('sfb').innerHTML='<div class="fb '+(c.p===2?'ok':'no')+'"><b>'+(c.p===2?'Best move.':c.p===1?'Not bad, but there is a better move.':'Risky.')+'</b> '+esc(c.f)+'</div><div class="btns" style="margin-top:0"><button class="btn sm" type="button" id="snx">'+(i+1<S.length?'Next':'See your score')+'</button></div>';
+  var nx=document.getElementById('snx');nx.focus();nx.onclick=function(){i++;show()}}});
+ var q=box.querySelector('.q');if(i)q.setAttribute('tabindex','-1'),q.focus();
+}
+function end(){
+ var perfect=score===max,G=window.GFA||{};
+ if(window.gtag)gtag('event','the_stop_complete',{score:score});
+ box.innerHTML='<div class="meter" aria-hidden="true"><i style="width:100%"></i></div><p class="eyebrow">Stop complete</p><p class="q">You scored '+score+' out of '+max+'.</p><p>'+(perfect?'A perfect stop. You stayed calm, protected your rights and kept everyone safe.':score>=10?'Solid work. Review the feedback above to sharpen the rest.':'Every stop is a chance to learn. Read the guides linked below, then try again.')+'</p><p>You drive home with a warning. Afterward, write down what happened: the time, location, officer names, badge and car numbers, and any witnesses. If you believe the stop or a search was unlawful, <a href="/contact/contact-gfa-law">request a case review</a>.</p><div class="btns"><button class="btn" type="button" id="sag">Play again</button><a class="btn ghost" href="/tools/wallet-card">Make a wallet card</a></div><div id="sseal"></div>';
+ document.getElementById('sag').onclick=function(){i=0;score=0;show();box.scrollIntoView({block:'start'})};box.scrollIntoView({block:'start'});
+ if(perfect&&G.sealBtn){var w=document.getElementById('sseal');w.innerHTML='<p class="sm" style="margin-top:18px">A perfect stop earns a reward:</p>';w.appendChild(G.sealBtn('stop'))}
+}
+show();
+})();
+</script>
+{{band}}

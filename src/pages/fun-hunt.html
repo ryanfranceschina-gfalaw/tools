@@ -1,0 +1,30 @@
+path: /1791
+title: The 1791 Hunt | GFA LAW, PLLC
+desc: Ten wax seals are hidden across the GFA LAW website. Find them all to earn a certificate and a reward.
+short: The 1791 Hunt
+noindex: 1
+hidden: 1
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">You found the secret</p><h1>The 1791 Hunt</h1>
+<p class="lede">The Bill of Rights was ratified on December 15, 1791. To celebrate, we hid ten red wax seals marked "1791" across this website. Find all ten to earn a printable certificate and unlock the secret merch vault.</p>
+</div></section>
+<section class="sec tight"><div class="wrap" style="max-width:820px">
+<div class="meter" aria-hidden="true"><i id="hm" style="width:0"></i></div>
+<p id="hc" class="q" style="font:600 20px var(--serif);color:#fff">Seals found: 0 of 10</p>
+<ol class="hunt-list" id="hl"></ol>
+<div class="btns"><a class="btn" href="/1791/certificate" id="hcert">Claim your certificate</a><button class="btn ghost" type="button" id="hreset">Start over</button></div>
+<h2 style="margin-top:48px">Rules</h2>
+<ul>
+<li>Seals are saved in this browser, so use the same device and browser to finish.</li>
+<li>The reward is a discount on GFA LAW merchandise from our Etsy shop. It is for merch only and has no connection to legal services or fees.</li>
+<li>No purchase is necessary to play, and no personal information is collected.</li>
+</ul>
+</div></section>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var G=window.GFA;if(!G)return;var g=G.got(),L=document.getElementById('hl');
+ L.innerHTML=G.SEALS.map(function(s,i){var h=g.indexOf(s.id)>-1;return'<li class="'+(h?'got':'')+'"><span class="n">'+(i+1)+'</span><span>'+(h?'<b>Found.</b> ':'')+s.hint+'</span></li>'}).join('');
+ document.getElementById('hc').textContent='Seals found: '+g.length+' of '+G.SEALS.length;document.getElementById('hm').style.width=(g.length/G.SEALS.length*100)+'%';
+ if(g.length<G.SEALS.length)document.getElementById('hcert').hidden=true;
+ document.getElementById('hreset').onclick=function(){if(confirm('Clear your progress and start the hunt over?')){try{localStorage.removeItem('gfa_seals')}catch(e){}location.reload()}}});
+</script>

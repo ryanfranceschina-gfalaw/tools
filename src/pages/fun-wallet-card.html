@@ -1,0 +1,49 @@
+path: /tools/wallet-card
+title: Know Your Rights Wallet Card Maker | GFA LAW, PLLC
+desc: Make and print a free credit-card-sized Know Your Rights card with the words to use during a police encounter, in English or Spanish.
+short: Wallet Card Maker
+ogsub: Print a free card with the words to use when police stop you
+---
+<section class="phero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Free Tool</p><h1>Know Your Rights Wallet Card</h1>
+<p class="lede">Under stress, it is easy to forget what to say. Make a credit-card-sized card with the key phrases, add an emergency contact, and keep it behind your license.</p>
+</div></section>
+<section class="sec tight"><div class="wrap">
+<div class="wc-wrap">
+<form class="wc-form" id="wcf" onsubmit="return false">
+<label for="wc-lang">Language</label>
+<select id="wc-lang"><option value="en">English</option><option value="es">Español</option></select>
+<label for="wc-name">Your name (optional)</label>
+<input type="text" id="wc-name" maxlength="40" autocomplete="name">
+<label for="wc-ec">Emergency contact name (optional)</label>
+<input type="text" id="wc-ec" maxlength="40">
+<label for="wc-ep">Emergency contact phone (optional)</label>
+<input type="tel" id="wc-ep" maxlength="20" autocomplete="off">
+<label class="ck"><input type="checkbox" id="wc-firm" checked> Include the GFA LAW phone number</label>
+<label class="ck"><input type="checkbox" id="wc-drv" checked> Include the reminder for drivers</label>
+<p class="sm">Nothing you type leaves your device. The card is built in your browser and is not saved or sent anywhere.</p>
+<div class="btns"><button class="btn" type="button" id="wc-print">Print my card</button></div>
+<p class="sm" style="margin-top:14px">Print at 100% scale (not "fit to page"), cut out both sides, and fold or glue them back to back.</p>
+</form>
+<div class="wc-cards" id="wcc"></div>
+</div>
+<p class="sm" style="margin-top:30px">This card is general information, not legal advice. Showing it does not replace saying the words out loud: courts have held that you must clearly state that you are invoking your rights. Read more in our guide to <a href="/resources/know-your-rights/police-stops-and-arrests-in-texas">police stops and arrests in Texas</a>.</p>
+</div></section>
+<script>
+(function(){
+var L={
+ en:{h:'Know Your Rights',say:'To the officer:',l:['I am going to remain silent.','I want a lawyer.','I do not consent to any searches.','Am I being detained, or am I free to go?'],drv:'If I am driving, I will show my license when asked.',bh:'If I am arrested',name:'Name',ec:'Emergency contact',firm:'My lawyer',note:'Stay calm. Keep your hands visible. Do not resist. Do not lie.'},
+ es:{h:'Conozca sus derechos',say:'Al oficial:',l:['Voy a permanecer en silencio.','Quiero un abogado.','No doy mi consentimiento para ningún registro.','¿Estoy detenido o me puedo ir?'],drv:'Si estoy manejando, mostraré mi licencia cuando me la pidan.',bh:'Si me arrestan',name:'Nombre',ec:'Contacto de emergencia',firm:'Mi abogado',note:'Mantenga la calma. Manos a la vista. No se resista. No mienta.'}
+};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function draw(){var t=L[$('wc-lang').value],n=$('wc-name').value.trim(),ec=$('wc-ec').value.trim(),ep=$('wc-ep').value.trim();
+ var f='<div class="wcard f" aria-label="Card front"><h4>'+t.h+'</h4><p style="margin:0 0 4px;color:#e2c67c">'+t.say+'</p><ul>'+t.l.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>'+($('wc-drv').checked?'<p style="margin:6px 0 0;font-size:11px">'+t.drv+'</p>':'')+'<div class="ft"><span>gfalaw.us</span><img src="/assets/img/seal-300.png" alt=""></div></div>';
+ var b='<div class="wcard b" aria-label="Card back"><h4>'+t.bh+'</h4><p style="margin:0 0 6px">'+t.l[0]+' '+t.l[1]+'</p>'+(n?'<p style="margin:0 0 4px"><b>'+t.name+':</b> '+esc(n)+'</p>':'')+(ec||ep?'<p style="margin:0 0 4px"><b>'+t.ec+':</b> '+esc(ec)+(ec&&ep?', ':'')+esc(ep)+'</p>':'')+($('wc-firm').checked?'<p style="margin:0 0 4px"><b>'+t.firm+':</b> GFA LAW, PLLC 254-405-1726</p>':'')+'<div class="ft"><span>'+t.note+'</span></div></div>';
+ $('wcc').innerHTML=f+b}
+['wc-lang','wc-name','wc-ec','wc-ep','wc-firm','wc-drv'].forEach(function(i){$(i).addEventListener('input',draw);$(i).addEventListener('change',draw)});
+$('wc-print').addEventListener('click',function(){draw();if(window.gtag)gtag('event','wallet_card_print',{lang:$('wc-lang').value});if(window.GFA&&GFA.find)GFA.find('card');document.body.classList.add('printing-card');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('printing-card')},400)},60)});
+draw();
+})();
+</script>
+{{band}}

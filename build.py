@@ -62,13 +62,14 @@ NAV = [
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
+   ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0),
    ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
    ('Can the Cop Do That?', '/tools/can-the-cop-do-that', '', 1), ('Deadline Checker', '/tools/deadline-checker', '', 1),
    ('Case Review Finder', '/tools/case-review-finder', '', 1), ('Records Request Builder', '/tools/records-request-builder', '', 1),
    ('Firearm Return and Expunction Checker', '/tools/firearm-return-and-expunction-checker', '', 1),
-   ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
+   ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('The Stop', '/tools/the-stop', '', 1), ('Wallet Card Maker', '/tools/wallet-card', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
  ('Press', '/press-releases'),
- ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('FAQ', '/contact/faq', '', 0),
+ ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
    ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
    ('Complaints', '/complaints', 'GFA HR Department Portal', 0)]),
  ('Merch', '/merch'),
@@ -302,9 +303,15 @@ def make_og(meta):
         try: tf.set_variation_by_name('Bold')
         except Exception: pass
     lh = int(size * 1.18)
-    y = (H - lh * len(lines)) // 2
+    sub = meta.get('ogsub', '')
+    y = (H - lh * len(lines) - (54 if sub else 0)) // 2
     for ln in lines:
         d.text((70, y), ln, font=tf, fill=(247, 242, 229)); y += lh
+    if sub:
+        sub2 = sub
+        while d.textlength(sub2, font=sf) > maxw and len(sub2) > 10: sub2 = sub2[:-2]
+        if sub2 != sub: sub2 = sub2.rstrip(' ,.;:') + '\u2026'
+        d.text((70, y + 18), sub2, font=sf, fill=(196, 190, 168))
     d.text((70, H - 96), 'gfalaw.us  \u00b7  254-405-1726  \u00b7  Temple, Texas', font=sf, fill=(226, 198, 124))
     os.makedirs(os.path.join(OUT, 'assets', 'og'), exist_ok=True)
     im.save(os.path.join(OUT, 'assets', 'og', slug + '.jpg'), quality=86, optimize=True)
@@ -374,6 +381,7 @@ def render(meta, body):
 </main>
 {foot_for(meta)}
 <script src="/assets/site.js?v={V}" defer></script>
+<script src="/assets/fun.js?v={V}" defer></script>
 </body>
 </html>
 '''
@@ -525,6 +533,86 @@ def videos_page(V):
 def home_news(R):
     return ''.join(f'''<a class="card news-card rv" href="/press-releases/{r["id"]}"><div class="meta"><span>{fmt_date(r["date"])}</span></div><h3>{esc(r["title"])}</h3><p>{esc(r["sub"])}</p><span class="more">Read release</span></a>''' for r in R[:3])
 
+
+def const_body(e):
+    out = ''
+    if e.get('sections'):
+        for sx in e['sections']:
+            lab = ('<b>Section %s.</b> ' % sx['n']) if sx.get('n') else ''
+            parts = sx['text'].split('\n\n')
+            out += '<p class="sx">' + lab + esc(parts[0]) + '</p>' + ''.join('<p class="sx">' + esc(x) + '</p>' for x in parts[1:])
+            for am in sx.get('amended', []):
+                out += '<p class="sm">The passage beginning "' + esc(' '.join(am['passage'].split()[:8])) + '..." was changed by ' + esc(am['by']) + '.</p>'
+    else:
+        out += ''.join('<p>' + esc(x) + '</p>' for x in e['text'].split('\n\n'))
+    for c in e.get('closing', []):
+        out += '<p class="sm">' + esc(c) + '</p>'
+    if e.get('footnote'): out += '<p class="sm">' + esc(e['footnote']) + '</p>'
+    return out
+
+def const_meta_line(e):
+    r = ' &middot; Ratified ' + fmt_date(e['ratified']) if e.get('ratified') else ''
+    return '<p class="topic">' + esc(e.get('topic', 'We the People')) + r + '</p>'
+
+def const_pages(J):
+    pages = []
+    toc = ''.join('<a href="#%s">%s</a>' % (e['id'], esc(e['short'])) for e in J)
+    blocks = ''
+    for e in J:
+        blocks += ('<div class="cblock" id="%s"><h2>%s</h2>%s<div class="ctext">%s</div>'
+                   '<div class="tools"><a class="btn sm ghost" href="/constitution/%s">Share %s</a></div></div>') % (
+                   e['id'], esc(e['title']), const_meta_line(e), const_body(e), e['id'], esc(e['short']))
+    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1>The Constitution of the United States</h1>\n'
+            '<p class="lede">The full text of the Constitution and all 27 amendments, from the National Archives transcription. Every article and amendment has its own page you can share.</p>\n'
+            '<div class="btns"><a class="btn" href="#amendment-1">Jump to the Bill of Rights</a><a class="btn ghost" href="/trivia">Test yourself with daily trivia</a></div>\n</div></section>\n'
+            '<section class="sec tight"><div class="wrap" style="max-width:860px"><nav class="toc" aria-label="Articles and amendments">' + toc + '</nav>' + blocks +
+            '<p class="sm" style="margin-top:30px">Text from the National Archives transcription of the Constitution and amendments, with original spelling and punctuation. Portions of the original text have been changed by later amendments, as noted. This page is general information, not legal advice.</p></div></section>{{band}}')
+    pages.append(({'path': '/constitution', 'title': 'The U.S. Constitution, Full Text | Pocket Constitution | GFA LAW, PLLC',
+                   'desc': 'Read the full text of the U.S. Constitution and all 27 amendments, including the Bill of Rights, with a shareable page for every article and amendment.',
+                   'short': 'Pocket Constitution', 'schema': 'CollectionPage', 'ogsub': 'Every article and amendment, free to read and share'}, body))
+    for i, e in enumerate(J):
+        prev = J[i - 1] if i else None
+        nxt = J[i + 1] if i + 1 < len(J) else None
+        first = (e.get('text') or e['sections'][0]['text']).split('\n\n')[0]
+        snippet = first if len(first) <= 150 else first[:147].rsplit(' ', 1)[0] + '...'
+        hist = '<p class="sm">' + esc(e['history']) + '</p>' if e.get('history') else ''
+        slot = '<div data-seal-slot="a2" style="margin-top:18px"></div>' if e['id'] == 'amendment-2' else ''
+        pn = '<div class="btns">'
+        if prev: pn += '<a class="btn ghost sm" href="/constitution/%s">&larr; %s</a>' % (prev['id'], esc(prev['short']))
+        if nxt: pn += '<a class="btn ghost sm" href="/constitution/%s">%s &rarr;</a>' % (nxt['id'], esc(nxt['short']))
+        pn += '<a class="btn ghost sm" href="/constitution">Full Constitution</a></div>'
+        body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1>' + esc(e['title']) + '</h1>' + const_meta_line(e) + '\n</div></section>\n'
+                '<section class="sec tight"><div class="wrap" style="max-width:860px"><div class="ctext">' + const_body(e) + '</div>' + hist +
+                '<div class="btns"><button class="btn sm" type="button" data-share="' + esc(e['title']) + '">Share</button><a class="btn sm ghost" href="#" data-copy>Copy link</a></div>\n'
+                + pn + slot + '<p class="sm" style="margin-top:30px">Text from the National Archives transcription. This page is general information, not legal advice.</p></div></section>{{band}}')
+        kind = 'to' if e['id'].startswith('amendment') else 'of'
+        pages.append(({'path': '/constitution/' + e['id'], 'title': e['title'] + ' | Full Text | Pocket Constitution | GFA LAW, PLLC',
+                       'desc': '%s %s the U.S. Constitution, full text: "%s"' % (e['title'], kind, snippet),
+                       'short': e['title'], 'ogtitle': e['title'], 'ogsub': e.get('topic', 'We the People of the United States')}, body))
+    return pages
+
+
+VAULT_CODE = 'HUNT1791'
+VAULT_TERMS = '15% off GFA LAW merchandise in our Etsy shop, one use per Etsy buyer. The button below applies the code automatically, or enter it at Etsy checkout. Merch only: it has no connection to legal services or fees. Etsy promotion terms apply, and the offer may end at any time.'
+
+def vault_page(M):
+    items = M['items'][:12]
+    cards = ''.join('<a class="mcard" href="%s" target="_blank" rel="noopener"><div class="im"><img src="%s" alt="%s" loading="lazy" decoding="async" width="570" height="570"></div><div class="bd"><span class="tt">%s</span><span class="pr">%s</span></div></a>' % (esc(i['url']), esc(i['img']), esc(i['title']), esc(i['title']), esc(i['price'])) for i in items)
+    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Members of the 1791 Club only</p><h1>The Merch Vault</h1>\n'
+            '<p class="lede">You found the vault. Seal hunters get a reward on official GFA LAW gear.</p></div></section>\n'
+            '<section class="sec tight"><div class="wrap">'
+            '<div id="vlock" hidden><p class="lede">The vault is sealed. Find all ten 1791 seals hidden across the site to open it. <a href="/1791">See your progress</a>.</p></div>'
+            '<div id="vopen" hidden><p>Your code:</p><div class="code-box"><span id="vcode"></span><button class="btn sm" type="button" id="vcp">Copy</button></div>'
+            '<p class="sm">' + esc(VAULT_TERMS) + '</p>'
+            '<div class="btns"><a class="btn" id="vshop" href="https://www.etsy.com/shop/GFALAWmerchandise" target="_blank" rel="noopener">' + ICON['shop'] + ' Shop with my code</a><a class="btn ghost" href="/1791/certificate">Print your certificate</a></div>'
+            '<h2 style="margin-top:48px">Vault picks</h2><div class="merch-grid">' + cards + '</div></div>'
+            '</div></section>\n'
+            '<script>document.addEventListener("DOMContentLoaded",function(){var G=window.GFA,ok=G&&G.got().length>=G.SEALS.length;document.getElementById(ok?"vopen":"vlock").hidden=false;if(!ok)return;'
+            'var c=["HUNT","1791"].join("");document.getElementById("vcode").textContent=c;document.getElementById("vshop").href="https://gfalawmerchandise.etsy.com?coupon="+c;if(window.gtag)gtag("event","vault_open");'
+            'document.getElementById("vcp").onclick=function(){var b=this;if(navigator.clipboard)navigator.clipboard.writeText(c).then(function(){b.textContent="Copied"})}})</script>')
+    meta = {'path': '/vault', 'title': 'The Merch Vault | GFA LAW, PLLC', 'short': 'The Merch Vault', 'desc': 'A secret reward for 1791 Hunt finishers.', 'noindex': '1', 'hidden': '1'}
+    return meta, body
+
 if __name__ == '__main__':
     if os.path.exists(OUT): shutil.rmtree(OUT)
     shutil.copytree(os.path.join(SRC, 'static'), OUT)
@@ -537,6 +625,9 @@ if __name__ == '__main__':
     rp, R = release_pages(R)
     pages = [parse(f) for f in sorted(glob.glob(os.path.join(SRC, 'pages', '*.html')))]
     pages += rp + [press_index(R, C), merch_page(M), videos_page(V)]
+    CJ = json.load(open(os.path.join(SRC, 'assets', 'fun', 'constitution.json')))
+    pages += const_pages(CJ)
+    pages.append(vault_page(M))
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
@@ -550,7 +641,9 @@ if __name__ == '__main__':
             write('/home', render(m2, body))
     # 404 uses absolute links, it is served at any depth
     m404 = {'path': '/404', 'title': 'Page not found | GFA LAW, PLLC', 'short': 'Page not found', 'desc': 'This page could not be found.', 'noindex': '1'}
-    b404 = '''<section class="sec"><div class="wrap center"><p class="eyebrow">Error 404</p><h1>Page not found</h1><p class="lede">The page you are looking for has moved or no longer exists.</p>
+    b404 = '''<section class="sec"><div class="wrap center"><p class="eyebrow">Error 404</p><h1>This page is exercising its right to remain silent</h1><p class="lede">We searched, but without a warrant we could not find the page you asked for. It may have moved, or it never existed.</p>
+<p>While you are here: try the <a href="/trivia">daily Constitution trivia</a>, play <a href="/tools/the-stop">The Stop</a>, or <a href="/games">visit the game room</a>.</p>
+<div data-seal-slot="lost" style="margin:6px 0 0"></div>
 <div class="btns"><a class="btn" href="/">Go to the home page</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div>
 <form class="hsearch" action="/search/" method="get" role="search"><label class="vh" for="q404">Search the site</label><input id="q404" name="q" type="search" placeholder="Search the site"><button class="btn" type="submit">Search</button></form></div></section>'''
     d404 = render(m404, b404).replace('href="../', 'href="/').replace('src="../', 'src="/')
