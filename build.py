@@ -218,7 +218,7 @@ def render(meta, body):
     depth = 0 if path == '/' else len(path.strip('/').split('/'))
     prefix = '../' * depth
     title = meta['title']; desc = meta['desc']
-    canon = SITE + ('/' if path == '/' else path + '/')
+    canon = SITE + ('/' if path in ('/', '/404') else path + '/')
     if meta.get('canon'): canon = SITE + meta['canon']
     if path == '/' and not meta.get('canon'): canon = SITE + '/'
     short = meta.get('short') or title.split(' - ')[-1].split(' | ')[0]
