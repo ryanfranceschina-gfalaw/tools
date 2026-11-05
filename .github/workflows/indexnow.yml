@@ -1,0 +1,29 @@
+name: Tell Bing about site updates
+
+# After each publish, sends every page in the sitemap to IndexNow
+# (Bing, Yandex and other IndexNow search engines). No account needed:
+# the key file at https://www.gfalaw.us/d578be94361ee65e57f026813e4dd1f1.txt proves the site is ours.
+on:
+  workflow_run:
+    workflows: ["Build and publish website"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  indexnow:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'schedule') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit sitemap pages to IndexNow
+        run: |
+          sleep 60
+          curl -sL https://www.gfalaw.us/sitemap.xml | grep -o '<loc>[^<]*' | sed 's/<loc>//' > urls.txt
+          python3 - <<'PY'
+          import json
+          urls=[u.strip() for u in open('urls.txt') if u.strip()]
+          json.dump({"host":"www.gfalaw.us","key":"d578be94361ee65e57f026813e4dd1f1","keyLocation":"https://www.gfalaw.us/d578be94361ee65e57f026813e4dd1f1.txt","urlList":urls},open('body.json','w'))
+          print(len(urls),'urls')
+          PY
+          code=$(curl -s -o resp.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' --data @body.json)
+          echo "IndexNow answered $code"; cat resp.txt
+          case "$code" in 200|202) exit 0;; *) exit 1;; esac
