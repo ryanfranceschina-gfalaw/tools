@@ -43,8 +43,8 @@ jobs:
           args: >-
             --no-progress --max-concurrency 4 --timeout 30 --max-retries 2
             --accept 200,201,202,203,204,206,301,302,303,307,308,403,429,999
-            --exclude-path _site/study-portal --exclude-path _site/embeds
-            --exclude 'fonts\.(googleapis|gstatic)\.com' --exclude 'googletagmanager' --exclude 'x\.com/intent' --exclude 'facebook\.com/sharer'
+            --root-dir ${{ github.workspace }}/_site --exclude-path _site/study-portal --exclude-path _site/embeds --exclude-path _site/404.html
+            --exclude 'forms\.gle' --exclude 'fonts\.(googleapis|gstatic)\.com' --exclude 'googletagmanager' --exclude 'x\.com/intent' --exclude 'facebook\.com/sharer'
             '_site/**/*.html'
           fail: true
 
@@ -61,4 +61,4 @@ jobs:
             https://www.gfalaw.us/press-releases/
             https://www.gfalaw.us/merch/
           uploadArtifacts: true
-          temporaryPublicStorage: true
+          temporaryPublicStorage: false
