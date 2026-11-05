@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indoctrination Escape!</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+  #game { padding: 1rem; max-width: 700px; margin: 0 auto; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: #ffffff; border: 0.5px solid rgba(0,0,0,0.15); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .card-danger { border: 0.5px solid #E24B4A; background: #FCEBEB; }
+  .card-success { border: 0.5px solid #639922; background: #EAF3DE; }
+  .card-info { border: 0.5px solid #378ADD; background: #E6F1FB; }
+  h1 { font-size: 22px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.5rem; }
+  h2 { font-size: 18px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.75rem; }
+  h3 { font-size: 16px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.5rem; }
+  p { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 0.75rem; }
+  .btn { display: inline-block; padding: 10px 20px; border: 0.5px solid rgba(0,0,0,0.3); border-radius: 8px; background: transparent; color: #1a1a1a; font-size: 14px; cursor: pointer; margin: 4px; transition: background 0.15s; }
+  .btn:hover { background: #f0f0ec; }
+  .btn-primary { background: #185FA5; color: #E6F1FB; border-color: #185FA5; }
+  .btn-primary:hover { background: #0C447C; }
+  .btn-full { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 12px 16px; font-size: 14px; border: 0.5px solid rgba(0,0,0,0.15); border-radius: 8px; background: #f5f5f0; color: #1a1a1a; cursor: pointer; line-height: 1.5; }
+  .btn-full:hover { border-color: rgba(0,0,0,0.4); background: #ffffff; }
+  .btn-wrong { background: #FCEBEB !important; border-color: #E24B4A !important; color: #A32D2D !important; }
+  .btn-correct { background: #EAF3DE !important; border-color: #639922 !important; color: #3B6D11 !important; }
+  .stat-row { display: flex; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .stat { background: #f0f0ec; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 80px; }
+  .stat-label { font-size: 12px; color: #888; }
+  .stat-val { font-size: 20px; font-weight: 500; color: #1a1a1a; }
+  .prof { font-size: 40px; margin-bottom: 0.5rem; }
+  .speech-bubble { background: #f0f0ec; border: 0.5px solid rgba(0,0,0,0.15); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; position: relative; font-size: 14px; color: #1a1a1a; line-height: 1.6; }
+  .speech-bubble::before { content: ''; position: absolute; top: -10px; left: 20px; border: 5px solid transparent; border-bottom-color: rgba(0,0,0,0.15); }
+  .indent-meter { width: 100%; height: 12px; background: #f0f0ec; border-radius: 6px; overflow: hidden; margin: 8px 0; border: 0.5px solid rgba(0,0,0,0.15); }
+  .indent-fill { height: 100%; background: linear-gradient(90deg, #639922, #EF9F27, #E24B4A); transition: width 0.4s; }
+  .result-feedback { padding: 12px 16px; border-radius: 8px; margin: 10px 0; font-size: 14px; font-weight: 500; }
+  .feedback-good { background: #EAF3DE; color: #3B6D11; border: 0.5px solid #639922; }
+  .feedback-bad { background: #FCEBEB; color: #A32D2D; border: 0.5px solid #E24B4A; }
+  #lives-display, #lives-display2 { font-size: 20px; letter-spacing: 4px; }
+</style>
+</head>
+<body>
+<div id="game">
+
+<div id="screen-title" class="screen active">
+  <div style="text-align: center; padding: 2rem 0;">
+    <div style="font-size: 60px; margin-bottom: 0.5rem;">🎓</div>
+    <h1 style="font-size: 26px; margin-bottom: 0.5rem;">Indoctrination Escape!</h1>
+    <p style="font-size: 14px; color: #888; margin-bottom: 0.25rem;">A satirical campus survival game</p>
+    <p style="font-size: 13px; color: #888; margin-bottom: 1.5rem;">Can you keep your common sense intact?</p>
+    <div class="card card-info" style="text-align: left; margin-bottom: 1.5rem;">
+      <h3>How to play</h3>
+      <p style="font-size: 13px;">Each level, Professor Wokenstein lectures you on the latest campus fad. Then you take a quiz. Answer with <strong>common sense</strong> — not the woke nonsense you were just taught — to pass. Three wrong answers and you've been fully indoctrinated!</p>
+    </div>
+    <button class="btn btn-primary" onclick="startGame()">Enroll in Class ↗</button>
+  </div>
+</div>
+
+<div id="screen-lecture" class="screen">
+  <div class="stat-row">
+    <div class="stat"><div class="stat-label">Level</div><div class="stat-val" id="stat-level">1</div></div>
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-val" id="stat-score">0</div></div>
+    <div class="stat"><div class="stat-label">Lives</div><div id="lives-display">❤️❤️❤️</div></div>
+  </div>
+  <div class="card">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;">
+      <div class="prof" id="prof-emoji">👩‍🏫</div>
+      <div>
+        <div style="font-size: 15px; font-weight: 500;" id="prof-name">Prof. Wokenstein</div>
+        <div style="font-size: 12px; color: #888;" id="prof-title">Dept. of Very Important Feelings</div>
+      </div>
+    </div>
+    <div class="speech-bubble" id="lecture-text">Loading lecture...</div>
+    <div style="font-size: 12px; color: #888; margin-bottom: 1rem;" id="lecture-subtitle"></div>
+    <div style="margin-bottom: 0.5rem;">
+      <div style="font-size: 12px; color: #888; margin-bottom: 4px;">Indoctrination risk meter</div>
+      <div class="indent-meter"><div class="indent-fill" id="risk-meter" style="width: 15%;"></div></div>
+    </div>
+    <button class="btn btn-primary" onclick="showQuiz()">I've heard enough. Take the quiz →</button>
+  </div>
+</div>
+
+<div id="screen-quiz" class="screen">
+  <div class="stat-row">
+    <div class="stat"><div class="stat-label">Level</div><div class="stat-val" id="stat-level2">1</div></div>
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-val" id="stat-score2">0</div></div>
+    <div class="stat"><div class="stat-label">Lives</div><div id="lives-display2">❤️❤️❤️</div></div>
+  </div>
+  <div class="card">
+    <div style="font-size: 12px; color: #888; margin-bottom: 0.5rem;" id="q-progress">Question 1 of 3</div>
+    <h3 id="quiz-question">Loading question...</h3>
+    <div style="margin-top: 0.75rem;" id="quiz-options"></div>
+    <div id="quiz-feedback" style="display:none;"></div>
+    <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" style="display:none; margin-top: 0.75rem;">Next question →</button>
+  </div>
+</div>
+
+<div id="screen-level-complete" class="screen">
+  <div style="text-align: center; padding: 1.5rem 0;">
+    <div style="font-size: 50px; margin-bottom: 0.5rem;">🦅</div>
+    <h2>Level complete!</h2>
+    <div class="card card-success" style="text-align: left; margin: 1rem 0;">
+      <p id="level-complete-msg">You resisted the professor's lecture.</p>
+      <p style="font-size: 13px; color: #3B6D11;" id="score-msg"></p>
+    </div>
+    <button class="btn btn-primary" onclick="nextLevel()">Next level: harder brainwashing →</button>
+  </div>
+</div>
+
+<div id="screen-gameover" class="screen">
+  <div style="text-align: center; padding: 1.5rem 0;">
+    <div style="font-size: 50px; margin-bottom: 0.5rem;">🧠</div>
+    <h2>You've been indoctrinated!</h2>
+    <div class="card card-danger" style="text-align: left; margin: 1rem 0;">
+      <p id="gameover-msg">The professor got to you.</p>
+      <p style="font-size: 13px; color: #A32D2D;">Final score: <strong id="final-score">0</strong></p>
+    </div>
+    <button class="btn btn-primary" onclick="startGame()">Try again (touch grass first)</button>
+  </div>
+</div>
+
+<div id="screen-win" class="screen">
+  <div style="text-align: center; padding: 1.5rem 0;">
+    <div style="font-size: 50px; margin-bottom: 0.5rem;">🏆</div>
+    <h2>You escaped indoctrination!</h2>
+    <div class="card card-success" style="text-align: left; margin: 1rem 0;">
+      <p>Against all odds, you survived every lecture with your common sense fully intact. Professor Wokenstein has filed a formal complaint with the Dean of Diversity, Equity, Inclusion & Whatever Else.</p>
+      <p style="font-size: 13px; color: #3B6D11;">Final score: <strong id="win-score">0</strong></p>
+    </div>
+    <button class="btn btn-primary" onclick="startGame()">Play again</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const levels = [
+  {
+    prof: { emoji: "👩‍🏫", name: "Prof. Wokenstein", title: "Dept. of Very Important Feelings" },
+    lecture: "Welcome, students! Today we learn that everything ever invented, including the wheel, the alphabet, and tacos, was stolen from marginalized communities. Your existence as a non-marginalized person is itself a form of violence. Please refer to yourselves as 'harm-adjacent beings.' Attendance is mandatory. Dissent is a microaggression.",
+    subtitle: "Textbook: 'Everything Is Someone Else's Fault' — $340 (not available used)",
+    risk: "20%",
+    questions: [
+      {
+        q: "On your first day of class, the professor announces that your mere presence is 'violence.' What is the correct response?",
+        options: [
+          { text: "Apologize profusely and offer land acknowledgments.", correct: false },
+          { text: "Ask the professor to define 'violence' and politely note you're just sitting there.", correct: true },
+          { text: "Leave to attend a mandatory allyship workshop.", correct: false },
+          { text: "Volunteer to be re-educated over winter break.", correct: false }
+        ],
+        goodFeedback: "Correct! You kept your head. Words have meanings, and sitting in a chair isn't violence.",
+        badFeedback: "Wrong! You swallowed the premise whole. Critical thinking, friend. Critical thinking."
+      },
+      {
+        q: "The professor says America has never done anything good, ever, at all, full stop. What do you think?",
+        options: [
+          { text: "Agree. Put it on a tote bag.", correct: false },
+          { text: "A nation that ended slavery, rebuilt Europe, and put people on the moon has a complicated but real legacy of achievement.", correct: true },
+          { text: "Ask for extra credit for agreeing loudest.", correct: false },
+          { text: "Post about your shame on social media.", correct: false }
+        ],
+        goodFeedback: "Nailed it! Nuance beats sloganeering.",
+        badFeedback: "Whoops. You can criticize history AND acknowledge achievement. Both/and, not either/or."
+      },
+      {
+        q: "You're charged $340 for a textbook titled 'Decolonizing Your Cereal Bowl.' The campus bookstore won't take it back. What do you do?",
+        options: [
+          { text: "Read it cover to cover and write a reflection paper.", correct: false },
+          { text: "Sell it to a freshman next year for $300.", correct: true },
+          { text: "Donate it to a 'radical library collective.'", correct: false },
+          { text: "Ask the author to sign it for your shrine.", correct: false }
+        ],
+        goodFeedback: "The American way! Turn a loss into a hustle.",
+        badFeedback: "You're funding the machine, pal."
+      }
+    ]
+  },
+  {
+    prof: { emoji: "🧑‍💼", name: "Dr. Feelsgood", title: "Dept. of Emotional Labor Studies" },
+    lecture: "Today's topic: microaggressions. A microaggression is anything that makes anyone feel slightly uncomfortable, including eye contact, the phrase 'you guys,' commenting on the weather (triggers climate anxiety), asking someone where they're from (colonialism), and using the word 'normal.' We have a 48-page chart. It's on Canvas. Server is down. You're still responsible.",
+    subtitle: "Guest lecturer next week: a certified Microaggression Auditor (salary: $95,000/yr)",
+    risk: "40%",
+    questions: [
+      {
+        q: "You say 'hey guys' to a group of friends. Three people file microaggression reports. What now?",
+        options: [
+          { text: "Attend a 6-hour gender-inclusive language seminar.", correct: false },
+          { text: "Switch to 'y'all' like normal people have always done and move on with your life.", correct: true },
+          { text: "Stop speaking entirely to avoid further harm.", correct: false },
+          { text: "Request that 'guys' be added to the campus banned-words list.", correct: false }
+        ],
+        goodFeedback: "Practical and sensible! Language evolves naturally without a committee.",
+        badFeedback: "Six hours of your life — gone. For saying 'guys.'"
+      },
+      {
+        q: "The professor claims asking someone 'where are you from?' is always an act of colonial violence. You believe:",
+        options: [
+          { text: "Obviously. Update your phone's autocorrect to block the question.", correct: false },
+          { text: "It's a normal human question about someone's background. Intent and context matter enormously.", correct: true },
+          { text: "File a preemptive apology just in case you've thought about asking.", correct: false },
+          { text: "Replace it with 'from which colonized territory do you hail?'", correct: false }
+        ],
+        goodFeedback: "Context matters! Curiosity about people isn't a crime.",
+        badFeedback: "You just made small talk illegal. Proud of yourself?"
+      },
+      {
+        q: "You receive a 48-page microaggression chart. It includes 'making eye contact' as a potential offense. You:",
+        options: [
+          { text: "Memorize it. Get it laminated. Sleep with it nearby.", correct: false },
+          { text: "Note that if everything is an aggression, then nothing meaningfully is, and close the tab.", correct: true },
+          { text: "Propose a 96-page expanded edition for thoroughness.", correct: false },
+          { text: "Practice avoiding eye contact immediately.", correct: false }
+        ],
+        goodFeedback: "Precisely. Inflation of language devalues actual harms.",
+        badFeedback: "Congratulations: you can no longer look at anyone."
+      }
+    ]
+  },
+  {
+    prof: { emoji: "🧑‍🎓", name: "Professor Hashtag", title: "Dept. of Social Media Activism & Digital Outrage" },
+    lecture: "Welcome to level three! Today: Trump, MAGA, and why anyone who disagrees with us is literally Hitler — though we can't say 'literally' anymore because it's ableist. The 2024 election results were the end of democracy, even though elections are how democracies work. Silence is violence. Speaking is also potentially violence. The solution is to donate to our approved nonprofits.",
+    subtitle: "Office hours: Tuesdays, unless the professor is at a rally, which they always are.",
+    risk: "65%",
+    questions: [
+      {
+        q: "The professor says 75 million Americans who voted for Trump are all 'deplorable' and irredeemable. Your honest assessment:",
+        options: [
+          { text: "Agree. Unfriend them all on Facebook immediately.", correct: false },
+          { text: "Dismissing tens of millions of fellow citizens wholesale is exactly how you lose elections and friendships.", correct: true },
+          { text: "Make a documentary about their deplorability.", correct: false },
+          { text: "Ask the professor for a list of approved friends.", correct: false }
+        ],
+        goodFeedback: "Smart! Treating voters as a monolith backfires badly — ask Hillary.",
+        badFeedback: "You just wrote off your uncle, your mechanic, and half of Ohio."
+      },
+      {
+        q: "The professor says that because you didn't vote how they wanted, you are personally responsible for 'the death of democracy.' You respond:",
+        options: [
+          { text: "Apologize and pledge to vote correctly next time as directed.", correct: false },
+          { text: "Voting in elections IS democracy working. Disagreeing with an outcome isn't the end of it.", correct: true },
+          { text: "Ask the professor to define democracy, then agree it only applies when your side wins.", correct: false },
+          { text: "Attend three candlelit vigils for democracy this weekend.", correct: false }
+        ],
+        goodFeedback: "Constitutional scholar energy! Democracy survives disagreement — that's kind of the point.",
+        badFeedback: "By this logic, democracy dies every time anyone loses an election. Rough system."
+      },
+      {
+        q: "The professor says silence on political issues is violence. But also speaking incorrectly is violence. What should you do?",
+        options: [
+          { text: "Panic. Both options are violence. Become a mime.", correct: false },
+          { text: "Recognize this as an unfalsifiable trap designed to ensure you can never be right, and take notes for the midterm.", correct: true },
+          { text: "Donate to the professor's approved nonprofits as a form of speaking-through-giving.", correct: false },
+          { text: "Ask the professor if breathing wrong is also violence.", correct: false }
+        ],
+        goodFeedback: "You spotted the logic trap! When everything is violence, the word loses all meaning.",
+        badFeedback: "Welcome to the no-win scenario. Population: you."
+      }
+    ]
+  },
+  {
+    prof: { emoji: "🧙", name: "The Woke Wizard", title: "Dean of Radical Epistemology & Vibe-Based Truth" },
+    lecture: "Final level! Today you will learn that objective facts are a tool of oppression, math was invented by white supremacists (this is in several actual official school documents — look it up), science must be 'decolonized,' and the highest intellectual achievement is posting a black square on Instagram. Also: free speech is dangerous, but this class requires you to agree with everything I say. Any questions will be answered with a disappointed stare.",
+    subtitle: "Warning: This lecture may cause permanent eye-rolling. Side effects include common sense.",
+    risk: "90%",
+    questions: [
+      {
+        q: "The professor says 2+2=4 is a construct of white supremacy. The midterm, however, requires you to calculate grades. You:",
+        options: [
+          { text: "Use vibes-based math on the midterm and dispute the resulting F.", correct: false },
+          { text: "Note that math is why bridges don't fall down, and use actual numbers on the exam.", correct: true },
+          { text: "Demand an equity curve that raises everyone's grade regardless of answers.", correct: false },
+          { text: "Submit the midterm as an emotional response piece.", correct: false }
+        ],
+        goodFeedback: "Structural engineering thanks you.",
+        badFeedback: "Your bridge made of vibes has collapsed. Tragically, it was load-bearing."
+      },
+      {
+        q: "The professor bans free speech in class as 'too dangerous,' but demands you enthusiastically agree with every claim. This is:",
+        options: [
+          { text: "Reasonable — some speech is just too free.", correct: false },
+          { text: "A contradiction: suppressing disagreement while demanding agreement is the definition of intellectual authoritarianism.", correct: true },
+          { text: "Fine. You nod along and update your thesis to match.", correct: false },
+          { text: "An opportunity to get extra credit for the most enthusiastic agreement.", correct: false }
+        ],
+        goodFeedback: "First Amendment energy. Compelled agreement isn't free thought — it's a loyalty oath.",
+        badFeedback: "You have been awarded a gold star. It was not optional."
+      },
+      {
+        q: "You've survived four levels of indoctrination. The professor offers you an honorary degree in 'Lived Experience Studies' if you simply admit you've learned nothing useful and were wrong about everything. You:",
+        options: [
+          { text: "Accept. Hang it proudly. Change your LinkedIn.", correct: false },
+          { text: "Politely decline, collect your actual diploma, and go start a small business.", correct: true },
+          { text: "Ask if it comes with a certificate in Oppressor Studies as a minor.", correct: false },
+          { text: "Weep. The indoctrination was a journey and you're grateful.", correct: false }
+        ],
+        goodFeedback: "You walked out with your brain intact. That's the whole game!",
+        badFeedback: "You traded your critical thinking for a piece of paper. At least get a real degree in accounting."
+      }
+    ]
+  }
+];
+
+let state = {};
+
+function updateStats() {
+  ['stat-level','stat-level2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = state.level; });
+  ['stat-score','stat-score2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = state.score; });
+  const livesStr = '❤️'.repeat(state.lives) + '🖤'.repeat(3 - state.lives);
+  ['lives-display','lives-display2'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = livesStr; });
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function startGame() {
+  state = { level: 1, score: 0, lives: 3, qIndex: 0, wrongThisLevel: 0 };
+  showLevel();
+}
+
+function showLevel() {
+  const lvl = levels[state.level - 1];
+  document.getElementById('prof-emoji').textContent = lvl.prof.emoji;
+  document.getElementById('prof-name').textContent = lvl.prof.name;
+  document.getElementById('prof-title').textContent = lvl.prof.title;
+  document.getElementById('lecture-text').textContent = lvl.lecture;
+  document.getElementById('lecture-subtitle').textContent = lvl.subtitle || '';
+  document.getElementById('risk-meter').style.width = lvl.risk;
+  updateStats();
+  showScreen('lecture');
+}
+
+function showQuiz() {
+  state.qIndex = 0;
+  showQuestion();
+}
+
+function showQuestion() {
+  const lvl = levels[state.level - 1];
+  const q = lvl.questions[state.qIndex];
+  document.getElementById('q-progress').textContent = `Question ${state.qIndex + 1} of ${lvl.questions.length}`;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+  shuffled.forEach((opt) => {
+    const btn = document.createElement('button');
+    btn.className = 'btn-full';
+    btn.textContent = opt.text;
+    btn.onclick = () => answerQuestion(opt, btn, shuffled);
+    opts.appendChild(btn);
+  });
+  updateStats();
+  showScreen('quiz');
+}
+
+function answerQuestion(opt, btn, allOpts) {
+  document.querySelectorAll('#quiz-options .btn-full').forEach(b => b.onclick = null);
+  const lvl = levels[state.level - 1];
+  const q = lvl.questions[state.qIndex];
+  const fb = document.getElementById('quiz-feedback');
+  fb.style.display = 'block';
+  const btns = document.querySelectorAll('#quiz-options .btn-full');
+  allOpts.forEach((o, i) => {
+    if (o.correct) btns[i].classList.add('btn-correct');
+    else if (o === opt && !o.correct) btns[i].classList.add('btn-wrong');
+  });
+  if (opt.correct) {
+    state.score += (state.level * 100);
+    fb.className = 'result-feedback feedback-good';
+    fb.textContent = '✓ ' + q.goodFeedback;
+  } else {
+    state.lives = Math.max(0, state.lives - 1);
+    fb.className = 'result-feedback feedback-bad';
+    fb.textContent = '✗ ' + q.badFeedback;
+  }
+  updateStats();
+  if (state.lives <= 0) {
+    setTimeout(() => {
+      document.getElementById('gameover-msg').textContent = getGameoverMsg();
+      document.getElementById('final-score').textContent = state.score;
+      showScreen('gameover');
+    }, 1800);
+    return;
+  }
+  document.getElementById('next-btn').style.display = 'inline-block';
+}
+
+function getGameoverMsg() {
+  const msgs = [
+    "You now use words like 'problematic' and 'harmful' in normal conversation. Your family is worried.",
+    "You have been assigned a land acknowledgment to read at every family dinner.",
+    "The professor has offered you a TA position. Attendance is mandatory. Thinking is not.",
+    "Your critical thinking has left the building. It filed a hostile workplace complaint on the way out."
+  ];
+  return msgs[Math.min(state.level - 1, msgs.length - 1)];
+}
+
+function nextQuestion() {
+  const lvl = levels[state.level - 1];
+  state.qIndex++;
+  if (state.qIndex >= lvl.questions.length) {
+    if (state.level >= levels.length) {
+      document.getElementById('win-score').textContent = state.score;
+      showScreen('win');
+    } else {
+      const completeMsgs = [
+        "You survived 'Intro to Blaming Everything.' Your GPA is intact. Your soul: also intact.",
+        "You resisted the Microaggression Maze. You may still make eye contact with people.",
+        "You saw through the political guilt trip. Impressive. Most don't make it this far.",
+        "You decoded the Woke Wizard's final trap. Diploma: earned. Common sense: retained."
+      ];
+      document.getElementById('level-complete-msg').textContent = completeMsgs[state.level - 1];
+      document.getElementById('score-msg').textContent = `Score: ${state.score} points. Next level gets harder...`;
+      showScreen('level-complete');
+    }
+  } else {
+    showQuestion();
+  }
+}
+
+function nextLevel() {
+  state.level++;
+  state.wrongThisLevel = 0;
+  showLevel();
+}
+</script>
+</body>
+</html>
