@@ -35,7 +35,7 @@ jobs:
   outside-links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: python3 build.py
       - name: Check outside links (news articles, Etsy, MyCase, LawPay)
         uses: lycheeverse/lychee-action@v2
