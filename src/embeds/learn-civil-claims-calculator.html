@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Civil Rights Case Strength Evaluator</title><base target="_top"></head><body style="margin:0">
+<div id="gfa-case-evaluator">
+    <div class="eval-header">
+        <h2 class="branding-text">Advanced Civil Rights Case Strength Evaluator</h2>
+        <p>Answer targeted questions for a realistic assessment of your potential §1983 police misconduct claim. This tool helps you understand key strengths — and critical barriers — before contacting an attorney.</p>
+    </div>
+    
+    <div id="quiz-container">
+        <!-- Question Screen -->
+        <div id="question-card">
+            <div id="progress-bar-container">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="question-counter">Question <span id="current-q">1</span>/12</div>
+            <h3 id="question-text">Loading...</h3>
+            <div class="button-group">
+                <button onclick="handleAnswer(1)" class="quiz-btn yes-btn">✅ YES</button>
+                <button onclick="handleAnswer(0.5)" class="quiz-btn maybe-btn">❓ UNSURE / PARTIALLY</button>
+                <button onclick="handleAnswer(0)" class="quiz-btn no-btn">❌ NO</button>
+            </div>
+            <div class="question-hint" id="question-hint"></div>
+        </div>
+
+        <!-- Early Disqualifier Screen -->
+        <div id="disqualifier-card" style="display: none;">
+            <h3 id="disqualifier-heading">Important Time Limit Notice</h3>
+            <p id="disqualifier-text"></p>
+            <div class="disclaimer-box" style="margin: 30px 0;">
+                <strong>Key Note:</strong> This is a strict deadline. Missing it typically bars the claim forever, regardless of how strong the facts are.
+            </div>
+            <button onclick="restartQuiz()" class="restart-btn">Restart Evaluator</button>
+            <a href="https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc" target="_blank" class="cta-button" style="margin-top: 20px;">CONTACT US ANYWAY</a>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-card" style="display: none;">
+            <div class="score-circle">
+                <span id="score-value">0</span><small>/100</small>
+            </div>
+            <h3 id="result-heading">Your Case Strength Evaluation</h3>
+            <p id="result-text" class="main-feedback"></p>
+
+            <!-- Category Breakdown -->
+            <div class="breakdown-section">
+                <h4>Strength by Category</h4>
+                <div id="category-breakdown"></div>
+            </div>
+
+            <!-- Tailored Insights -->
+            <div class="insights-box">
+                <h4>Key Takeaways & Next Steps</h4>
+                <div id="insights-content"></div>
+            </div>
+
+            <!-- Legal Primer -->
+            <div class="legal-insights">
+                <h4>Quick Legal Primer: What Builds (or Breaks) a §1983 Claim</h4>
+                <ul>
+                    <li><strong>Foundation:</strong> Government actor under color of law — no claim without this.</li>
+                    <li><strong>Violation:</strong> Clear Fourth Amendment (excessive force, unlawful arrest/search) or First Amendment (retaliation) breach.</li>
+                    <li><strong>Evidence & Harm:</strong> Video/bodycam, witnesses, medical records — these win cases. No provable damages = limited recovery.</li>
+                    <li><strong>Liability:</strong> Patterns or prior complaints help sue the department (Monell) and fight qualified immunity.</li>
+                    <li><strong>Time Limit:</strong> In Texas, most §1983 claims must be filed within **2 years** of the incident (personal injury SOL borrowed). Exceptions are rare.</li>
+                </ul>
+                <p><strong>Qualified Immunity Reality:</strong> Even strong cases often face this defense. Only skilled attorneys can argue the right was "clearly established."</p>
+            </div>
+
+            <div class="disclaimer-box">
+                <strong>Important Disclaimer:</strong> This educational tool uses general principles — NOT legal advice. It cannot predict outcomes. §1983 cases are highly fact-specific, evidence-dependent, and frequently defended aggressively. Small details matter enormously.
+            </div>
+
+            <a href="https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc" target="_blank" class="cta-button">CONTACT GFA LAW, PLLC FOR A CONSULTATION</a>
+            
+            <button onclick="restartQuiz()" class="restart-btn">Restart Evaluator</button>
+        </div>
+    </div>
+
+    <div class="embed-footer">
+        <div class="footer-line"></div>
+        <p class="footer-contact">Even if your score is moderate or the timeline is tight, reach out — we evaluate every situation individually.</p>
+        <p class="footer-text">Property of <strong>GFA LAW, PLLC</strong> • Temple, Texas</p>
+        <p class="footer-subtext">Attorney Work Product | Educational Vetting Tool | © 2026</p>
+    </div>
+</div>
+
+<style>
+    /* Same styles as previous version – keeping consistent branding */
+    #gfa-case-evaluator { background-color: #2D5A27; color: #E2CE8F; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 60px 5%; border: 4px solid #4B4929; border-radius: 16px; max-width: 1000px; margin: 30px auto; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+    .branding-text { color: #B59344; text-transform: uppercase; letter-spacing: 3px; font-size: 2.6em; margin-bottom: 8px; }
+    .eval-header p { font-size: 1.25em; opacity: 0.95; max-width: 800px; margin: 0 auto 50px; }
+    #quiz-container { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 50px 40px; min-height: 520px; border: 1px solid rgba(181,147,68,0.25); }
+    #progress-bar-container { height: 8px; background: #4B4929; border-radius: 4px; margin-bottom: 30px; overflow: hidden; }
+    #progress-fill { height: 100%; background: linear-gradient(to right, #B59344, #E2CE8F); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    #question-counter { font-size: 1.1em; color: #B59344; margin-bottom: 15px; font-weight: 600; }
+    #question-text { font-size: 1.85em; line-height: 1.45; margin-bottom: 35px; min-height: 130px; }
+    .question-hint { font-size: 0.95em; opacity: 0.75; margin-top: 20px; font-style: italic; }
+    .button-group { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+    .quiz-btn { padding: 18px 38px; font-size: 1.15em; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; min-width: 160px; }
+    .yes-btn { background: #B59344; color: #2D5A27; }
+    .maybe-btn { background: #6B7A5E; color: #E2CE8F; }
+    .no-btn { background: #4B4929; color: #E2CE8F; }
+    .quiz-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+
+    /* Disqualifier styling */
+    #disqualifier-card { text-align: center; padding: 40px; }
+    #disqualifier-heading { color: #E2CE8F; font-size: 2.2em; margin-bottom: 30px; }
+    #disqualifier-text { font-size: 1.4em; line-height: 1.5; max-width: 800px; margin: 0 auto 30px; }
+
+    /* Results styling (same as before) */
+    .score-circle { font-size: 5.2em; font-weight: 800; color: #B59344; line-height: 1; margin: 20px 0; }
+    .score-circle small { font-size: 0.35em; vertical-align: super; color: #E2CE8F; }
+    .main-feedback { font-size: 1.35em; line-height: 1.5; margin: 25px 0 35px; }
+    .breakdown-section h4, .insights-box h4, .legal-insights h4 { color: #B59344; margin: 40px 0 20px; text-align: left; }
+    .category-item { background: rgba(0,0,0,0.2); margin-bottom: 14px; border-radius: 8px; padding: 12px 18px; display: flex; align-items: center; gap: 15px; }
+    .category-name { flex: 1; text-align: left; font-weight: 600; }
+    .category-bar-container { flex: 2; height: 14px; background: #4B4929; border-radius: 7px; overflow: hidden; }
+    .category-bar { height: 100%; background: linear-gradient(to right, #B59344, #E2CE8F); transition: width 1s ease; }
+    .category-score { font-weight: 700; color: #E2CE8F; min-width: 70px; text-align: right; }
+    .insights-box, .legal-insights { background: rgba(0,0,0,0.25); padding: 25px; border-radius: 10px; margin: 35px 0; text-align: left; border-left: 5px solid #B59344; }
+    .legal-insights ul { padding-left: 20px; line-height: 1.7; }
+    .legal-insights li { margin-bottom: 8px; }
+    .disclaimer-box { font-size: 0.95em; line-height: 1.55; background: rgba(0,0,0,0.3); padding: 22px; border-radius: 8px; border-left: 5px solid #B59344; margin: 30px 0; }
+    .cta-button { display: block; background: #B59344; color: #2D5A27; padding: 22px 60px; text-decoration: none; font-weight: 700; font-size: 1.25em; border-radius: 8px; margin: 30px auto; text-align: center; max-width: 420px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); transition: all 0.3s; }
+    .cta-button:hover { background: #E2CE8F; transform: translateY(-5px); }
+    .restart-btn { background: transparent; color: #E2CE8F; border: 2px solid #B59344; padding: 12px 40px; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 20px auto; display: block; }
+
+    .footer-line { height: 2px; background: linear-gradient(to right, transparent, #B59344, transparent); margin: 50px 0 25px; }
+    .footer-contact { font-size: 1.35em; font-style: italic; color: #E2CE8F; }
+    .footer-text { color: #B59344; font-size: 1.15em; }
+    .footer-subtext { font-size: 0.85em; opacity: 0.65; }
+
+    @media (max-width: 768px) { .button-group { flex-direction: column; align-items: center; } .quiz-btn { width: 85%; } }
+</style>
+
+<script>
+    const questions = [
+        { id: 1, q: "Did this incident occur within the last 2 years (most Texas §1983 claims have a 2-year filing deadline)?", weight: 20, category: "Procedural", hint: "Texas borrows its 2-year personal injury statute of limitations for most §1983 claims. If outside this window, the claim is usually time-barred forever.", isDisqualifier: true },
+        { id: 2, q: "Was the person a government official (police officer, deputy, jail guard, etc.) acting in their official capacity?", weight: 15, category: "Foundation", hint: "No §1983 claim without state action under color of law." },
+        { id: 3, q: "Did the officer use physical force that was clearly excessive or unreasonable given the circumstances?", weight: 12, category: "Violation", hint: "Core Fourth Amendment excessive force claim (Graham v. Connor factors apply)." },
+        { id: 4, q: "Were you arrested, detained, or searched without probable cause, a warrant, or a clearly stated reason?", weight: 12, category: "Violation", hint: "Fourth Amendment seizure/search violations." },
+        { id: 5, q: "Do you believe the action was retaliation for filming police, speaking out, protesting, or other First Amendment activity?", weight: 10, category: "Violation", hint: "Retaliation claims possible, but probable cause often defeats them unless narrow exceptions." },
+        { id: 6, q: "Were you lawfully in a public place and exercising constitutional rights during the incident?", weight: 5, category: "Violation", hint: "Bolsters First Amendment protections." },
+        { id: 7, q: "Do you have video, audio, bodycam footage, dashcam, witnesses, or other objective evidence?", weight: 10, category: "Evidence", hint: "Evidence is king — lack of it kills most cases." },
+        { id: 8, q: "Do you have medical records, injury photos, bills, lost wages proof, or documented emotional harm?", weight: 8, category: "Evidence", hint: "Provable damages required for substantial recovery." },
+        { id: 9, q: "Did you suffer actual physical injury, financial loss, medical costs, or severe emotional distress?", weight: 8, category: "Harm", hint: "No meaningful damages = nominal recovery at best." },
+        { id: 10, q: "Is there a known pattern of similar misconduct by this department (lawsuits, complaints, reports)?", weight: 8, category: "Liability", hint: "Essential for Monell municipal liability." },
+        { id: 11, q: "Has this officer had prior similar complaints or incidents?", weight: 5, category: "Liability", hint: "Helps show notice and sometimes overcomes qualified immunity." },
+        { id: 12, q: "Did you file an internal affairs complaint or preserve evidence early?", weight: 5, category: "Procedural", hint: "Good faith efforts help; spoliation can hurt." }
+    ];
+
+    let currentStep = 0;
+    let totalScore = 0;
+    let answers = [];
+    const maxPossible = questions.reduce((sum, q) => sum + (q.id === 1 ? 0 : q.weight), 0); // Exclude disqualifier from max score calc
+
+    const categories = {
+        "Foundation": { score: 0, max: 15 },
+        "Violation": { score: 0, max: 39 },
+        "Evidence": { score: 0, max: 18 },
+        "Harm": { score: 0, max: 8 },
+        "Liability": { score: 0, max: 13 },
+        "Procedural": { score: 0, max: 10 }  // Only post-disqualifier procedural
+    };
+
+    function updateQuestion() {
+        const progress = (currentStep / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+        document.getElementById('current-q').textContent = currentStep + 1;
+
+        if (currentStep < questions.length) {
+            const q = questions[currentStep];
+            document.getElementById('question-text').innerHTML = q.q;
+            document.getElementById('question-hint').innerHTML = `<strong>Why this matters:</strong> ${q.hint}`;
+        }
+    }
+
+    function handleAnswer(value) {
+        const q = questions[currentStep];
+
+        if (q.isDisqualifier) {
+            if (value < 1) {  // NO or UNSURE → disqualify
+                showDisqualifier();
+                return;
+            }
+            // YES → proceed normally, but don't add to score (foundational gate)
+            currentStep++;
+            updateQuestion();
+            return;
+        }
+
+        // Normal question
+        answers.push({ id: q.id, score: q.weight * value, category: q.category });
+        categories[q.category].score += q.weight * value;
+        totalScore += q.weight * value;
+        currentStep++;
+        updateQuestion();
+
+        if (currentStep >= questions.length) {
+            showResults();
+        }
+    }
+
+    function showDisqualifier() {
+        document.getElementById('question-card').style.display = 'none';
+        document.getElementById('disqualifier-card').style.display = 'block';
+        document.getElementById('disqualifier-text').innerHTML = 
+            "Based on your answer, the incident appears to fall outside Texas's standard 2-year statute of limitations for most §1983 civil rights claims.<br><br>" +
+            "This deadline is strict and usually bars the claim entirely — even very strong cases. Rare exceptions (e.g., continuing violation, equitable tolling) exist but are hard to prove.<br><br>" +
+            "Still, contact us — we can review your exact timeline and facts for any possible options.";
+    }
+
+    function calculateCategoryPercent(cat) {
+        return Math.round((categories[cat].score / categories[cat].max) * 100);
+    }
+
+    function showResults() {
+        document.getElementById('question-card').style.display = 'none';
+        document.getElementById('disqualifier-card').style.display = 'none';
+        document.getElementById('results-card').style.display = 'block';
+
+        let overall = Math.round((totalScore / maxPossible) * 100);
+        if (overall > 100) overall = 100;
+        if (overall < 1 && totalScore > 0) overall = 1;
+
+        document.getElementById('score-value').textContent = overall;
+
+        const scoreCircle = document.querySelector('.score-circle');
+        let heading = "Your Case Strength Evaluation";
+        if (overall >= 80) {
+            scoreCircle.style.color = '#B59344';
+            heading = "🔥 Very Strong Indicators";
+        } else if (overall >= 65) {
+            scoreCircle.style.color = '#E2CE8F';
+            heading = "✅ Solid Potential";
+        } else if (overall >= 45) {
+            scoreCircle.style.color = '#D4A017';
+            heading = "⚠️ Moderate – Needs Strengthening";
+        } else {
+            scoreCircle.style.color = '#A67C5D';
+            heading = "📉 Challenging – Significant Hurdles";
+        }
+        document.getElementById('result-heading').textContent = heading;
+
+        let feedback = "";
+        if (overall >= 80) {
+            feedback = "Strong across most categories — especially if evidence and violation scores are high. These profiles often lead to serious consideration or settlement, though qualified immunity remains a major obstacle.";
+        } else if (overall >= 65) {
+            feedback = "Good foundation with promising elements. Evidence/harm gaps are common but fixable. Many cases in this range succeed with strong proof.";
+        } else if (overall >= 45) {
+            feedback = "Some viable elements, but key weaknesses (evidence, harm, or liability) make success harder. Professional review could uncover angles.";
+        } else {
+            feedback = "Significant barriers exist (e.g., weak evidence, no clear violation, or limited damages). Still, automated tools miss nuances — contact us to discuss.";
+        }
+        document.getElementById('result-text').innerHTML = feedback;
+
+        // Category breakdown (skip disqualifier cat if needed)
+        let breakdownHTML = "";
+        Object.keys(categories).forEach(cat => {
+            if (cat === "Procedural" && categories[cat].score === 0 && categories[cat].max === 10) return; // Skip if no post-gate procedural
+            const perc = calculateCategoryPercent(cat);
+            const catData = categories[cat];
+            breakdownHTML += `
+                <div class="category-item">
+                    <div class="category-name">${cat}</div>
+                    <div class="category-bar-container">
+                        <div class="category-bar" style="width: ${perc}%"></div>
+                    </div>
+                    <div class="category-score">${perc}% (${Math.round(catData.score)}/${catData.max})</div>
+                </div>`;
+        });
+        document.getElementById('category-breakdown').innerHTML = breakdownHTML;
+
+        // Insights
+        let insights = `<p><strong>Strongest category:</strong> `;
+        let strongest = Object.keys(categories).reduce((a, b) => (calculateCategoryPercent(a) > calculateCategoryPercent(b) ? a : b), "Foundation");
+        insights += `${strongest} (${calculateCategoryPercent(strongest)}%)</p>`;
+
+        let weakAreas = [];
+        Object.keys(categories).forEach(cat => {
+            if (calculateCategoryPercent(cat) < 60 && cat !== "Procedural") weakAreas.push(cat);
+        });
+        if (weakAreas.length > 0) {
+            insights += `<p><strong>Weakest areas:</strong> ${weakAreas.join(", ")}<br>`;
+            if (weakAreas.includes("Evidence")) insights += "→ Preserve all footage, request bodycams immediately, gather witnesses.<br>";
+            if (weakAreas.includes("Harm")) insights += "→ Document injuries/bills ASAP — medical records are crucial.<br>";
+            insights += "</p>";
+        }
+
+        insights += `<p><strong>Recommended action:</strong> Contact GFA LAW right away. Evidence disappears fast, and early consultation maximizes options.</p>`;
+        document.getElementById('insights-content').innerHTML = insights;
+    }
+
+    function restartQuiz() {
+        currentStep = 0;
+        totalScore = 0;
+        answers = [];
+        Object.keys(categories).forEach(cat => { categories[cat].score = 0; });
+        document.getElementById('question-card').style.display = 'block';
+        document.getElementById('disqualifier-card').style.display = 'none';
+        document.getElementById('results-card').style.display = 'none';
+        updateQuestion();
+    }
+
+    // Init
+    updateQuestion();
+</script>
+
+</body></html>

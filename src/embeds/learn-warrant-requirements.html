@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Anatomy and Exceptions of a Warrant</title><base target="_top"></head><body style="margin:0">
+<div id="warrant-requirements-container">
+    <div class="slider-header">
+        <h2 class="branding-text">The Anatomy & Exceptions of a Warrant</h2>
+        <p>Explore the four constitutional requirements for a valid warrant and the primary exceptions to the rule.</p>
+    </div>
+
+    <div class="slider-wrapper">
+        <input type="range" min="1" max="5" step="1" value="1" id="warrant-slider" aria-label="Warrant requirement steps">
+        <div class="step-labels">
+            <span class="step-label" data-step="1">1. Magistrate</span>
+            <span class="step-label" data-step="2">2. Cause</span>
+            <span class="step-label" data-step="3">3. Particularity</span>
+            <span class="step-label" data-step="4">4. Execution</span>
+            <span class="step-label" data-step="5">5. Exceptions</span>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div id="step-1-content" class="info-card active">
+            <div class="card-title">Neutral & Detached Magistrate</div>
+            <div class="legal-cite">Requirement: Oversight</div>
+            <ul class="points">
+                <li><strong>The Rule:</strong> A warrant must be issued by a judicial officer capable of determining whether Probable Cause exists.</li>
+                <li><strong>Neutrality:</strong> The person cannot be part of the law enforcement team or have a personal stake in the outcome.</li>
+                <li><strong>The Buffer:</strong> The Magistrate serves as a critical check against overzealous law enforcement activity.</li>
+            </ul>
+        </div>
+
+        <div id="step-2-content" class="info-card">
+            <div class="card-title">Probable Cause & Oath</div>
+            <div class="legal-cite">Requirement: The Affidavit</div>
+            <ul class="points">
+                <li><strong>Oath or Affirmation:</strong> The officer must swear to the truth of the facts in a written affidavit.</li>
+                <li><strong>Substantial Basis:</strong> Facts must show a "fair probability" that a crime was committed or evidence is in a specific location.</li>
+                <li><strong>Timeliness:</strong> Information cannot be "stale"; the evidence must likely be there at the time of the search.</li>
+            </ul>
+        </div>
+
+        <div id="step-3-content" class="info-card">
+            <div class="card-title">Particularity</div>
+            <div class="legal-cite">Requirement: The Scope</div>
+            <ul class="points">
+                <li><strong>Place to be Searched:</strong> The warrant must specifically describe the location (e.g., "123 Main St, Apt 4B").</li>
+                <li><strong>Items to be Seized:</strong> It must list the specific things police are looking for (e.g., "stolen jewelry").</li>
+                <li><strong>Scope Rule:</strong> Police cannot look for an elephant in a breadbox; they may only search areas where the items listed could reasonably be found.</li>
+            </ul>
+        </div>
+
+        <div id="step-4-content" class="info-card">
+            <div class="card-title">Proper Execution</div>
+            <div class="legal-cite">Requirement: The Service</div>
+            <ul class="points">
+                <li><strong>Knock and Announce:</strong> Officers must generally announce their presence and purpose before entering.</li>
+                <li><strong>Time Limits:</strong> Warrants must be served within a specific timeframe (often 3–10 days).</li>
+                <li><strong>The Return:</strong> After the search, officers must provide an inventory of everything seized to the court.</li>
+            </ul>
+        </div>
+
+        <div id="step-5-content" class="info-card">
+            <div class="card-title">Warrant Requirement Exceptions</div>
+            <div class="legal-cite">Standard: When a Warrant is Not Required</div>
+            <ul class="points exception-list">
+                <li><strong>1. Search Incident to Lawful Arrest (SILA):</strong> Allows a search of the person and their immediate "wingspan" after a lawful arrest.</li>
+                <li><strong>2. Plain View Doctrine:</strong> Evidence can be seized without a warrant if it is in plain view from a lawful vantage point.</li>
+                <li><strong>3. Consent:</strong> A search is legal if an individual with authority over the premises voluntarily gives permission.</li>
+                <li><strong>4. Automobile Exception (Carroll Doctrine):</strong> Police may search a vehicle without a warrant if they have Probable Cause that it contains contraband.</li>
+                <li><strong>5. Exigent Circumstances:</strong> Emergency situations like "Hot Pursuit," the imminent destruction of evidence, or providing emergency aid.</li>
+                <li><strong>6. Inventory Searches:</strong> Routine searches of impounded vehicles or belongings, intended to protect property and safety rather than gather evidence.</li>
+                <li><strong>7. Terry Frisk:</strong> A limited pat-down of outer clothing based on Reasonable Suspicion that a person is armed and dangerous.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="embed-footer">
+        <div class="footer-line"></div>
+        <p class="footer-contact">Please contact us if you feel that these rights were not honored in your interaction with the police.</p>
+        <p class="footer-text">Property of <strong>GFA LAW, PLLC</strong></p>
+        <p class="footer-subtext">Attorney Work Product | Educational Resource | © 2026</p>
+    </div>
+</div>
+
+<style>
+    #warrant-requirements-container {
+        background-color: #2D5A27; /* Forest Green */
+        color: #E2CE8F; /* Gold Highlights */
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 50px 5%;
+        border: 4px solid #4B4929; /* Olive Border */
+        border-radius: 12px;
+        width: 100%; 
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 20px 0;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+
+    .branding-text {
+        color: #B59344; /* Gold Mid-tone */
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+        font-size: 2.2em;
+    }
+
+    .slider-header p {
+        color: #E2CE8F;
+        font-size: 1.2em;
+        margin-bottom: 40px;
+        opacity: 0.9;
+    }
+
+    .slider-wrapper {
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #warrant-slider {
+        -webkit-appearance: none;
+        width: 70%;
+        max-width: 700px;
+        background: transparent;
+        margin-bottom: 25px;
+    }
+
+    #warrant-slider::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 14px;
+        cursor: pointer;
+        background: #4B4929;
+        border-radius: 7px;
+        border: 1px solid #B59344;
+    }
+
+    #warrant-slider::-webkit-slider-thumb {
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background: #B59344;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -10px;
+        border: 3px solid #E2CE8F;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .step-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        max-width: 900px;
+    }
+
+    .step-label {
+        font-weight: bold;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        color: #E2CE8F;
+        opacity: 0.5;
+        transition: opacity 0.3s;
+    }
+
+    .step-label.active-label {
+        opacity: 1;
+        color: #B59344;
+    }
+
+    .content-area {
+        display: flex;
+        justify-content: center;
+        min-height: 480px;
+        margin-bottom: 30px;
+    }
+
+    .info-card {
+        display: none;
+        animation: slideUpWarrant 0.5s ease;
+        text-align: left;
+        background: rgba(255,255,255,0.03);
+        padding: 40px;
+        border-radius: 10px;
+        border-left: 6px solid #B59344;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .info-card.active { display: block; }
+
+    .card-title {
+        font-size: 2em;
+        font-weight: bold;
+        color: #B59344;
+        margin-bottom: 5px;
+    }
+
+    .legal-cite {
+        font-size: 1em;
+        margin-bottom: 25px;
+        color: #E2CE8F;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .points { list-style: none; padding: 0; }
+    .points li {
+        margin-bottom: 18px;
+        line-height: 1.6;
+        font-size: 1.1em;
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .points li::before {
+        content: "⚖️";
+        position: absolute;
+        left: 0;
+        font-size: 0.9em;
+    }
+
+    .exception-list li {
+        font-size: 1em;
+        margin-bottom: 12px;
+    }
+
+    /* Footer Styling */
+    .embed-footer {
+        margin-top: 50px;
+        padding-bottom: 10px;
+    }
+
+    .footer-line {
+        height: 2px;
+        background: linear-gradient(to right, transparent, #B59344, transparent);
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .footer-contact {
+        font-size: 1.2em;
+        color: #E2CE8F;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-style: italic;
+    }
+
+    .footer-text {
+        font-size: 1.1em;
+        color: #B59344;
+        margin-bottom: 5px;
+        letter-spacing: 1px;
+    }
+
+    .footer-subtext {
+        font-size: 0.8em;
+        color: #E2CE8F;
+        opacity: 0.6;
+        text-transform: uppercase;
+    }
+
+    @keyframes slideUpWarrant {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        #warrant-slider { width: 90%; }
+        .step-labels { display: none; }
+        .branding-text { font-size: 1.6em; }
+    }
+</style>
+
+<script>
+    const wSlider = document.getElementById('warrant-slider');
+    const labels = document.querySelectorAll('.step-label');
+    
+    function updateWarrantStep(step) {
+        document.querySelectorAll('.info-card').forEach(card => card.classList.remove('active'));
+        document.getElementById(`step-${step}-content`).classList.add('active');
+        labels.forEach(label => {
+            label.classList.remove('active-label');
+            if(label.getAttribute('data-step') == step) label.classList.add('active-label');
+        });
+    }
+
+    wSlider.addEventListener('input', function() { updateWarrantStep(this.value); });
+    updateWarrantStep(1);
+</script>
+
+</body></html>

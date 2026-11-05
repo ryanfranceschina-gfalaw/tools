@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Born in Fire, Crowned in Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --obsidian: #0a0a0f;
+    --deep: #0f0f18;
+    --void: #050509;
+    --white-spot: #e8e4dc;
+    --snowflake: #d4cfc6;
+    --warm-white: #f3efe7;
+    --ash: #8f8f9f;
+    --ash-dim: #6d6d7d;
+    --ember: #d07e52;
+    --ember-deep: #b5613a;
+    --lava: #8b3a2a;
+    --gold: #c9a96e;
+    --silver: #b8b4ac;
+    --line: rgba(208,126,82,0.14);
+    --rule: rgba(255,255,255,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--void);
+    color: var(--white-spot);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.9;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Subtle vignette to deepen the edges */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  /* Film grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.45;
+    mix-blend-mode: overlay;
+  }
+
+  /* Reading progress bar */
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(to right, var(--ember-deep), var(--ember), var(--gold));
+    box-shadow: 0 0 12px rgba(208,126,82,0.6);
+    z-index: 1001;
+    transition: width 0.1s linear;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 62%, #1c100a 0%, transparent 65%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, #0b0b13 0%, var(--void) 80%);
+  }
+
+  /* Pulsing lava glow at bottom */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: -12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 45%;
+    background: radial-gradient(ellipse, rgba(139,58,42,0.4) 0%, rgba(208,126,82,0.06) 45%, transparent 72%);
+    animation: pulse-lava 7s ease-in-out infinite;
+    filter: blur(8px);
+  }
+
+  @keyframes pulse-lava {
+    0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  }
+
+  /* Floating particles (snow drifting up, embers rising) */
+  .spot {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,228,220,0.95) 0%, rgba(232,228,220,0.15) 55%, transparent 100%);
+    animation: drift linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .spot.ember {
+    background: radial-gradient(circle, rgba(224,140,90,0.95) 0%, rgba(181,97,58,0.2) 55%, transparent 100%);
+  }
+
+  @keyframes drift {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translateY(-55vh) translateX(14px) scale(0.85); }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-110vh) translateX(-10px) scale(0.4); opacity: 0; }
+  }
+
+  .stone-visual {
+    position: relative;
+    width: 190px;
+    height: 190px;
+    margin: 0 auto 3.2rem;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  /* Halo glow behind the stone */
+  .stone-visual::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle, rgba(208,126,82,0.18) 0%, transparent 60%);
+    animation: pulse-lava 7s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-16px) rotate(1deg); }
+  }
+
+  .stone-body {
+    width: 100%;
+    height: 100%;
+    border-radius: 42% 58% 55% 45% / 48% 44% 56% 52%;
+    background: radial-gradient(ellipse at 35% 30%, #32323e 0%, #16161f 42%, #08080e 100%);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      inset 0 0 36px rgba(0,0,0,0.85),
+      inset 8px 10px 30px rgba(255,255,255,0.04),
+      0 24px 70px rgba(0,0,0,0.9),
+      0 0 90px rgba(139,58,42,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Glassy sheen */
+  .stone-body::before {
+    content: '';
+    position: absolute;
+    top: 7%;
+    left: 13%;
+    width: 40%;
+    height: 28%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.16) 0%, transparent 100%);
+    border-radius: 50%;
+    transform: rotate(-22deg);
+    filter: blur(1px);
+  }
+
+  /* Snowflake crystal cluster */
+  .stone-body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 20px at 52% 47%, rgba(243,239,231,0.92) 0%, rgba(232,228,220,0.45) 38%, transparent 70%),
+      radial-gradient(circle 10px at 37% 63%, rgba(212,207,198,0.65) 0%, transparent 66%),
+      radial-gradient(circle 8px at 66% 34%, rgba(212,207,198,0.55) 0%, transparent 66%),
+      radial-gradient(circle 6px at 44% 37%, rgba(212,207,198,0.45) 0%, transparent 66%),
+      radial-gradient(circle 5px at 61% 61%, rgba(212,207,198,0.4) 0%, transparent 66%),
+      radial-gradient(circle 4px at 30% 44%, rgba(212,207,198,0.35) 0%, transparent 66%),
+      radial-gradient(circle 3px at 72% 52%, rgba(212,207,198,0.3) 0%, transparent 66%);
+    animation: glow-spots 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow-spots {
+    from { filter: brightness(0.82); }
+    to { filter: brightness(1.25) drop-shadow(0 0 8px rgba(232,228,220,0.55)); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.66rem;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.4rem;
+    animation: fade-up 1.3s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.1rem, 6.2vw, 4rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.16;
+    color: var(--warm-white);
+    margin-bottom: 1.3rem;
+    text-shadow: 0 2px 40px rgba(208,126,82,0.2);
+    animation: fade-up 1.3s 0.15s ease both;
+  }
+
+  .hero-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    color: var(--ash);
+    max-width: 480px;
+    animation: fade-up 1.3s 0.3s ease both;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ash-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    animation: fade-up 2s 1.1s ease both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 52px;
+    background: linear-gradient(to bottom, var(--ember), transparent);
+    animation: scroll-pulse 2.2s ease-in-out infinite;
+    transform-origin: top;
+  }
+
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.35; transform: scaleY(0.85); }
+    50% { opacity: 1; transform: scaleY(1.15); }
+  }
+
+  /* ============ CONTENT ============ */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ============ SECTION ============ */
+  .section {
+    padding: 6.5rem 0;
+    border-top: 1px solid var(--rule);
+    opacity: 0;
+    transform: translateY(44px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered reveal of children */
+  .section > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .section.visible > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section.visible > *:nth-child(1) { transition-delay: 0.05s; }
+  .section.visible > *:nth-child(2) { transition-delay: 0.15s; }
+  .section.visible > *:nth-child(3) { transition-delay: 0.25s; }
+  .section.visible > *:nth-child(4) { transition-delay: 0.33s; }
+  .section.visible > *:nth-child(5) { transition-delay: 0.40s; }
+  .section.visible > *:nth-child(6) { transition-delay: 0.46s; }
+  .section.visible > *:nth-child(n+7) { transition-delay: 0.52s; }
+
+  .section-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.45em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .section-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--line), transparent);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.3rem, 3.2vw, 1.9rem);
+    font-weight: 500;
+    color: var(--warm-white);
+    margin-bottom: 2.2rem;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+  }
+
+  .section p {
+    color: rgba(232,228,220,0.84);
+    margin-bottom: 1.6rem;
+    font-size: clamp(1.02rem, 2vw, 1.18rem);
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  /* Drop cap on the first paragraph of each section */
+  .section > p:first-of-type::first-letter {
+    font-family: 'Cinzel', serif;
+    float: left;
+    font-size: 3.4rem;
+    line-height: 0.82;
+    padding: 0.1rem 0.7rem 0 0;
+    color: var(--ember);
+    font-weight: 600;
+    text-shadow: 0 2px 18px rgba(208,126,82,0.35);
+  }
+
+  em {
+    font-style: italic;
+    color: var(--snowflake);
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    margin: 3.8rem 0;
+    padding: 2.2rem 2.8rem;
+    border-left: 2px solid var(--ember);
+    background: linear-gradient(to right, rgba(139,58,42,0.1), rgba(139,58,42,0.01) 70%, transparent);
+    position: relative;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .pull-quote::before {
+    content: '\201C';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5.5rem;
+    line-height: 1;
+    color: var(--ember);
+    opacity: 0.35;
+    position: absolute;
+    top: -0.3rem;
+    left: 1.4rem;
+  }
+
+  .pull-quote p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    color: var(--warm-white) !important;
+    line-height: 1.7;
+    margin: 0 !important;
+    position: relative;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    margin: 0;
+    padding: 2.5rem 0;
+    color: var(--ash);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent);
+  }
+
+  .divider-mark {
+    font-family: 'Cinzel', serif;
+    font-size: 0.66rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ember);
+    opacity: 0.75;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .divider-mark::before {
+    content: '\2756';
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+
+  /* Closing */
+  .closing {
+    padding: 7rem 0 11rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(44px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .closing.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .closing-stone {
+    width: 86px;
+    height: 86px;
+    margin: 0 auto 2.8rem;
+    border-radius: 42% 58% 55% 45% / 48% 44% 56% 52%;
+    background: radial-gradient(ellipse at 35% 30%, #32323e 0%, #16161f 42%, #08080e 100%);
+    box-shadow:
+      inset 0 0 22px rgba(0,0,0,0.85),
+      inset 6px 8px 20px rgba(255,255,255,0.04),
+      0 10px 34px rgba(0,0,0,0.85),
+      0 0 50px rgba(139,58,42,0.18);
+    position: relative;
+    overflow: hidden;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .closing-stone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 11px at 50% 50%, rgba(243,239,231,0.92) 0%, rgba(232,228,220,0.35) 44%, transparent 70%),
+      radial-gradient(circle 6px at 35% 65%, rgba(212,207,198,0.55) 0%, transparent 66%),
+      radial-gradient(circle 5px at 66% 37%, rgba(212,207,198,0.45) 0%, transparent 66%),
+      radial-gradient(circle 3px at 58% 60%, rgba(212,207,198,0.35) 0%, transparent 66%);
+    animation: glow-spots 5s ease-in-out infinite alternate;
+  }
+
+  .closing p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--ash);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.78;
+  }
+
+  .closing-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    font-weight: 500;
+    color: var(--warm-white);
+    letter-spacing: 0.08em;
+    margin-bottom: 2.2rem;
+    text-shadow: 0 2px 30px rgba(208,126,82,0.2);
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .section, .closing, .section > * { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- Floating light particles (generated by script) -->
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:relative; z-index:2;">
+    <div class="stone-visual">
+      <div class="stone-body"></div>
+    </div>
+    <p class="hero-eyebrow">A Story of Fire, Darkness, and Light</p>
+    <h1 class="hero-title">Born in Fire,<br>Crowned in Light</h1>
+    <p class="hero-subtitle">The story of the snowflake obsidian, and what it knows about survival.</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    Read on
+  </div>
+</section>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- Section 1 -->
+  <section class="section">
+    <span class="section-number">I</span>
+    <h2 class="section-title">The Earth Opens</h2>
+    <p>
+      Deep beneath the surface, where no light has ever reached, the earth tears itself open. Magma surges upward under pressures the human mind cannot fully comprehend. Temperatures climb past a thousand degrees. Everything in its path burns.
+    </p>
+    <p>
+      This is not a gentle beginning. This is not the soft light of a sunrise or the slow turning of a season. This is <em>violent creation.</em> Lava pours across the landscape, swallowing everything. The world, in that moment, is nothing but blackness and heat.
+    </p>
+    <p>
+      Out of that catastrophe, something forms. The molten rock cools rapidly, too fast for crystals to organize themselves, too fast for structure or symmetry to take hold. The result is a glass, dense and dark, sealed smooth by the sudden cold. It absorbs nearly every ray of light that falls on it. From the outside, it appears to be pure darkness.
+    </p>
+    <p>
+      That stone is obsidian. And it has a secret.
+    </p>
+  </section>
+</div>
+
+<div class="divider"><span class="divider-mark">the stone</span></div>
+
+<div class="content">
+  <!-- Section 2 -->
+  <section class="section">
+    <span class="section-number">II</span>
+    <h2 class="section-title">What Grows Inside the Dark</h2>
+    <p>
+      Not all obsidian looks the same. In certain conditions, as the volcanic glass cools, tiny mineral crystals begin to form within the black matrix. These are cristobalite crystals, white and delicate, arranged by invisible forces into patterns that resemble snowflakes or flowers pressed beneath glass.
+    </p>
+    <p>
+      The result is snowflake obsidian: a stone that appears, at first glance, to be darkness itself, but carries within it a constellation of white light. The darkness did not destroy those patterns. The darkness <em>made them possible.</em> The same extreme conditions that produced the black volcanic glass also created the perfect environment for those crystal formations to take shape and hold.
+    </p>
+
+    <div class="pull-quote">
+      <p>The stone did not survive in spite of its darkness. It became something remarkable because of what grew quietly within it.</p>
+    </div>
+
+    <p>
+      For centuries, indigenous peoples across Mesoamerica, the American Southwest, and the Pacific used snowflake obsidian not just as a tool, but as a sacred object. Warriors carried it. Healers worked with it. Its meaning was consistent across cultures: balance. The coexistence of shadow and light. The truth that one cannot exist without the other.
+    </p>
+  </section>
+</div>
+
+<div class="divider"><span class="divider-mark">the mirror</span></div>
+
+<div class="content">
+  <!-- Section 3 -->
+  <section class="section">
+    <span class="section-number">III</span>
+    <h2 class="section-title">You Have Known That Fire</h2>
+    <p>
+      You already know what volcanic heat feels like. Not literally, perhaps, but you know the kind of pressure that comes from a life that has broken open. Grief that arrives without warning. Loss so heavy it bends the spine. Seasons where the darkness is not poetic or metaphorical but physical, real, crushing weight.
+    </p>
+    <p>
+      There are moments when the darkness feels total. When every direction looks the same shade of black and the idea of light seems like something other people are allowed to have. When the numbness that comes with surviving hard things starts to feel permanent, like it has fused to you the way glass fuses under heat.
+    </p>
+    <p>
+      In those moments, the obsidian has something to tell you.
+    </p>
+    <p>
+      You are not a stone that failed to become something beautiful. You are a stone in the middle of formation. The same conditions that feel like they are destroying you are the conditions under which something crystalline and irreplaceable is quietly taking shape inside you.
+    </p>
+
+    <div class="pull-quote">
+      <p>The crystal does not fight the darkness around it. It simply grows. Slowly. Faithfully. In the only direction it knows: toward its own nature.</p>
+    </div>
+  </section>
+</div>
+
+<div class="divider"><span class="divider-mark">the light</span></div>
+
+<div class="content">
+  <!-- Section 4 -->
+  <section class="section">
+    <span class="section-number">IV</span>
+    <h2 class="section-title">Find the White Spots</h2>
+    <p>
+      Here is the practice that snowflake obsidian demands of us: look for the white.
+    </p>
+    <p>
+      Not the grand transformation. Not the moment when all darkness is banished and everything resolves into warmth and clarity. That moment may come, but demanding it now, in the middle of the dark, is the wrong question. The right question is smaller and more honest: <em>where is the white spot?</em>
+    </p>
+    <p>
+      For you, today, it might be a cup of coffee that tasted exactly right. A child's laugh in another room. One hour of sleep that was genuinely restful. A text from someone who thought of you. A song that found you at the right moment. A breath that came a little easier than the one before it.
+    </p>
+    <p>
+      These are not consolation prizes. These are the cristobalite crystals. They are small, yes. They may seem insignificant against the black field surrounding them. But they are real, they are yours, and they are proof that the darkness has not taken everything.
+    </p>
+    <p>
+      When you hold a piece of snowflake obsidian and tilt it toward the light, those white formations catch and hold every photon they can find. They do not wait for more light to arrive before they start shining. They work with exactly what is available.
+    </p>
+
+    <div class="pull-quote">
+      <p>You do not need to be free of darkness to focus on the light. You only need to tilt yourself, even slightly, toward whatever white spot is closest.</p>
+    </div>
+  </section>
+</div>
+
+<div class="divider"><span class="divider-mark">the carrying</span></div>
+
+<div class="content">
+  <!-- Section 5 -->
+  <section class="section">
+    <span class="section-number">V</span>
+    <h2 class="section-title">What the Stone Teaches Us About Carrying Hard Things</h2>
+    <p>
+      Snowflake obsidian is heavy for its size. Dense. Smooth but not soft. It has edges, even when polished. This is part of what it is, and nothing about the polishing process erases that.
+    </p>
+    <p>
+      Your hardest experiences are the same. The point is not to become a person who was never broken open, who never knew the fire. The point is to become a person who carries those things with intention, who can hold the dark and the light in the same hand and recognize that both belong to the same stone.
+    </p>
+    <p>
+      The warriors who carried obsidian into battle understood something important: the stone was not a charm against difficulty. It was a reminder. It said, <em>I came from fire and I am still here. I hold darkness and I hold light. I am not one or the other. I am both, and that is what makes me what I am.</em>
+    </p>
+    <p>
+      That is what you are too. Not in spite of the volcanic seasons. Because of them.
+    </p>
+    <p>
+      The white patterns inside you, the moments of unexpected grace, the quiet joys, the stubborn loves, the things that still make you laugh or feel or reach toward something, those were forged in the same fire as everything else. They are not separate from your suffering. They grew within it.
+    </p>
+  </section>
+</div>
+
+<div class="divider"><span class="divider-mark">the practice</span></div>
+
+<div class="content">
+  <!-- Section 6 -->
+  <section class="section">
+    <span class="section-number">VI</span>
+    <h2 class="section-title">A Way Forward</h2>
+    <p>
+      When the darkness feels total, do not demand that it lift immediately. That is not how obsidian forms, and it is not how humans heal. Instead, try this:
+    </p>
+    <p>
+      Name one white spot. Just one. It does not need to be large or beautiful or worthy of anyone's admiration. It only needs to be real. Find it, look at it directly, and let yourself acknowledge that it exists inside the same life that holds all the darkness. The obsidian does not apologize for its black matrix. It simply also shows you the snow.
+    </p>
+    <p>
+      Then, when you are able, name another. And another. Over time, what you are doing is not ignoring the darkness. You are mapping the crystal formations within it. You are learning the interior geography of your own stone.
+    </p>
+    <p>
+      This is a practice, not a cure. Some days the white spots will be obvious. Some days you will have to hold the stone up to a very specific angle and squint before they appear. Do not mistake the difficulty of finding them for their absence. They are there. They are always there. The fire that formed the black glass formed them too, and nothing that came after has undone them.
+    </p>
+
+    <div class="pull-quote">
+      <p>You were made in fire. You carry light inside the dark. You are still forming. And you are still here.</p>
+    </div>
+
+    <p>
+      That is not a small thing. That is everything.
+    </p>
+  </section>
+
+</div>
+
+<!-- CLOSING -->
+<div class="content">
+  <section class="closing">
+    <div class="closing-stone"></div>
+    <h2 class="closing-title">Born in Fire.<br>Crowned in Light.</h2>
+    <p>
+      The stone does not choose its origin. It only becomes what it becomes, through heat and pressure and time. So do you.
+    </p>
+    <p>
+      Find your white spots. Hold them carefully. Let them be enough, today, to remind you what you are made of.
+    </p>
+  </section>
+</div>
+
+<script>
+  // Generate floating particles in the hero
+  (function () {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    const hero = document.querySelector('.hero');
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      const ember = Math.random() < 0.35;
+      s.className = 'spot' + (ember ? ' ember' : '');
+      const size = (ember ? 2 : 3) + Math.random() * 4;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = '100%';
+      s.style.animationDuration = (14 + Math.random() * 14) + 's';
+      s.style.animationDelay = (-Math.random() * 20) + 's';
+      hero.appendChild(s);
+    }
+  })();
+
+  // Intersection observer for section reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.section, .closing').forEach(el => observer.observe(el));
+
+  // Reading progress bar
+  const progress = document.getElementById('progress');
+  let ticking = false;
+  function updateProgress() {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    progress.style.width = Math.min(100, Math.max(0, scrolled * 100)) + '%';
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(updateProgress); ticking = true; }
+  }, { passive: true });
+  updateProgress();
+</script>
+</body>
+</html>
