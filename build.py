@@ -172,9 +172,9 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <div><a class="brand" href="/"><img src="/assets/img/seal-300.png" alt="" width="44" height="44"><span class="brand-t"><b>GFA LAW, PLLC</b><span>Attorneys-at-Law</span></span></a>
 <p>Grisham Franceschina Attorneys-at-Law, PLLC<br>4970 E. Business 190<br>Temple, TX 76501</p>
 <p><a href="tel:+12544051726">254-405-1726</a><br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
-<div><h4>Practice</h4><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/tools/restore-my-rights">Restore My Rights</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
-<div><h4>Firm</h4><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
-<div><h4>Get Help</h4><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/contact/espanol">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
+<div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/tools/restore-my-rights">Restore My Rights</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
+<div><p class="fh">Firm</p><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
+<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/contact/espanol">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
 </div>
 <div class="legal">
 <p>Lawyers responsible for the content of this website are Ryan Franceschina and CJ Grisham. Primary practice location: Temple, Texas. The attorneys of GFA LAW, PLLC are not certified by the Texas Board of Legal Specialization.</p>
@@ -266,7 +266,7 @@ def render(meta, body):
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr"><div class="hdr-in">
-<a class="brand" href="/" aria-label="GFA LAW, PLLC home"><img src="/assets/img/seal-300.png" alt="" width="44" height="44"><span class="brand-t"><b>GFA LAW</b><span>Attorneys-at-Law, PLLC</span></span></a>
+<a class="brand" href="/"><img src="/assets/img/seal-300.png" alt="" width="44" height="44"><span class="brand-t"><b>GFA LAW</b><span>Attorneys-at-Law, PLLC</span></span></a>
 <nav class="nav" id="nav" aria-label="Main">{nav_html(path)}</nav>
 <a class="btn sm hdr-cta" href="/contact/contact-gfa-law">Request a Case Review</a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span></button>
@@ -332,8 +332,8 @@ def release_pages(R):
 {share}
 {pn}
 </article>
-<aside class="side"><div class="side-card"><h3>Media inquiries</h3><p>Reporters can reach the firm at <a href="mailto:press@gfalaw.us">press@gfalaw.us</a> or 254-405-1726.</p><a class="btn ghost" href="/press-releases">All press releases</a></div>
-<div class="side-card"><h3>Need help with a case?</h3><p>Requesting a case review is free. If we can help, the consultation is $350.</p><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a></div></aside>
+<aside class="side"><div class="side-card"><h2 class="h3">Media inquiries</h2><p>Reporters can reach the firm at <a href="mailto:press@gfalaw.us">press@gfalaw.us</a> or 254-405-1726.</p><a class="btn ghost" href="/press-releases">All press releases</a></div>
+<div class="side-card"><h2 class="h3">Need help with a case?</h2><p>Requesting a case review is free. If we can help, the consultation is $350.</p><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a></div></aside>
 </div></section>'''
         meta = {'path': f'/press-releases/{r["id"]}', 'title': f'{r["title"]} | GFA LAW, PLLC', 'short': r['title'],
                 'desc': r.get('summary') or r['sub'], 'ogtype': 'article', 'schema': 'WebPage',
@@ -353,7 +353,7 @@ def press_index(R, C):
     chips = '<button class="chip" type="button" data-val="All" aria-pressed="true">All</button>' + ''.join(
         f'<button class="chip" type="button" data-val="{esc(t)}" aria-pressed="false">{esc(t)}</button>' for t in tags)
     cards = ''.join(f'''<a class="card news-card rv" href="/press-releases/{r["id"]}" data-in="pr" data-tags="{esc('|'.join(r['tags']))}">
-<div class="meta"><span>{fmt_date(r["date"])}</span></div><h3>{esc(r["title"])}</h3><p>{esc(r["sub"])}</p>
+<div class="meta"><span>{fmt_date(r["date"])}</span></div><h2 class="h3">{esc(r["title"])}</h2><p>{esc(r["sub"])}</p>
 <div class="tags">{''.join(f'<span class="tag">{esc(t)}</span>' for t in r['tags'])}</div><span class="more">Read release</span></a>''' for r in R)
     cov = ''.join(f'''<li><a href="{esc(c["url"])}" target="_blank" rel="noopener"><span class="o">{esc(c["outlet"])}<small>{fmt_date(c["date"])}</small></span><span class="t">{esc(c["title"])}</span><span class="x">Read &#8599;</span></a></li>''' for c in sorted(C, key=lambda c: c['date'], reverse=True))
     body = f'''<section class="phero"><div class="wrap">{{{{crumbs}}}}
@@ -361,6 +361,7 @@ def press_index(R, C):
 <p class="lede">Statements and announcements from GFA LAW, PLLC, the Temple, Texas civil rights and criminal defense firm of Grisham Franceschina Attorneys-at-Law. Media inquiries: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p>
 </div></section>
 <section class="sec"><div class="wrap">
+<h2 class="vh">All press releases</h2>
 <input class="search" type="search" placeholder="Search press releases" data-search="pr" aria-label="Search press releases">
 <div class="chips" data-filter="pr" role="group" aria-label="Filter by topic">{chips}</div>
 <div class="grid g2">{cards}</div>
@@ -394,6 +395,7 @@ def merch_page(M):
 <div class="btns"><a class="btn" href="https://www.etsy.com/shop/GFALAWmerchandise" target="_blank" rel="noopener">{ICON["shop"]} Visit the Etsy shop</a></div>
 </div></section>
 <section class="sec"><div class="wrap">
+<h2 class="vh">Shop by category</h2>
 <input class="search" type="search" placeholder="Search merch" data-search="m" aria-label="Search merch">
 <div class="chips" data-filter="m" role="group" aria-label="Filter by category">{chips}</div>
 <p class="mcount" data-count="m" aria-live="polite"></p>
