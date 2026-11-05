@@ -28,3 +28,6 @@ d.addEventListener('click',function(e){var a=e.target.closest('a');if(!a||typeof
  if(h.indexOf('tel:')===0)ev='call_click';else if(h.indexOf('mailto:')===0)ev='email_click';else if(/mycase\.com\/contact_us/.test(h))ev='case_review_form';else if(/restore-my-rights/.test(h))ev='restore_rights_click';else if(/lawpay\.com/.test(h))ev='payment_click';else if(/etsy\.com/.test(h))ev='merch_click';
  if(ev)gtag('event',ev,{link_text:lab,link_url:h,page_path:location.pathname})});
 })();
+
+// click-to-play YouTube: nothing loads from YouTube until the visitor presses play
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button.vid');if(!b||b.dataset.on)return;b.dataset.on='1';var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+b.dataset.yt+'?autoplay=1&rel=0';f.title=b.getAttribute('aria-label');f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';f.allowFullscreen=true;b.appendChild(f);if(window.gtag)gtag('event','video_play',{video_id:b.dataset.yt});});

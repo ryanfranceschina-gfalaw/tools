@@ -54,10 +54,14 @@ NAV = [
    ('Section 1983 Civil Rights Lawsuits', '/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits', '', 1),
    ('Innocent Defense', '/about-the-firm/practice-areas/innocent-defense', '', 1),
    ('Firearm Rights and Expunction', '/about-the-firm/practice-areas/firearm-rights-and-expunction', '', 1),
+   ('Federal Firearm Rights Restoration', '/about-the-firm/practice-areas/federal-firearm-rights-restoration', '', 1),
+   ('Areas We Serve', '/areas-we-serve', 'Central Texas and statewide', 0),
    ('CJ Grisham', '/about-the-firm/cj-grisham', 'Senior Partner', 0),
    ('Ryan Franceschina', '/about-the-firm/ryan-franceschina', 'Managing Partner', 0),
    ('David T. Amad 1791 Scholarship', '/about-the-firm/david-t-amad-1791-scholarship-application', '', 0)]),
- ('Tools', [('All Free Tools', '/tools', 'Know your rights, deadlines and records', 0),
+ ('Resources', [('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
+   ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
+   ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
    ('Can the Cop Do That?', '/tools/can-the-cop-do-that', '', 1), ('Deadline Checker', '/tools/deadline-checker', '', 1),
    ('Case Review Finder', '/tools/case-review-finder', '', 1), ('Records Request Builder', '/tools/records-request-builder', '', 1),
    ('Firearm Return and Expunction Checker', '/tools/firearm-return-and-expunction-checker', '', 1),
@@ -73,7 +77,7 @@ for name, tgt in NAV:
     if isinstance(tgt, str): TITLES[tgt] = name
     else:
         for n, p, _, _ in tgt: TITLES[p] = n
-TITLES.update({'/about-the-firm': 'About the Firm', '/contact': 'Contact', '/press-releases': 'Press Releases', '/tools': 'Tools'})
+TITLES.update({'/about-the-firm': 'About the Firm', '/contact': 'Contact', '/press-releases': 'Press Releases', '/tools': 'Tools', '/resources': 'Resources'})
 
 esc = html.escape
 KNOWN = set()
@@ -172,14 +176,14 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <div><a class="brand" href="/"><img src="/assets/img/seal-300.png" alt="" width="44" height="44"><span class="brand-t"><b>GFA LAW, PLLC</b><span>Attorneys-at-Law</span></span></a>
 <p>Grisham Franceschina Attorneys-at-Law, PLLC<br>4970 E. Business 190<br>Temple, TX 76501</p>
 <p><a href="tel:+12544051726">254-405-1726</a><br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
-<div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/tools/restore-my-rights">Restore My Rights</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
+<div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Rights Restoration</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
 <div><p class="fh">Firm</p><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
-<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/contact/espanol">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
+<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/contact/espanol">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
 </div>
 <div class="legal">
 <p>Lawyers responsible for the content of this website are Ryan Franceschina and CJ Grisham. Primary practice location: Temple, Texas. The attorneys of GFA LAW, PLLC are not certified by the Texas Board of Legal Specialization.</p>
 <p>The information provided on this website is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed by viewing this site or contacting the firm through this website. Past results do not guarantee future outcomes.</p>
-<p>&copy; YEAR GFA LAW, PLLC. All rights reserved.</p>
+<p>&copy; YEAR GFA LAW, PLLC. All rights reserved. <a href="/privacy-policy">Privacy Policy</a></p>
 </div></div></footer>
 <nav class="callbar" aria-label="Quick contact"><a class="btn" href="tel:+12544051726">CALLICON Call</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a></nav>'''
 
@@ -190,9 +194,20 @@ SIDE_PRACTICE = '''<aside class="side">
 <li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Section 1983 Civil Rights Lawsuits</a></li>
 <li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li>
 <li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li>
-<li><a href="/tools/restore-my-rights">Restore My Rights (Federal)</a></li>
+<li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Firearm Rights Restoration</a></li>
 <li><a href="/tools">Free Tools</a></li></ul></div>
 </aside>'''
+
+LEGAL_ES = '''<div class="legal" lang="es">
+<p>Los abogados responsables del contenido de este sitio web son Ryan Franceschina y CJ Grisham. Lugar principal de práctica: Temple, Texas. Los abogados de GFA LAW, PLLC no están certificados por la Junta de Especialización Legal de Texas (Texas Board of Legal Specialization).</p>
+<p>La información de este sitio web es solo de carácter general y no constituye asesoría legal. Ver este sitio o comunicarse con la firma no crea una relación abogado-cliente. Los resultados anteriores no garantizan resultados futuros.</p>
+</div>'''
+
+def foot_for(meta):
+    f = expand(FOOTER, meta).replace('YEAR', str(NOW.year))
+    if meta.get('lang') == 'es':
+        f = f.replace('<div class="legal">', LEGAL_ES + '\n<div class="legal">', 1)
+    return f
 
 def expand(body, meta):
     body = body.replace('{{band}}', FOOT).replace('{{side:practice}}', SIDE_PRACTICE)
@@ -274,7 +289,7 @@ def render(meta, body):
 <main id="main">
 {body}
 </main>
-{expand(FOOTER, meta).replace('YEAR', str(NOW.year))}
+{foot_for(meta)}
 <script src="/assets/site.js?v={V}" defer></script>
 </body>
 </html>
@@ -406,6 +421,24 @@ def merch_page(M):
             'desc': 'Official GFA LAW, PLLC apparel and gear: shirts, hoodies, hats, drinkware, stickers and more. Every order is handled through our Etsy shop.'}
     return meta, body
 
+def videos_page(V):
+    secs = []
+    for g in V:
+        cards = ''.join(f'''<div class="vcard rv"><button class="vid" type="button" data-yt="{esc(v["id"])}" aria-label="Play video: {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="len" aria-hidden="true">{esc(v["len"])}</span></button><div class="bd"><h3>{esc(v["title"])}</h3><p>{esc(v["note"])}</p><a class="more" href="https://www.youtube.com/watch?v={esc(v["id"])}" target="_blank" rel="noopener">Watch on YouTube</a></div></div>''' for v in g['items'])
+        secs.append(f'<h2>{esc(g["group"])}</h2><div class="vgrid">{cards}</div>')
+    body = f'''<section class="phero"><div class="wrap">{{{{crumbs}}}}
+<p class="eyebrow">Watch</p><h1>Videos</h1>
+<p class="lede">Know-your-rights lessons, case updates and testimony from GFA LAW. More videos are on our <a href="https://www.youtube.com/@gfalaw" target="_blank" rel="noopener">GFA Law HQ YouTube channel</a>.</p>
+<div class="btns"><a class="btn" href="https://www.youtube.com/@gfalaw" target="_blank" rel="noopener">{ICON["youtube"]} Subscribe on YouTube</a></div>
+</div></section>
+<section class="sec"><div class="wrap vsecs">{"".join(secs)}
+<p class="sm" style="margin-top:30px">Videos play from YouTube. Preview images come from YouTube, and the video player loads only when you press play. Videos are general information, not legal advice for your situation.</p>
+</div></section>
+{{{{band}}}}'''
+    meta = {'path': '/videos', 'title': 'Videos | GFA LAW, PLLC', 'short': 'Videos', 'schema': 'CollectionPage',
+            'desc': 'Know-your-rights videos, case updates and legislative testimony from GFA LAW, PLLC, civil rights and Second Amendment attorneys in Temple, Texas.'}
+    return meta, body
+
 def home_news(R):
     return ''.join(f'''<a class="card news-card rv" href="/press-releases/{r["id"]}"><div class="meta"><span>{fmt_date(r["date"])}</span></div><h3>{esc(r["title"])}</h3><p>{esc(r["sub"])}</p><span class="more">Read release</span></a>''' for r in R[:3])
 
@@ -417,9 +450,10 @@ if __name__ == '__main__':
     R = json.load(open(os.path.join(SRC, 'data', 'releases.json')))
     C = json.load(open(os.path.join(SRC, 'data', 'coverage.json')))
     M = json.load(open(os.path.join(SRC, 'data', 'merch.json')))
+    V = json.load(open(os.path.join(SRC, 'data', 'videos.json')))
     rp, R = release_pages(R)
     pages = [parse(f) for f in sorted(glob.glob(os.path.join(SRC, 'pages', '*.html')))]
-    pages += rp + [press_index(R, C), merch_page(M)]
+    pages += rp + [press_index(R, C), merch_page(M), videos_page(V)]
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
