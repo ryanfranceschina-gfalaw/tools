@@ -68,9 +68,10 @@ NAV = [
    ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('FAQ', '/contact/faq', '', 0),
-   ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/contact/espanol', '', 0),
+   ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
    ('Complaints', '/complaints', 'GFA HR Department Portal', 0)]),
  ('Merch', '/merch'),
+ ('Client Login', 'https://www.mycase.com/login'),
 ]
 TITLES = {}  # path -> short name, for breadcrumbs
 for name, tgt in NAV:
@@ -118,6 +119,8 @@ def nav_html(cur):
     for name, tgt in NAV:
         if isinstance(tgt, str):
             ac = ' aria-current="page"' if tgt == cur else ''
+            if tgt.startswith('http'):
+                ac = ' class="ext" target="_blank" rel="noopener"'
             out.append(f'<li><a href="{tgt}"{ac}>{esc(name)}</a></li>')
         else:
             out.append(f'<li><button type="button" aria-haspopup="true" aria-expanded="false">{esc(name)}{ICON["chev"]}</button><ul class="sub">')
@@ -131,9 +134,29 @@ def nav_html(cur):
     out.append('</ul>')
     return ''.join(out)
 
+ES_PAIRS = {'/': '/es', '/about-the-firm/practice-areas': '/es/areas-de-practica', '/contact/contact-gfa-law': '/es/contacto'}
+
+def hreflang(path):
+    en = {v: k for k, v in ES_PAIRS.items()}
+    if path in ES_PAIRS: pair = (path, ES_PAIRS[path])
+    elif path in en: pair = (en[path], path)
+    else: return ''
+    u = lambda p: '@@SITE@@' + ('/' if p == '/' else p + '/')
+    return (f'<link rel="alternate" hreflang="en" href="{u(pair[0])}">'
+            f'<link rel="alternate" hreflang="es" href="{u(pair[1])}">'
+            f'<link rel="alternate" hreflang="x-default" href="{u(pair[0])}">\n')
+
 def crumbs(path, title):
     parts = path.strip('/').split('/') if path != '/' else []
     items = [('Home', '/')]
+    if parts and parts[0] == 'es':
+        items = [('Inicio', '/es')]
+        parts = parts[1:]
+        acc = '/es'
+        for i, p in enumerate(parts):
+            acc += '/' + p
+            items.append((title if i == len(parts) - 1 else TITLES.get(acc, p), acc))
+        return items
     acc = ''
     for i, p in enumerate(parts):
         acc += '/' + p
@@ -178,7 +201,7 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <p><a href="tel:+12544051726">254-405-1726</a><br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
 <div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Rights Restoration</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
 <div><p class="fh">Firm</p><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
-<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/contact/espanol">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
+<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/es">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
 </div>
 <div class="legal">
 <p>Lawyers responsible for the content of this website are Ryan Franceschina and CJ Grisham. Primary practice location: Temple, Texas. The attorneys of GFA LAW, PLLC are not certified by the Texas Board of Legal Specialization.</p>
@@ -207,6 +230,8 @@ def foot_for(meta):
     f = expand(FOOTER, meta).replace('YEAR', str(NOW.year))
     if meta.get('lang') == 'es':
         f = f.replace('<div class="legal">', LEGAL_ES + '\n<div class="legal">', 1)
+        f = f.replace('<nav class="callbar" aria-label="Quick contact">', '<nav class="callbar" aria-label="Contacto rápido" lang="es">')
+        f = f.replace(ICON['phone'] + ' Call</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a>', ICON['phone'] + ' Llamar</a><a class="btn ghost" href="/es/contacto">Revisión de caso</a>')
     return f
 
 def expand(body, meta):
@@ -264,6 +289,7 @@ def render(meta, body):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 {robots}<link rel="canonical" href="@@CANON@@">
+{hreflang(path)}
 <meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="GFA LAW, PLLC">
 <meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="@@CANON@@"><meta property="og:image" content="{ogimg}"><meta property="og:locale" content="{'es_US' if meta.get('lang') == 'es' else 'en_US'}">
@@ -294,7 +320,7 @@ def render(meta, body):
 </body>
 </html>
 '''
-    doc = fix_links(doc, prefix).replace('@@CANON@@', canon)
+    doc = fix_links(doc, prefix).replace('@@CANON@@', canon).replace('@@SITE@@', SITE)
     return doc
 
 def write(path, doc):
