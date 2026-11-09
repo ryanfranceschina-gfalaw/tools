@@ -10,6 +10,13 @@
  ],
  "items": [
   {
+   "cat": "Stickers & Accessories",
+   "url": "https://www.etsy.com/listing/4591961980",
+   "img": "https://i.etsystatic.com/68176662/r/il/da8db1/8841491039/il_570xN.8841491039_m8rf.jpg",
+   "title": "Abolish Qualified Immunity Sticker",
+   "price": "From $4.99"
+  },
+  {
    "cat": "T-Shirts",
    "url": "https://www.etsy.com/listing/4597103061",
    "img": "https://i.etsystatic.com/68176662/r/il/877736/8739408013/il_570xN.8739408013_kcw3.jpg",
@@ -190,13 +197,6 @@
    "img": "https://i.etsystatic.com/68176662/r/il/796038/8650229044/il_570xN.8650229044_ihc7.jpg",
    "title": "Presumed Innocent Poster",
    "price": "From $15.99"
-  },
-  {
-   "cat": "Stickers & Accessories",
-   "url": "https://www.etsy.com/listing/4591961980",
-   "img": "https://i.etsystatic.com/68176662/r/il/da8db1/8841491039/il_570xN.8841491039_m8rf.jpg",
-   "title": "Abolish Qualified Immunity Sticker",
-   "price": "From $4.99"
   },
   {
    "cat": "Drinkware",
@@ -941,5 +941,5 @@
    "price": "From $13.99"
   }
  ],
- "updated": "November 5, 2026"
+ "updated": "November 9, 2026"
 }
