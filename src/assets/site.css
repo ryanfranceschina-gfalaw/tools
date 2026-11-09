@@ -359,8 +359,9 @@ iframe.emb.auto{height:500px;overflow:hidden}
 /* mobile call bar */
 .callbar{display:none}
 @media(max-width:700px){
- .callbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(11,22,13,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line2);padding:9px 10px calc(9px + env(safe-area-inset-bottom))}
- .callbar .btn{padding:12px 8px;font-size:15px}
+ .callbar{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(11,22,13,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line2);padding:9px 10px calc(9px + env(safe-area-inset-bottom))}
+ .callbar .btn{padding:12px 6px;font-size:15px;white-space:nowrap}
+ .callbar .btn svg{width:17px;height:17px}
  body{padding-bottom:72px}
 }
 
@@ -535,3 +536,6 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 .code-box{display:inline-flex;align-items:center;gap:12px;font:700 clamp(24px,4vw,34px)/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:#fff;background:var(--bg2);border:2px dashed var(--gold);border-radius:14px;padding:16px 22px;margin:8px 0 16px}
 .wcard.b b{color:#14301b}.wcard.f b{color:#fff}
 .cert b,.cert strong{color:#2a1a0b}
+
+/* radio */
+.eps .ep h3{margin:4px 0 12px}.eps audio{width:100%;margin:0 0 10px;display:block}

@@ -55,6 +55,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .cta p{color:#e9e2cb;margin:0 0 10px;font-size:14px}
 .cta b{color:#fff}
 @media (max-width:520px){.head h1{font-size:22px}.body{padding:16px}.wrap{padding:10px 6px 20px}}
+.prep{margin-top:18px;border:1.5px dashed var(--gold);border-radius:12px;padding:14px 16px;background:#fffaf0}
+.prep summary{cursor:pointer;font-weight:700;color:var(--green);font-size:15.5px}
+.prep .two{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:520px){.prep .two{grid-template-columns:1fr}}
+.prep textarea{min-height:84px;resize:vertical}
+.prep .ck{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:4px}
+.prep .ck label{display:flex;gap:6px;align-items:center;margin:0;font-weight:500;color:var(--ink)}
+#sum{min-height:150px;font-size:14px;background:#fff}
 </style><style id="gfa-launch-css">.gfa-launch{display:none}
 @media(max-width:820px){html.gfa-xframe,html.gfa-xframe body{overflow:hidden!important}html.gfa-xframe .gfa-launch{display:flex;position:fixed;inset:0;z-index:2147483000;flex-direction:column;align-items:center;justify-content:center;gap:clamp(4px,3vh,14px);padding:8px 14px;box-sizing:border-box;background:#1d2a1d;border:2px solid #D4AF5A;border-radius:8px;text-decoration:none;text-align:center;font-family:Inter,Arial,sans-serif;color:#F4EEDC;cursor:pointer}
 .gfa-launch .gl-t{font:700 clamp(15px,9vh,30px)/1.15 'Playfair Display',Georgia,serif;color:#D4AF5A}
@@ -98,7 +106,50 @@ if(urgent)h+='<div class="alert"><b>This is time-sensitive.</b> Call the office 
 h+='<p>'+txt+'</p>'+fee();
 if(url)h+='<div class="row"><a class="btn" href="'+url+'" target="_blank" rel="noopener">'+btn+'</a><a class="btn ghost" href="tel:2544051726">Call 254-405-1726</a></div>';
 else h+='<div class="row"><a class="btn" href="tel:2544051726">Call 254-405-1726</a><a class="btn ghost" href="mailto:intake@gfalaw.us">Email intake@gfalaw.us</a></div>';
-h+='<div class="row"><button class="btn ghost" id="restart">Start over</button></div>';st.innerHTML=h;st.className='fade';$('restart').onclick=function(){ask('start');};}
+var kind=url===CIVIL?'civil':url===CRIM?'criminal':null;if(kind)h+=prep(kind,url);h+='<div class="row"><button class="btn ghost" id="restart">Start over</button></div>';st.innerHTML=h;st.className='fade';$('restart').onclick=function(){ask('start');};if(kind){wirePrep(kind,url);if(urgent)$('prep').open=false;}}
+
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function prep(kind,url){var civ=kind==='civil';
+var h='<details class="prep" id="prep"><summary>Optional: prepare your request in 2 minutes</summary><p style="margin-top:10px;font-size:14px">Answer what you can. We turn your answers into a short summary you can paste into the form, and we flag deadlines to mention. Nothing you type here is sent or saved; it stays on your device until you paste it.</p>';
+if(civ){h+='<div class="two"><div><label for="p-date">Date it happened</label><input type="date" id="p-date"></div><div><label for="p-county">County where it happened</label><input type="text" id="p-county" maxlength="60"></div></div>'+
+'<label for="p-who">Agency or officials involved</label><input type="text" id="p-who" maxlength="160" placeholder="Example: Temple Police Department, Officer Smith">'+
+'<label for="p-what">What happened, in a few sentences</label><textarea id="p-what" maxlength="1200"></textarea>'+
+'<label for="p-hurt">Were you injured, arrested or jailed? For how long?</label><input type="text" id="p-hurt" maxlength="200">'+
+'<label for="p-crim">Were you charged with anything from this incident?</label><select id="p-crim"><option value="">Choose one</option><option>No charges</option><option>Yes, the case is still pending</option><option>Yes, it was dismissed or I was found not guilty</option><option>Yes, I pleaded guilty or was convicted</option><option>Not sure</option></select>'+
+'<label>What do you already have?</label><div class="ck"><label><input type="checkbox" value="Video"> Video</label><label><input type="checkbox" value="Photos"> Photos</label><label><input type="checkbox" value="Police report"> Police report</label><label><input type="checkbox" value="Medical records"> Medical records</label><label><input type="checkbox" value="Witness names"> Witnesses</label></div>';}
+else{h+='<label for="p-chg">Charge or charges</label><input type="text" id="p-chg" maxlength="200" placeholder="Example: unlawful carrying of a weapon">'+
+'<div class="two"><div><label for="p-county">County</label><input type="text" id="p-county" maxlength="60"></div><div><label for="p-who">Arresting agency</label><input type="text" id="p-who" maxlength="100"></div></div>'+
+'<div class="two"><div><label for="p-date">Date of arrest</label><input type="date" id="p-date"></div><div><label for="p-court">Next court date (if any)</label><input type="date" id="p-court"></div></div>'+
+'<div class="two"><div><label for="p-case">Case or cause number (if known)</label><input type="text" id="p-case" maxlength="60"></div><div><label for="p-cust">Custody status</label><select id="p-cust"><option value="">Choose one</option><option>In jail now</option><option>Out on bond</option><option>Never arrested (summons or citation)</option></select></div></div>'+
+'<label for="p-for">Who is requesting the review?</label><select id="p-for"><option>The person charged</option><option>A family member or friend</option></select>'+
+'<label for="p-what">Anything else we should know?</label><textarea id="p-what" maxlength="800"></textarea>';}
+h+='<div class="row"><button class="btn green" type="button" id="p-go">Build my summary</button></div><div id="p-out"></div></details>';return h;}
+function days(v){if(!v)return null;var d=new Date(v+'T12:00:00');return Math.floor((new Date()-d)/864e5);}
+function wirePrep(kind,url){var b=$('p-go');if(!b)return;b.onclick=function(){var civ=kind==='civil',md=ST==='MD',v=function(i){var e=$(i);return e?e.value.trim():'';},L=[],F=[];
+ if(civ){var dd=days(v('p-date'));L.push('Type of matter: civil rights / claim against government ('+stName()+')');
+  if(v('p-date'))L.push('Date of incident: '+v('p-date'));if(v('p-county'))L.push('County: '+v('p-county'));if(v('p-who'))L.push('Agency/officials: '+v('p-who'));
+  if(v('p-hurt'))L.push('Injury/arrest/jail: '+v('p-hurt'));if(v('p-crim'))L.push('Related criminal charge: '+v('p-crim'));
+  var ev=[].slice.call(document.querySelectorAll('.prep .ck input:checked')).map(function(x){return x.value;});if(ev.length)L.push('Evidence I have: '+ev.join(', '));
+  if(v('p-what'))L.push('What happened: '+v('p-what'));
+  if(dd!==null){if(dd<0)F.push(['info','The date you entered is in the future. Please double-check it.']);
+   else if(md){if(dd>=365*3)F.push(['alert','About '+Math.round(dd/365*10)/10+' years have passed. The general three-year deadline for federal civil rights claims in Maryland may have passed. Submit anyway so a lawyer can check for exceptions.']);
+    else if(dd>=300)F.push(['alert','Claims against Maryland local governments generally require written notice within one year'+(dd>=365?', so that notice deadline may already have passed. Federal civil rights claims can still be available':'')+'. About '+dd+' days have passed. Call the office now.']);}
+   else{if(dd>=730)F.push(['alert','About '+Math.round(dd/365*10)/10+' years have passed. The general two-year deadline for civil rights claims in Texas may have passed. Submit anyway so a lawyer can check for exceptions.']);
+    else if(dd>=640)F.push(['alert','The general two-year deadline for civil rights claims in Texas is close (about '+(730-dd)+' days left). Call the office now.']);
+    else if(dd>=180)F.push(['alert','Many claims against Texas governments require written notice within six months, and some city charters require less. About '+dd+' days have passed, so that notice deadline may already have passed. Federal civil rights claims can still be available. Call the office now.']);
+    else if(dd>=120)F.push(['alert','Many claims against Texas governments require written notice within six months, and some city charters require less. About '+dd+' days have passed. Call the office now.']);}}
+  if(/pending/.test(v('p-crim')))F.push(['info','Because the related criminal case is still pending, mention it in your request. It can affect when and how a civil claim should be filed.']);}
+ else{var cd=v('p-court')?-days(v('p-court')):null;L.push('Type of matter: criminal defense ('+stName()+')');L.push('Requested by: '+v('p-for'));
+  if(v('p-chg'))L.push('Charge(s): '+v('p-chg'));if(v('p-county'))L.push('County: '+v('p-county'));if(v('p-who'))L.push('Arresting agency: '+v('p-who'));
+  if(v('p-date'))L.push('Arrest date: '+v('p-date'));if(v('p-court'))L.push('Next court date: '+v('p-court'));if(v('p-case'))L.push('Case/cause number: '+v('p-case'));
+  if(v('p-cust'))L.push('Custody: '+v('p-cust'));if(v('p-what'))L.push('Other details: '+v('p-what'));
+  if(v('p-cust')==='In jail now')F.push(['alert','Someone is in custody. Call the office now at 254-405-1726, then submit the form.']);
+  if(cd!==null&&cd>=0&&cd<=7)F.push(['alert','The court date is '+(cd===0?'today':'in '+cd+' day'+(cd===1?'':'s'))+'. Call the office now at 254-405-1726.']);}
+ var txt=L.join('\n');var o='';F.forEach(function(x){o+='<div class="'+x[0]+'">'+esc(x[1])+'</div>';});
+ o+='<label for="sum">Your summary</label><textarea id="sum" readonly>'+esc(txt)+'</textarea><div class="row"><button class="btn" type="button" id="p-cp">Copy summary</button><a class="btn ghost" href="'+url+'" target="_blank" rel="noopener">Open the form</a></div><p style="font-size:13.5px;margin-top:10px">Paste the summary into the form\'s description box. Share only the basic facts until we confirm we can help.</p>';
+ $('p-out').innerHTML=o;var cp=$('p-cp');cp.onclick=function(){var t=$('sum');var done=function(){cp.textContent='Copied';};if(navigator.clipboard)navigator.clipboard.writeText(t.value).then(done,function(){t.select();document.execCommand('copy');done();});else{t.select();document.execCommand('copy');done();}};
+ try{if(window.top.gtag)window.top.gtag('event','case_review_prep',{kind:kind});}catch(e){}
+};}
 function route(n){var S=steps();if(S[n])return ask(n);var md=ST==='MD';
  var C='Use the Criminal Case Review form. Have the charge, the arresting agency, the county and any case number or court date ready.';
  switch(n){

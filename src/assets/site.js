@@ -25,7 +25,7 @@ d.querySelectorAll('.pay').forEach(function(p){var ks=p.querySelectorAll('input[
 d.querySelectorAll('[data-copy]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){a.textContent='Link copied'}).catch(function(){prompt('Copy this link:',u)})})});
 /* analytics: count calls, emails and case review clicks */
 d.addEventListener('click',function(e){var a=e.target.closest('a');if(!a||typeof gtag!=='function')return;var h=a.getAttribute('href')||'',ev=null,lab=(a.textContent||'').trim().slice(0,60);
- if(h.indexOf('tel:')===0)ev='call_click';else if(h.indexOf('mailto:')===0)ev='email_click';else if(/mycase\.com\/contact_us/.test(h))ev='case_review_form';else if(/restore-my-rights/.test(h))ev='restore_rights_click';else if(/lawpay\.com/.test(h))ev='payment_click';else if(/etsy\.com/.test(h))ev='merch_click';
+ if(h.indexOf('tel:')===0)ev='call_click';else if(h.indexOf('sms:')===0)ev='text_click';else if(h.indexOf('mailto:')===0)ev='email_click';else if(/mycase\.com\/contact_us/.test(h))ev='case_review_form';else if(/restore-my-rights/.test(h))ev='restore_rights_click';else if(/lawpay\.com/.test(h))ev='payment_click';else if(/etsy\.com/.test(h))ev='merch_click';
  if(ev)gtag('event',ev,{link_text:lab,link_url:h,page_path:location.pathname})});
 })();
 

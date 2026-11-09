@@ -28,6 +28,7 @@ MYCASE_CRIM = 'https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mC
 LAWPAY = 'https://secure.lawpay.com/pages/gfalaw/trust?amount=350.00&amp;reference=Consultation%20Fee&amp;readOnlyFields=amount'
 
 ICON = {
+ 'sms': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>',
  'phone': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
  'mail': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
  'pin': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>',
@@ -58,6 +59,7 @@ NAV = [
    ('Areas We Serve', '/areas-we-serve', 'Central Texas and statewide', 0),
    ('CJ Grisham', '/about-the-firm/cj-grisham', 'Senior Partner', 0),
    ('Ryan Franceschina', '/about-the-firm/ryan-franceschina', 'Managing Partner', 0),
+   ('On the Radio', '/about-the-firm/on-the-radio', 'Hear us on KMIL 105.1 FM', 0),
    ('David T. Amad 1791 Scholarship', '/about-the-firm/david-t-amad-1791-scholarship-application', '', 0)]),
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
@@ -133,6 +135,7 @@ def nav_html(cur):
             out.append('</ul></li>')
     out.append('<li class="m-cta"><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a></li>')
     out.append('<li class="m-cta"><a class="btn ghost" href="tel:+12544051726">Call 254-405-1726</a></li>')
+    out.append('<li class="m-cta"><a class="btn ghost" href="sms:+12544051726">Text 254-405-1726</a></li>')
     out.append('</ul>')
     return ''.join(out)
 
@@ -178,12 +181,23 @@ def crumbs_ld(items):
     return {"@type": "BreadcrumbList", "itemListElement": [
         dict({"@type": "ListItem", "position": i + 1, "name": n}, **({"item": SITE + ('/' if p == '/' else p + '/')} if (not KNOWN or p in KNOWN or i == len(items) - 1) else {})) for i, (n, p) in enumerate(items)]}
 
-FIRM = {"@type": ["LegalService", "LocalBusiness"], "@id": FIRM_ID, "name": "GFA LAW, PLLC",
+FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, "name": "GFA LAW, PLLC",
         "legalName": "Grisham Franceschina Attorneys-at-Law, PLLC", "url": SITE + "/",
         "telephone": "+1-254-405-1726", "email": "intake@gfalaw.us",
         "image": SITE + "/assets/img/og-gfa-law.jpg", "logo": SITE + "/assets/img/seal-300.png",
         "address": ADDR, "geo": {"@type": "GeoCoordinates", "latitude": 31.0982, "longitude": -97.3080},
-        "areaServed": [{"@type": "State", "name": "Texas"}, {"@type": "State", "name": "Maryland"}],
+        "areaServed": [{"@type": "State", "name": "Texas"}, {"@type": "State", "name": "Maryland"},
+                       {"@type": "City", "name": "Temple, Texas"}, {"@type": "City", "name": "Belton, Texas"}, {"@type": "City", "name": "Killeen, Texas"},
+                       {"@type": "City", "name": "Waco, Texas"}, {"@type": "City", "name": "Austin, Texas"},
+                       {"@type": "AdministrativeArea", "name": "Bell County, Texas"}, {"@type": "AdministrativeArea", "name": "Coryell County, Texas"},
+                       {"@type": "AdministrativeArea", "name": "McLennan County, Texas"}, {"@type": "AdministrativeArea", "name": "Williamson County, Texas"}],
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=4970+E+Business+190+Temple+TX+76501",
+        "contactPoint": [{"@type": "ContactPoint", "telephone": "+1-254-405-1726", "contactType": "customer service", "areaServed": ["US-TX", "US-MD"], "availableLanguage": ["English", "Spanish"]}],
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Legal services", "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Section 1983 civil rights lawsuits", "url": SITE + "/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Criminal defense (Innocent Defense)", "url": SITE + "/about-the-firm/practice-areas/innocent-defense"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Firearm rights, firearm return and expunction", "url": SITE + "/about-the-firm/practice-areas/firearm-rights-and-expunction"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Federal firearm rights restoration (18 U.S.C. 925(c))", "url": SITE + "/tools/restore-my-rights"}}]},
         "priceRange": "Free case review; $350 consultation",
         "knowsAbout": ["Civil rights litigation", "42 U.S.C. 1983", "First Amendment", "Second Amendment",
                        "Criminal defense", "Expunction", "Firearm return", "Federal firearm rights restoration"],
@@ -200,7 +214,7 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <div class="ftr-grid">
 <div><a class="brand" href="/"><img src="/assets/img/seal-300.png" alt="" width="44" height="44"><span class="brand-t"><b>GFA LAW, PLLC</b><span>Attorneys-at-Law</span></span></a>
 <p>Grisham Franceschina Attorneys-at-Law, PLLC<br>4970 E. Business 190<br>Temple, TX 76501</p>
-<p><a href="tel:+12544051726">254-405-1726</a><br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
+<p><a href="tel:+12544051726">254-405-1726</a> (call or <a href="sms:+12544051726">text</a>)<br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
 <div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Rights Restoration</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
 <div><p class="fh">Firm</p><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
 <div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/es">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
@@ -210,7 +224,7 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <p>The information provided on this website is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed by viewing this site or contacting the firm through this website. Past results do not guarantee future outcomes.</p>
 <p>&copy; YEAR GFA LAW, PLLC. All rights reserved. <a href="/privacy-policy">Privacy Policy</a></p>
 </div></div></footer>
-<nav class="callbar" aria-label="Quick contact"><a class="btn" href="tel:+12544051726">CALLICON Call</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a></nav>'''
+<nav class="callbar" aria-label="Quick contact"><a class="btn" href="tel:+12544051726">CALLICON Call</a><a class="btn ghost" href="sms:+12544051726">SMSICON Text</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a></nav>'''
 
 SIDE_PRACTICE = '''<aside class="side">
 <div class="side-card"><h3>Talk to GFA LAW</h3><p>Requesting a case review is free. If we can help, the consultation is $350.</p>
@@ -233,7 +247,7 @@ def foot_for(meta):
     if meta.get('lang') == 'es':
         f = f.replace('<div class="legal">', LEGAL_ES + '\n<div class="legal">', 1)
         f = f.replace('<nav class="callbar" aria-label="Quick contact">', '<nav class="callbar" aria-label="Contacto rápido" lang="es">')
-        f = f.replace(ICON['phone'] + ' Call</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a>', ICON['phone'] + ' Llamar</a><a class="btn ghost" href="/es/contacto">Revisión de caso</a>')
+        f = f.replace(ICON['phone'] + ' Call</a><a class="btn ghost" href="sms:+12544051726">' + ICON['sms'] + ' Text</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a>', ICON['phone'] + ' Llamar</a><a class="btn ghost" href="sms:+12544051726">' + ICON['sms'] + ' Texto</a><a class="btn ghost" href="/es/contacto">Revisión de caso</a>')
     return f
 
 def expand(body, meta):
@@ -245,7 +259,7 @@ def expand(body, meta):
                   lambda m: f'<div class="tool-frame"><iframe class="emb auto" src="/{m.group(1)}" title="{esc(meta["title"].split(" - ")[-1])}" scrolling="no"></iframe></div>', body)
     body = re.sub(r'<div class="emb" data-src="([^"]+)"></div>',
                   lambda m: f'<iframe class="emb auto" src="/embeds/{m.group(1)}.html" title="{esc(meta["title"].split(" - ")[-1])}" scrolling="no"></iframe>', body)
-    body = body.replace('CALLICON', ICON['phone'])
+    body = body.replace('CALLICON', ICON['phone']).replace('SMSICON', ICON['sms'])
     return body
 
 def faq_ld(body):
@@ -329,7 +343,8 @@ def render(meta, body):
     items = crumbs(path, short)
     body = body.replace('{{crumbs}}', crumbs_html(items) if path != '/' else '')
     body = expand(body, meta)
-    graph = [FIRM, {"@type": "WebSite", "@id": SITE + "/#site", "url": SITE + "/", "name": "GFA LAW, PLLC", "publisher": {"@id": FIRM_ID}, "inLanguage": "en-US"}] if path == '/' else []
+    graph = [FIRM, {"@type": "WebSite", "@id": SITE + "/#site", "url": SITE + "/", "name": "GFA LAW, PLLC", "publisher": {"@id": FIRM_ID}, "inLanguage": "en-US",
+             "potentialAction": {"@type": "SearchAction", "target": SITE + "/search?q={search_term_string}", "query-input": "required name=search_term_string"}}] if path == '/' else [FIRM]
     page_type = meta.get('schema', 'WebPage')
     wp = {"@type": page_type, "@id": canon + "#page", "url": canon, "name": title, "description": desc,
           "isPartOf": {"@id": SITE + "/#site"}, "about": {"@id": FIRM_ID}, "inLanguage": meta.get('lang', 'en') + ('-US' if meta.get('lang', 'en') == 'en' else '')}
