@@ -1,0 +1,6 @@
+{
+ "_readme": "Hand-maintained. lean: bill id -> pro | anti | neutral. exclude: bill ids that matched the keyword filter but are not firearm bills. include: bill ids to add even if the filter missed them (ids look like tx-90r-hb173, us-119-hr38, md-2027rs-hb0012).",
+ "lean": {},
+ "exclude": [],
+ "include": []
+}

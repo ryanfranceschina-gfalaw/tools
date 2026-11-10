@@ -63,6 +63,7 @@ NAV = [
    ('David T. Amad 1791 Scholarship', '/about-the-firm/david-t-amad-1791-scholarship-application', '', 0)]),
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
+   ('Gun Bill Tracker', '/resources/gun-bill-tracker', 'New Texas, federal and Maryland gun bills', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
    ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0),
    ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
@@ -607,6 +608,96 @@ def const_pages(J):
     return pages
 
 
+LEAN = {'pro': 'Pro-gun', 'anti': 'Anti-gun', 'neutral': 'Neutral', '': 'Not yet sorted'}
+CATL = {'proposed': 'Proposed', 'passed': 'Passed', 'dead': 'Did not pass'}
+
+def fdate(s):
+    try:
+        d = datetime.date.fromisoformat((s or '')[:10]); return '%d/%d/%d' % (d.month, d.day, d.year)
+    except ValueError:
+        return ''
+
+def bill_pages():
+    p = os.path.join(SRC, 'data', 'gun-bills.json')
+    D = json.load(open(p)) if os.path.exists(p) else {'bills': [], 'updated': ''}
+    cp = os.path.join(SRC, 'data', 'gun-bills-curated.json')
+    CU = json.load(open(cp)) if os.path.exists(cp) else {}
+    lean, excl = CU.get('lean', {}), set(CU.get('exclude', []))
+    bills = [dict(b, lean=lean.get(b['id'], b.get('lean', ''))) for b in D.get('bills', []) if b['id'] not in excl]
+    base = '/resources/gun-bill-tracker'
+    upd = D.get('updated', '')
+    upd_txt = fdate(upd[:10]) if upd else 'pending first update'
+    def card(b):
+        q = (b['number'] + ' ' + b['title'] + ' ' + b.get('sponsor', '') + ' ' + b['jurisName']).lower()
+        meta = []
+        if b.get('sponsor'): meta.append(esc(b['sponsor']))
+        d = fdate(b.get('filed')) 
+        if d: meta.append(('Filed ' if b['juris'] != 'US' else 'Introduced ') + d)
+        meta.append(esc(b['session']))
+        return ('<article class="bill" data-j="%s" data-c="%s" data-q="%s"><div class="bhead"><span class="bnum"><span class="bj">%s</span> %s</span>'
+                '<span class="bst st-%s">%s</span></div><p class="btitle">%s</p><p class="bmeta">%s</p>'
+                '<div class="bact"><a class="btn sm" href="%s/%s">Read the bill</a><a class="btn sm ghost" href="%s" target="_blank" rel="noopener">Official page</a></div></article>') % (
+                b['juris'], b['category'], esc(q), b['juris'] if b['juris'] != 'US' else 'U.S.', esc(b['number']), b['category'], esc(b['status']),
+                esc(b['title']), ' &middot; '.join(meta), base, b['id'], esc(b['official']))
+    cols = ''
+    for key in ('pro', 'anti', 'neutral', ''):
+        bs = [b for b in bills if b['lean'] == key]
+        if not bs and key in ('neutral', ''): continue
+        cols += ('<section class="bcol bcol-%s" aria-labelledby="h-%s"><h2 id="h-%s">%s <span class="bcount" data-count></span></h2>%s<p class="bnone" hidden>No bills match these filters.</p></section>') % (
+            key or 'unsorted', key or 'unsorted', key or 'unsorted', LEAN[key], ''.join(card(b) for b in bs))
+    n = len(bills)
+    by = {j: sum(1 for b in bills if b['juris'] == j) for j in ('TX', 'US', 'MD')}
+    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Free Resource</p><h1>Gun Bill Tracker</h1>\n'
+            '<p class="lede">Firearm and weapons bills filed in the Texas Legislature, the U.S. Congress and the Maryland General Assembly, sorted as pro-gun or anti-gun. Open any bill to read its official text.</p>\n'
+            '<p class="sm">%d bills: %d Texas, %d federal, %d Maryland. Updated from official sources daily; last updated %s.</p></div></section>\n'
+            '<section class="sec tight"><div class="wrap">'
+            '<div class="bfilters" role="group" aria-label="Filter bills">'
+            '<div class="chips" data-f="j"><button type="button" class="chip on" aria-pressed="true" data-v="">All</button><button type="button" class="chip" aria-pressed="false" data-v="TX">Texas</button><button type="button" class="chip" aria-pressed="false" data-v="US">Federal</button><button type="button" class="chip" aria-pressed="false" data-v="MD">Maryland</button></div>'
+            '<div class="chips" data-f="c"><button type="button" class="chip on" aria-pressed="true" data-v="proposed">Proposed</button><button type="button" class="chip on" aria-pressed="true" data-v="passed">Passed</button><button type="button" class="chip" aria-pressed="false" data-v="dead">Did not pass</button></div>'
+            '<label class="vh" for="bq">Search bills</label><input id="bq" class="search" type="search" placeholder="Search by number, title or author"></div>'
+            '<div class="bcols">%s</div>'
+            '<p class="sm" style="margin-top:28px">Bills are pulled from the Texas Legislature, the U.S. Government Publishing Office (congress.gov data) and the Maryland General Assembly. Titles, captions, statuses and bill text are the official versions published by those bodies. GFA LAW sorts each bill as pro-gun (expands or protects the right to keep and bear arms), anti-gun (restricts it) or neutral; newly filed bills appear under "Not yet sorted" until we review them. Always check the official page for the latest action. This page is general information, not legal advice.</p>'
+            '</div></section>\n'
+            '<script>(function(){var f={j:"",c:{proposed:1,passed:1}},q="";function run(){document.querySelectorAll(".bcol").forEach(function(col){var n=0;col.querySelectorAll(".bill").forEach(function(b){var ok=(!f.j||b.dataset.j===f.j)&&f.c[b.dataset.c]&&(!q||b.dataset.q.indexOf(q)>-1);b.hidden=!ok;if(ok)n++});col.querySelector("[data-count]").textContent="("+n+")";col.querySelector(".bnone").hidden=n>0})}'
+            'document.querySelectorAll(".chips").forEach(function(g){g.addEventListener("click",function(e){var c=e.target.closest(".chip");if(!c)return;if(g.dataset.f==="j"){g.querySelectorAll(".chip").forEach(function(x){x.classList.toggle("on",x===c)});f.j=c.dataset.v}else{c.classList.toggle("on");f.c[c.dataset.v]=c.classList.contains("on")?1:0}c.setAttribute("aria-pressed",c.classList.contains("on"));run()})});'
+            'var i=document.getElementById("bq");i.addEventListener("input",function(){q=i.value.trim().toLowerCase();run()});'
+            'var h=(location.hash||"").slice(1).toUpperCase();if(/^(TX|US|MD)$/.test(h)){var c=document.querySelector(\'.chips[data-f=j] .chip[data-v="\'+h+\'"]\');if(c)c.click()}run()})()</script>{{band}}') % (
+            n, by['TX'], by['US'], by['MD'], upd_txt, cols)
+    pages = [({'path': base, 'title': 'Gun Bill Tracker: Texas, Federal and Maryland Firearm Bills | GFA LAW, PLLC',
+               'desc': 'Track firearm and weapons bills in the Texas Legislature, Congress and the Maryland General Assembly, sorted as pro-gun or anti-gun, with the official text of every bill.',
+               'short': 'Gun Bill Tracker', 'schema': 'CollectionPage', 'ogsub': 'Every new Texas, federal and Maryland gun bill, with the official text'}, body)]
+    for b in bills:
+        rows = [('Jurisdiction', b['jurisName']), ('Session', b['session']), ('Sponsor' if b['juris'] != 'TX' else 'Author', b.get('sponsor', '')),
+                ('Status', b['status']), ('Last action', ((fdate(b.get('lastActionDate')) + ': ') if b.get('lastActionDate') else '') + b.get('lastAction', '')),
+                ('Filed' if b['juris'] != 'US' else 'Introduced', fdate(b.get('filed'))), ('Cross-filed with', b.get('crossfile', ''))]
+        tbl = ''.join('<tr><th scope="row">%s</th><td>%s</td></tr>' % (k, esc(v)) for k, v in rows if v)
+        if b.get('text'):
+            viewer = ('<div class="billview" data-pdf="%s"><p class="bload">Loading the official bill text...</p></div>'
+                      '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>'
+                      '<script>(function(){var el=document.querySelector(".billview"),url=el.dataset.pdf;if(!window.pdfjsLib){el.innerHTML=\'<p>The bill viewer could not load. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\';return}'
+                      'pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";'
+                      'pdfjsLib.getDocument(url).promise.then(function(pdf){el.innerHTML="";var w=Math.min(el.clientWidth,900),chain=Promise.resolve();for(var i=1;i<=pdf.numPages;i++){(function(n){chain=chain.then(function(){return pdf.getPage(n).then(function(pg){var v1=pg.getViewport({scale:1}),s=w/v1.width,dpr=window.devicePixelRatio||1,v=pg.getViewport({scale:s*dpr}),c=document.createElement("canvas");c.width=v.width;c.height=v.height;c.style.width=(v.width/dpr)+"px";c.setAttribute("aria-label","Page "+n+" of "+pdf.numPages);c.className="bpage";el.appendChild(c);return pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise})})})(i)}'
+                      'return chain}).catch(function(){el.innerHTML=\'<p>The bill text could not be displayed here. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\'})})()</script>') % b['text']
+            dl = '<a class="btn sm ghost" href="%s" download>Download PDF</a>' % b['text']
+        else:
+            viewer = '<p>The official text of this bill has not been published yet. Check the <a href="%s" target="_blank" rel="noopener">official bill page</a>.</p>' % esc(b['official'])
+            dl = ''
+        lb = '<span class="blean bl-%s">%s</span>' % (b['lean'] or 'unsorted', LEAN[b['lean']])
+        body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Gun Bill Tracker &middot; %s</p><h1>%s</h1>\n<p class="lede">%s</p>'
+                '<p>%s <span class="bst st-%s">%s</span></p></div></section>\n'
+                '<section class="sec tight"><div class="wrap" style="max-width:940px"><table class="btbl">%s</table>'
+                '<div class="btns"><a class="btn sm" href="%s" target="_blank" rel="noopener">Official bill page</a>%s<a class="btn sm ghost" href="%s#%s">Back to the tracker</a></div>'
+                '<h2 style="margin-top:30px">Official bill text</h2>%s'
+                '<p class="sm" style="margin-top:24px">Text as published by the %s. Check the official bill page for later versions and actions. This page is general information, not legal advice.</p></div></section>{{band}}') % (
+                esc(b['jurisName']), esc(b['number']), esc(b['title']), lb, b['category'], esc(b['status']), tbl, esc(b['official']), dl, base, b['juris'], viewer,
+                {'TX': 'Texas Legislature', 'US': 'U.S. Government Publishing Office', 'MD': 'Maryland General Assembly'}[b['juris']])
+        t = '%s %s' % (b['jurisName'] if b['juris'] != 'US' else 'Federal', b['number'])
+        pages.append(({'path': base + '/' + b['id'], 'title': '%s: %s | Gun Bill Tracker | GFA LAW, PLLC' % (t, b['title'][:70]),
+                       'desc': ('%s (%s). Status: %s. Read the official bill text.' % (b['title'][:150], b['session'], b['status'])),
+                       'short': t, 'ogimg': SITE + '/assets/img/og-gfa-law.jpg'}, body))
+    return pages
+
+
 VAULT_CODE = 'HUNT1791'
 VAULT_TERMS = '15% off GFA LAW merchandise in our Etsy shop, one use per Etsy buyer. The button below applies the code automatically, or enter it at Etsy checkout. Merch only: it has no connection to legal services or fees. Etsy promotion terms apply, and the offer may end at any time.'
 
@@ -643,6 +734,7 @@ if __name__ == '__main__':
     CJ = json.load(open(os.path.join(SRC, 'assets', 'fun', 'constitution.json')))
     pages += const_pages(CJ)
     pages.append(vault_page(M))
+    pages += bill_pages()
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
