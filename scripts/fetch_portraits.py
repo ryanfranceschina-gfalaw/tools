@@ -40,9 +40,7 @@ def main():
             print('Portrait download failed for', key, e)
 
 # Other source images the website needs, downloaded once into incoming/ (not published) for editing.
-EXTRA = {
-    'incoming/cj-grisham-headshot-original.jpg': 'https://bloximages.newyork1.vip.townnews.com/tdtnews.com/content/tncms/assets/v3/editorial/0/c2/0c2bb8bc-c080-4d00-b1db-4dfe0d209984/67f400e4e5420.image.jpg',
-}
+EXTRA = {}
 
 def extra():
     root = os.path.join(os.path.dirname(__file__), '..')
