@@ -773,3 +773,5 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
  .tl-mv button{height:26px;font-size:13px}
  .tl-ends{margin-bottom:4px}
 }
+
+.about-portrait{float:right;width:min(220px,38%);margin:4px 0 12px 22px}.about-portrait img{width:100%;height:auto;border-radius:14px}
