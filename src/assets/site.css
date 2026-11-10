@@ -613,7 +613,16 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 .lbf label{display:block;font-weight:600;margin:12px 0 6px}.lbf div{display:flex;gap:8px;flex-wrap:wrap}.lbf input{flex:1;min-width:180px;padding:10px 12px;border-radius:9px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--text);font:15px var(--sans)}
 
 .hero-art{display:flex;flex-direction:column;align-items:center}
-.playlink{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:7px 16px;border:1px solid rgba(201,165,75,.5);border-radius:999px;color:var(--gold2);font-size:13.5px;font-weight:600;letter-spacing:.02em;text-decoration:none;background:rgba(14,29,17,.35);transition:border-color .15s,background .15s}
-.playlink:hover{border-color:var(--gold);background:rgba(201,165,75,.12);color:var(--gold2)}
-.playlink:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
-@media(max-width:900px){.playlink{margin-top:12px}}
+.playcard{display:none}
+@media(max-width:900px){
+.playcard{display:flex;align-items:center;gap:12px;width:min(360px,100%);margin:14px auto 0;padding:10px 14px 10px 10px;border:1px solid rgba(201,165,75,.45);border-radius:14px;background:linear-gradient(180deg,rgba(27,58,34,.85),rgba(14,29,17,.85));text-decoration:none;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.playcard:active{transform:scale(.99)}
+.playcard:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.pc-tiles{display:grid;grid-template-columns:repeat(2,20px);gap:3px;flex:none}
+.pc-tiles i{display:grid;place-items:center;width:20px;height:20px;border-radius:4px;background:#2b3a2e;color:#b9b39b;font:700 11px/1 Georgia,serif;font-style:normal}
+.pc-tiles i.h{background:#5aa66a;color:#0e1d11}.pc-tiles i.n{background:#c9a54b;color:#16180f}
+.pc-txt{flex:1;min-width:0}
+.pc-txt b{display:block;color:var(--gold2);font-size:15px;line-height:1.25}
+.pc-txt small{display:block;color:var(--dim);font-size:12.5px;line-height:1.3}
+.pc-go{flex:none;color:var(--gold2);font-weight:700;font-size:18px}
+}
