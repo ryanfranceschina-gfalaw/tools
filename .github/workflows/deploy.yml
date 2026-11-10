@@ -39,6 +39,9 @@ jobs:
         env:
           ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
         run: python3 scripts/refresh_merch.py
+      - name: Refresh the gun bill tracker from official sources
+        if: github.event_name != 'push'
+        run: timeout 40m python3 scripts/gun_bills.py || echo "Bill tracker refresh failed; keeping the last data"
       - name: Save source changes
         run: |
           git config user.name "GFA LAW website bot"
