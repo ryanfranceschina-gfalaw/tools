@@ -567,7 +567,7 @@ def const_meta_line(e):
     r = ' &middot; Ratified ' + fmt_date(e['ratified']) if e.get('ratified') else ''
     return '<p class="topic">' + esc(e.get('topic', 'We the People')) + r + '</p>'
 
-LB_URL = ''  # Google Apps Script web app URL for the Daily Game leaderboard
+LB_URL = 'https://script.google.com/macros/s/AKfycby8UZBeOWXoGvYc1IqK32HDkAVTwiNZ8lFmEZGuFg1nQLuaCOO1IL_t9tg4TUnPmrdGOA/exec'  # Google Apps Script web app URL for the Daily Game leaderboard
 CONST_FONT = '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">'
 
 def const_pages(J):
