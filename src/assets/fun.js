@@ -122,7 +122,7 @@ var SEALS=[
  {id:'term',hint:'Open the case file terminal with the ~ key and find the secret file.'},
  {id:'y1791',hint:'Turn back the clock. Type the year the Bill of Rights was ratified, anywhere on the site.'},
  {id:'a2',hint:'Read the right that shall not be infringed in the Pocket Constitution.'},
- {id:'trivia',hint:'Answer the daily Constitution trivia question correctly.'},
+ {id:'trivia',hint:'Win the GFA LAW Daily Game.'},
  {id:'bills',hint:'Make the call on three bills in the Gun Bill Tracker game.'},
  {id:'kyr',hint:'Visit the library of Know Your Rights guides and look near the bottom.'},
  {id:'video',hint:'Grab some popcorn. The seal is near the bottom of the Videos page.'},
@@ -183,7 +183,7 @@ function term(){
  p('<span class="g">GFA LAW, PLLC case file terminal v1.791</span>\n<span class="d">Type <b>help</b> for a list of commands. Press Esc or type exit to close.\nThis is a novelty, not legal advice. To talk to a lawyer, type <b>contact</b>.</span>\n');
  var FILES={'readme.txt':'You found the case file terminal. There is more to find.\nTry: cat secret.txt','secret.txt':'SEAL','motto.txt':'Live free. Know your rights. Call a lawyer.','constitution.txt':'CONST'};
  var CMD={
-  help:function(){p('<span class="g">Commands</span>\n  ls                 list files\n  cat &lt;file&gt;         read a file\n  amendment &lt;1-27&gt;   read an amendment\n  rights             what to say to police\n  trivia             today\'s Constitution trivia\n  constitution       open the Pocket Constitution\n  bills              open the Gun Bill Tracker\n  hunt               the 1791 Hunt\n  1791               toggle 1791 mode\n  theme &lt;name&gt;       preview a holiday theme (theme list)\n  merch              GFA LAW merch\n  contact            request a case review\n  whoami, date, clear, history, exit')},
+  help:function(){p('<span class="g">Commands</span>\n  ls                 list files\n  cat &lt;file&gt;         read a file\n  amendment &lt;1-27&gt;   read an amendment\n  rights             what to say to police\n  game               today\'s Daily Game\n  constitution       open the Pocket Constitution\n  bills              open the Gun Bill Tracker\n  hunt               the 1791 Hunt\n  1791               toggle 1791 mode\n  theme &lt;name&gt;       preview a holiday theme (theme list)\n  merch              GFA LAW merch\n  contact            request a case review\n  whoami, date, clear, history, exit')},
   ls:function(){p(Object.keys(FILES).join('    '))},
   cat:function(a){var f=FILES[a];if(!a)return p('usage: cat &lt;file&gt;','e');if(!f)return p('cat: '+esc(a)+': No such file. Try ls.','e');
    if(f==='SEAL'){var w=d.createElement('div');w.innerHTML='CLASSIFIED: you found a 1791 seal. Click it to claim it.\n';w.appendChild(sealBtn('term'));out.appendChild(w);out.scrollTop=out.scrollHeight;return}
@@ -192,7 +192,7 @@ function term(){
   amendment:function(a){var n=parseInt(a,10);if(!(n>=1&&n<=27))return p('usage: amendment &lt;1-27&gt;','e');p('<span class="d">Retrieving...</span>');
    getJSON('/assets/fun/constitution.json').then(function(J){var x=J.filter(function(e){return e.id==='amendment-'+n})[0];if(!x)throw 0;var txt=x.text||x.sections.map(function(s){return(s.n?'Section '+s.n+'. ':'')+s.text}).join('\n');p('<span class="g">'+esc(x.title)+'</span> <span class="d">(ratified '+esc(x.ratified||'')+')</span>\n'+esc(txt)+'\n<a href="/constitution/amendment-'+n+'">Share this amendment</a>')}).catch(function(){p('Could not load the text right now.','e')})},
   rights:function(){p('<span class="g">Say it clearly and calmly:</span>\n  "I am going to remain silent. I want a lawyer."\n  "I do not consent to any searches."\n  "Am I free to go?"\nDrivers must show a license when asked. Read more: <a href="/resources/know-your-rights/police-stops-and-arrests-in-texas">Police stops and arrests in Texas</a>')},
-  trivia:function(){location.href='/trivia'},bills:function(){location.href='/resources/gun-bill-tracker'},constitution:function(){location.href='/constitution'},
+  game:function(){location.href='/daily-game'},trivia:function(){location.href='/daily-game'},bills:function(){location.href='/resources/gun-bill-tracker'},constitution:function(){location.href='/constitution'},
   hunt:function(){var g=got();p('1791 Hunt: '+g.length+' of '+SEALS.length+' seals found. <a href="/1791">Read the rules</a>')},
   seals:function(){CMD.hunt()},
   '1791':function(){y1791(!H.classList.contains('y1791'));p(H.classList.contains('y1791')?'Traveling to 1791...':'Returning to the present...')},

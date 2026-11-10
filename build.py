@@ -66,7 +66,7 @@ NAV = [
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
    ('Pocket Constitution', '/constitution', 'Every article and amendment', 0)]),
  ('Gun Bills', '/resources/gun-bill-tracker'),
- ('Daily Game', '/trivia'),
+ ('Daily Game', '/daily-game'),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
    ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
@@ -567,7 +567,7 @@ def const_meta_line(e):
     r = ' &middot; Ratified ' + fmt_date(e['ratified']) if e.get('ratified') else ''
     return '<p class="topic">' + esc(e.get('topic', 'We the People')) + r + '</p>'
 
-LB_URL = ''  # Google Apps Script web app URL for the trivia leaderboard
+LB_URL = ''  # Google Apps Script web app URL for the Daily Game leaderboard
 CONST_FONT = '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">'
 
 def const_pages(J):
@@ -580,7 +580,7 @@ def const_pages(J):
                    e['id'], esc(e['title']), const_meta_line(e), const_body(e), e['id'], esc(e['short']))
     body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1 class="chead">The Constitution of the United States</h1>\n'
             '<p class="lede">The full text of the Constitution and all 27 amendments, from the National Archives transcription. Every article and amendment has its own page you can share.</p>\n'
-            '<div class="btns"><a class="btn" href="#amendment-1">Jump to the Bill of Rights</a><a class="btn ghost" href="/trivia">Test yourself with daily trivia</a></div>\n</div></section>\n'
+            '<div class="btns"><a class="btn" href="#amendment-1">Jump to the Bill of Rights</a><a class="btn ghost" href="/daily-game">Play the Daily Game</a></div>\n</div></section>\n'
             '<section class="sec tight"><div class="wrap" style="max-width:860px"><nav class="toc" aria-label="Articles and amendments">' + toc + '</nav>' + blocks +
             '<p class="sm" style="margin-top:30px">Text from the National Archives transcription of the Constitution and amendments, with original spelling and punctuation. Portions of the original text have been changed by later amendments, as noted. This page is general information, not legal advice.</p></div></section>{{band}}')
     pages.append(({'path': '/constitution', 'title': 'The U.S. Constitution, Full Text | Pocket Constitution | GFA LAW, PLLC',
@@ -705,7 +705,7 @@ def bill_pages():
             '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">How It Works</p><h2>How a Texas bill becomes law</h2></div><ol class="btl">%s</ol></div></section>\n'
             '<section class="sec alt"><div class="wrap"><div class="sec-head"><p class="eyebrow">Recent Changes</p><h2>What changed lately</h2></div><div class="lgrid">%s</div></div></section>\n'
             '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">The Foundation</p><h2>Long-standing gun law every Texan should know</h2></div><div class="lgrid">%s</div>'
-            '<div class="btns" style="margin-top:26px"><a class="btn" href="/resources/know-your-rights">Read our Know Your Rights guides</a><a class="btn ghost" href="/constitution">Read the Pocket Constitution</a><a class="btn ghost" href="/trivia">Daily trivia</a></div>'
+            '<div class="btns" style="margin-top:26px"><a class="btn" href="/resources/know-your-rights">Read our Know Your Rights guides</a><a class="btn ghost" href="/constitution">Read the Pocket Constitution</a><a class="btn ghost" href="/daily-game">Daily Game</a></div>'
             '<p class="sm" style="margin-top:28px">Bills come from the Texas Legislature, the U.S. Government Publishing Office and the Maryland General Assembly. Titles, captions, statuses and bill text are the official versions those bodies publish. GFA LAW sorts each bill as pro-gun (expands or protects the right to keep and bear arms), anti-gun (restricts it) or neutral; new bills show as "Not yet sorted" until we review them. Always check the official page for the latest action. This page is general information, not legal advice.</p>'
             '</div></section>\n'
             '<script>window.BILLGAME=%s;</script>'
@@ -802,7 +802,7 @@ if __name__ == '__main__':
     pages += const_pages(CJ)
     pages.append(vault_page(M))
     pages += bill_pages()
-    TRIVIA_WIDGET = '<p><a class="btn" href="/trivia">Play today&rsquo;s Daily Game</a></p>'  # the daily game lives on /trivia
+    TRIVIA_WIDGET = '<p><a class="btn" href="/daily-game">Play today&rsquo;s Daily Game</a></p>'
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
@@ -820,7 +820,7 @@ if __name__ == '__main__':
     # 404 uses absolute links, it is served at any depth
     m404 = {'path': '/404', 'title': 'Page not found | GFA LAW, PLLC', 'short': 'Page not found', 'desc': 'This page could not be found.', 'noindex': '1'}
     b404 = '''<section class="sec"><div class="wrap center"><p class="eyebrow">Error 404</p><h1>This page is exercising its right to remain silent</h1><p class="lede">We searched, but without a warrant we could not find the page you asked for. It may have moved, or it never existed.</p>
-<p>While you are here: try the <a href="/trivia">daily Constitution trivia</a>, check the <a href="/resources/gun-bill-tracker">Gun Bill Tracker</a>, or <a href="/games">visit the game room</a>.</p>
+<p>While you are here: try the <a href="/daily-game">Daily Game</a>, check the <a href="/resources/gun-bill-tracker">Gun Bill Tracker</a>, or <a href="/games">visit the game room</a>.</p>
 <div data-seal-slot="lost" style="margin:6px 0 0"></div>
 <div class="btns"><a class="btn" href="/">Go to the home page</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div>
 <form class="hsearch" action="/search/" method="get" role="search"><label class="vh" for="q404">Search the site</label><input id="q404" name="q" type="search" placeholder="Search the site"><button class="btn" type="submit">Search</button></form></div></section>'''

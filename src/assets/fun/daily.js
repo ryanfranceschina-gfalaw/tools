@@ -1,11 +1,11 @@
 /* GFA LAW Daily Game: one shared streak across a weekly rotation of games.
-   Mon Inkwell, Tue Who Said It?, Wed Inkwell, Thu Timeline, Fri Inkwell, Sat Who Said It?, Sun Constitution Trivia.
+   Sun Inkwell, Mon Inkwell, Tue Who Said It?, Wed Inkwell, Thu Timeline, Fri Inkwell, Sat Who Said It?.
    The leaderboard server (Google Apps Script) uses the same schedule and puzzle files to check results. */
 (function(){
 var W=window,D=document,box=D.getElementById('dg');if(!box)return;
 var LB=box.getAttribute('data-lb')||'',START=Date.UTC(2026,10,5);
-var SCHED=['trivia','inkwell','whosaid','inkwell','timeline','inkwell','whosaid'];
-var NAMES={inkwell:'Inkwell',whosaid:'Who Said It?',timeline:'Timeline',trivia:'Constitution Trivia'};
+var SCHED=['inkwell','inkwell','whosaid','inkwell','timeline','inkwell','whosaid'];
+var NAMES={inkwell:'Inkwell',whosaid:'Who Said It?',timeline:'Timeline'};
 var QUILL='<svg class="dg-quill" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3C12 4 7 9 5 17l-1 4 2-2c1-3 3-5 6-6l-2-1c3-1 6-3 8-6l-2 0c2-1 3-2 4-3z" fill="#e7cd86"/><path d="M5 19l1.5-1.5" stroke="#0e1d11" stroke-width="1.2"/></svg>';
 function $(i){return D.getElementById(i)}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -33,12 +33,12 @@ function start(){
   DAY=Math.round((Date.UTC(T.y,T.m-1,T.d)-START)/864e5);G=game(DAY);NUM=DAY+1;
   var s=rec();if(s.streak&&s.lastWin!==DAY&&s.lastWin!==DAY-1&&s.last!==DAY){s.streak=0;rec(s)}
   fetch('/assets/fun/'+G+'.json').then(function(r){return r.json()}).then(function(bank){
-    P=G==='trivia'?bank[((DAY*37)%bank.length+bank.length)%bank.length]:bank[idx(DAY)%bank.length];
+    P=bank[idx(DAY)%bank.length];
     var head='<div class="dg-head"><p class="eyebrow">Daily Game #'+NUM+'</p><h2 class="dg-title">'+NAMES[G]+'</h2><p class="dg-week">'+week()+'</p></div>';
     var s=rec();
     if(s.last===DAY&&s.res){box.innerHTML=head+'<div id="dg-play"></div>';done(s.res,true);return}
     box.innerHTML=head+'<div id="dg-play"></div>';
-    ({inkwell:inkwell,whosaid:whosaid,timeline:timeline,trivia:trivia})[G]($('dg-play'));
+    ({inkwell:inkwell,whosaid:whosaid,timeline:timeline})[G]($('dg-play'));
   }).catch(function(){box.innerHTML='<p>The daily game could not load right now. Please try again later.</p>'});
 }
 function week(){var L=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],t=wd(DAY);return L.map(function(l,i){return '<span'+(i===t?' class="on"':'')+' title="'+NAMES[SCHED[i]]+'">'+l+'</span>'}).join('')}
@@ -60,7 +60,7 @@ function done(res,returning){
   el.innerHTML=(returning?'<div class="fb '+(res.won?'ok':'no')+'"><b>You already played today.</b> '+esc(res.sum||'')+'</div>':'')+stats()+
     '<div class="btns" style="margin-top:0"><button class="btn sm" type="button" id="dg-sh">Share your result</button></div>'+
     '<p class="sm" style="margin-top:14px">Come back tomorrow for '+NAMES[game(DAY+1)]+'. A new game unlocks at midnight Central time.</p><div class="lb" id="dg-lb"></div>';
-  var sh=$('dg-sh');sh.onclick=function(){var t=res.share+'\ngfalaw.us/trivia';if(navigator.share)navigator.share({text:t}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){sh.textContent='Copied'},function(){})};
+  var sh=$('dg-sh');sh.onclick=function(){var t=res.share+'\ngfalaw.us/daily-game';if(navigator.share)navigator.share({text:t}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){sh.textContent='Copied'},function(){})};
   board();
 }
 function lbOn(){return LB.indexOf('https://')===0}
@@ -164,15 +164,6 @@ function timeline(el){
       finish(won,'GFA LAW Daily Game #'+NUM+': Timeline '+(won?rows.length:'X')+'/4\n'+grid,{t:tries},won?'You put the timeline in order in '+rows.length+'.':'The timeline got the better of you.');return}
     $('tl-msg').textContent=n+(n===1?' event is':' events are')+' in the right place.';draw()};
   draw();
-}
-
-/* ---------- Constitution Trivia ---------- */
-function trivia(el){
-  el.innerHTML='<p class="q">'+esc(P.q)+'</p><ul class="opts">'+P.choices.map(function(c,i){return'<li><button class="opt" type="button" data-i="'+i+'">'+esc(c)+'</button></li>'}).join('')+'</ul><div id="tv-fb"></div>';
-  var bs=el.querySelectorAll('.opt');bs.forEach(function(b){b.onclick=function(){var i=+b.dataset.i,ok=i===P.a;
-    bs.forEach(function(x,j){x.disabled=true;if(j===P.a)x.classList.add('ok');else if(j===i)x.classList.add('no')});
-    $('tv-fb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'Correct.':'Not quite.')+'</b> '+esc(P.why)+'</div>';
-    finish(ok,'GFA LAW Daily Game #'+NUM+': Constitution Trivia '+(ok?'✅':'❌'),{pick:i},ok?'You answered correctly.':'You missed today’s question.')}});
 }
 
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
