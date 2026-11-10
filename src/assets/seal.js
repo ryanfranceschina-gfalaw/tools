@@ -1,11 +1,15 @@
 (function () {
   var s = document.currentScript, b = s ? s.src.replace(/assets\/seal\.js.*$/, '') : '/';
-  var QUICK = 700, P0 = 1000, P1 = 4000;
+  var QUICK = 800, P0 = 1000, P1 = 4000;
   function go() {
     var i = document.querySelector('.hero-art .seal-wrap img');
     if (!i) return;
     var n = 0, l = 0;
-    i.style.touchAction = 'manipulation';
+    var st = i.style;
+    st.touchAction = 'manipulation'; st.webkitTapHighlightColor = 'transparent'; st.webkitTouchCallout = 'none';
+    st.webkitUserSelect = 'none'; st.userSelect = 'none';
+    i.draggable = false;
+    i.addEventListener('contextmenu', function (e) { if (n > 0) e.preventDefault(); });
     i.addEventListener('click', function (e) {
       var r = i.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
       var t = Date.now(), g = t - l;

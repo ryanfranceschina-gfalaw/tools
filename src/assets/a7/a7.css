@@ -45,3 +45,8 @@
 .fsp-empty{color:var(--dim);padding:18px 4px;list-style:none}
 .fsp-fine{font-size:13.5px;color:var(--dim);margin-top:28px;line-height:1.6}
 @media (max-width:560px){.fsp-card{padding:18px}.fsp-tx{font-size:17px}}
+.fsp-secret{background:rgba(201,165,75,.12);border:1px solid var(--line2);border-radius:var(--radius-sm);padding:12px 14px;margin:0 0 16px;font-size:15.5px;line-height:1.55;color:var(--gold3)}
+.fsp-secret b{color:var(--gold2)}
+.fsp-del{margin-left:auto;background:none;border:1px solid transparent;border-radius:999px;padding:4px 10px;color:var(--dim);font:500 13px var(--sans);cursor:pointer}
+.fsp-del:hover{color:var(--gold3)}
+.fsp-del.arm{border-color:#ffb4a8;color:#ffb4a8}

@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var API = 'https://script.google.com/macros/s/AKfycbx7QdvF6l8zROPvs_mUMLNjsfdeWccA5raj18UgX2HFuCvBD_RLukyVZxk2RUOzCkxTmw/exec';
-  var RULES = '2026-11-10';
+  var RULES = '2026-11-10b';
   var MAX = 67;
   var me = document.currentScript;
   var BASE = me ? me.src.replace(/assets\/a7\/app\.js.*$/, '') : '/';
@@ -35,6 +35,7 @@
   }
   var ME = jget('gfa_fsp_me', null);
   var VOTES = jget('gfa_fsp_votes', {});
+  var MINE = jget('gfa_a7_mine', []);
   var MODE = 'open';
 
   function avSrc(k) { var a = avMap[k] || avMap.star; return BASE + 'assets/' + a[2]; }
@@ -156,9 +157,9 @@
     var name = $('fsp-name').value.trim();
     if (!ME && !/^[A-Za-z0-9][A-Za-z0-9 _.\-]{1,18}[A-Za-z0-9]$/.test(name)) { err.textContent = 'Usernames are 3 to 20 letters, numbers, spaces, dots, dashes or underscores.'; return; }
     if (!pick) { err.textContent = 'Pick a profile picture.'; return; }
-    if (!$('fsp-adult').checked || !$('fsp-agree').checked) { err.textContent = 'Please confirm you are 18 or older and have read The Only Rule.'; return; }
+    if (!$('fsp-adult').checked || !$('fsp-secret').checked || !$('fsp-agree').checked) { err.textContent = 'Check all three boxes to join: 18 or older, keep the secret, and The Only Rule.'; return; }
     var btn = $('fsp-jbtn'); btn.disabled = true; btn.textContent = 'Joining...';
-    send({ a: 'join', name: name, av: pick, adult: true, rules: RULES }).then(function (d) {
+    send({ a: 'join', name: name, av: pick, adult: true, secret: true, rules: RULES }).then(function (d) {
       if (!d.ok || !d.user) { err.textContent = d.error || 'Please try again.'; return; }
       ME = { name: d.user.name, av: d.user.av, rules: d.user.rules };
       sset('gfa_fsp_me', JSON.stringify(ME)); editing = false; $('fsp-name').disabled = false;
@@ -187,6 +188,7 @@
         if (d.rules) { ME.rules = ''; sset('gfa_fsp_me', JSON.stringify(ME)); showForms(); }
         return;
       }
+      if (d.id) { MINE.push(d.id); if (MINE.length > 500) MINE = MINE.slice(-500); sset('gfa_a7_mine', JSON.stringify(MINE)); }
       $('fsp-text').value = ''; $('fsp-count').textContent = String(MAX);
       load();
     }).catch(function () { err.textContent = 'Could not reach the platform. Try again.'; })
@@ -221,6 +223,19 @@
     });
     return bt;
   }
+  function delBtn(p, li) {
+    var bt = el('button', 'fsp-del', 'Delete'); bt.type = 'button';
+    var armed = 0;
+    bt.addEventListener('click', function () {
+      if (!armed) { armed = setTimeout(function () { armed = 0; bt.textContent = 'Delete'; bt.classList.remove('arm'); }, 4000); bt.textContent = 'Tap again to delete'; bt.classList.add('arm'); return; }
+      clearTimeout(armed); bt.disabled = true; bt.textContent = 'Deleting...';
+      send({ a: 'del', pid: p.id }).then(function (d) {
+        if (d.ok) { li.parentNode && li.parentNode.removeChild(li); MINE = MINE.filter(function (x) { return x !== p.id; }); sset('gfa_a7_mine', JSON.stringify(MINE)); }
+        else { bt.disabled = false; armed = 0; bt.classList.remove('arm'); bt.textContent = d.error || 'Try again'; }
+      }).catch(function () { bt.disabled = false; armed = 0; bt.classList.remove('arm'); bt.textContent = 'Try again'; });
+    });
+    return bt;
+  }
   function render(posts) {
     var ol = $('fsp-feed'); ol.textContent = '';
     if (!posts.length) { ol.appendChild(el('li', 'fsp-empty', 'Nothing here yet. Be the first.')); return; }
@@ -234,6 +249,7 @@
       bd.appendChild(hd);
       bd.appendChild(el('p', 'fsp-tx', p.x));
       var vb = el('div', 'fsp-vb'); vb.appendChild(voteBtn(p, 1)); vb.appendChild(voteBtn(p, -1));
+      if (MINE.indexOf(p.id) > -1 && MODE === 'open') vb.appendChild(delBtn(p, li));
       bd.appendChild(vb); li.appendChild(bd); ol.appendChild(li);
     });
   }

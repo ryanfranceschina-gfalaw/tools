@@ -20,12 +20,14 @@ head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href
 
 <form id="fsp-join" class="fsp-card" hidden novalidate>
 <h2>Pick your name and face</h2>
+<div class="fsp-secret"><b>This is a secret club.</b> You only got here because someone trusted you or you found the way in yourself. It stays a tight circle: word of mouth only, never posted anywhere public. Be careful who you tell.</div>
 <label class="fsp-l" for="fsp-name">Username</label>
 <input id="fsp-name" name="name" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="3 to 20 characters">
 <p class="sm">Letters, numbers, spaces, dots, dashes and underscores. Names of the firm and its attorneys are reserved. Do not use your real name unless you want it public.</p>
 <fieldset class="fsp-avs"><legend class="fsp-l">Profile picture</legend><div id="fsp-avgrid" class="fsp-avgrid"></div></fieldset>
 <div class="fsp-hp" aria-hidden="true"><label for="fsp-site">Leave this empty</label><input id="fsp-site" name="website" type="text" tabindex="-1" autocomplete="off"></div>
 <label class="fsp-chk"><input id="fsp-adult" type="checkbox"> I am 18 or older.</label>
+<label class="fsp-chk"><input id="fsp-secret" type="checkbox"> I will <b>never</b> post, share or mention this platform anywhere public: no social media, no screenshots, no links. Word of mouth only, and only with people I trust to keep the secret.</label>
 <label class="fsp-chk"><input id="fsp-agree" type="checkbox"> I have read <a href="/a7/rules" target="_blank" rel="noopener">The Only Rule</a>, and I understand posts are public.</label>
 <p id="fsp-jerr" class="fsp-err" role="alert"></p>
 <button class="btn" type="submit" id="fsp-jbtn">Join</button>
