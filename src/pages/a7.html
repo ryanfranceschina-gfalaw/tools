@@ -1,7 +1,7 @@
 path: /a7
 title: The Secret Free Speech Platform | GFA LAW, PLLC
 short: The Secret Free Speech Platform
-desc: A hidden GFA LAW message board. Say it in 67 characters.
+desc: A hidden GFA LAW message board.
 noindex: 1
 hidden: 1
 head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/assets/a7/a7.css">
@@ -9,7 +9,7 @@ head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href
 <section class="phero fsp-hero"><div class="wrap">
 <p class="eyebrow">You found it</p>
 <h1>The Secret Free Speech Platform</h1>
-<p class="lede">Say it in 67 characters. Everyone sees everything. Give it a thumbs up or a thumbs down. That is the whole platform.</p>
+<p class="lede">Say what you think. Everyone sees everything. Reply, give it a thumbs up or a thumbs down. That is the whole platform.</p>
 </div></section>
 
 <section class="sec tight"><div class="wrap fsp" id="fsp">
@@ -20,10 +20,17 @@ head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href
 
 <form id="fsp-join" class="fsp-card" hidden novalidate>
 <h2>Pick your name and face</h2>
+<p class="fsp-alt" id="fsp-tologin-wrap">Already a member? <button type="button" class="fsp-link" id="fsp-tologin">Sign in</button></p>
 <div class="fsp-secret"><b>This is a secret club.</b> You only got here because someone trusted you or you found the way in yourself. It stays a tight circle: word of mouth only, never posted anywhere public. Be careful who you tell.</div>
 <label class="fsp-l" for="fsp-name">Username</label>
 <input id="fsp-name" name="name" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="3 to 20 characters">
 <p class="sm">Letters, numbers, spaces, dots, dashes and underscores. Names of the firm and its attorneys are reserved. Do not use your real name unless you want it public.</p>
+<div id="fsp-claimwrap" hidden><label class="fsp-l" for="fsp-claim">Claim code</label>
+<input id="fsp-claim" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="From the person who invited you"></div>
+<div id="fsp-pwwrap"><label class="fsp-l" for="fsp-pw">Password (optional)</label>
+<input id="fsp-pw" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
+<p class="sm">A password lets you sign in with the same username on your other devices. Without one, your username lives only in this browser.</p>
+<p class="fsp-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p></div>
 <fieldset class="fsp-avs"><legend class="fsp-l">Profile picture</legend><div id="fsp-avgrid" class="fsp-avgrid"></div></fieldset>
 <div class="fsp-hp" aria-hidden="true"><label for="fsp-site">Leave this empty</label><input id="fsp-site" name="website" type="text" tabindex="-1" autocomplete="off"></div>
 <label class="fsp-chk"><input id="fsp-adult" type="checkbox"> I am 18 or older.</label>
@@ -33,16 +40,41 @@ head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href
 <button class="btn" type="submit" id="fsp-jbtn">Join</button>
 </form>
 
+<form id="fsp-login" class="fsp-card" hidden novalidate>
+<h2>Sign in</h2>
+<p class="sm">Use the username and password you set on another device.</p>
+<label class="fsp-l" for="fsp-lname">Username</label>
+<input id="fsp-lname" type="text" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false">
+<label class="fsp-l" for="fsp-lpw">Password</label>
+<input id="fsp-lpw" type="password" maxlength="100" autocomplete="current-password">
+<p id="fsp-lerr" class="fsp-err" role="alert"></p>
+<div class="fsp-row"><button type="button" class="fsp-link" id="fsp-tojoin">New here? Join instead</button><button class="btn" type="submit" id="fsp-lbtn">Sign in</button></div>
+</form>
+
+<form id="fsp-pwform" class="fsp-card" hidden novalidate>
+<h2 id="fsp-pwtitle">Set a password</h2>
+<div id="fsp-oldwrap"><label class="fsp-l" for="fsp-old">Current password</label>
+<input id="fsp-old" type="password" maxlength="100" autocomplete="current-password"></div>
+<label class="fsp-l" for="fsp-new">New password</label>
+<input id="fsp-new" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
+<p class="fsp-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p>
+<p id="fsp-pwerr" class="fsp-err" role="alert"></p>
+<div class="fsp-row"><button type="button" class="fsp-link" id="fsp-pwcancel">Cancel</button><button class="btn" type="submit" id="fsp-pwbtn">Save password</button></div>
+</form>
+
 <form id="fsp-compose" class="fsp-card fsp-compose" hidden novalidate>
-<div class="fsp-me"><img id="fsp-meav" alt="" width="44" height="44"><b id="fsp-mename"></b><button type="button" class="fsp-link" id="fsp-edit">Change picture</button></div>
+<div class="fsp-me"><img id="fsp-meav" alt="" width="44" height="44"><b id="fsp-mename"></b><span class="fsp-acts"><button type="button" class="fsp-link" id="fsp-edit">Picture</button><button type="button" class="fsp-link" id="fsp-setpw">Set password</button><button type="button" class="fsp-link" id="fsp-out">Sign out</button></span></div>
 <label class="vh" for="fsp-text">Your post</label>
-<textarea id="fsp-text" rows="2" maxlength="140" placeholder="Say it in 67 characters"></textarea>
-<div class="fsp-row"><span id="fsp-count" class="fsp-count">67</span><button class="btn sm" type="submit" id="fsp-pbtn">Post</button></div>
+<textarea id="fsp-text" rows="3" maxlength="400" placeholder="Say it in 280 characters"></textarea>
+<div class="fsp-row"><span id="fsp-count" class="fsp-count">280</span><button class="btn sm" type="submit" id="fsp-pbtn">Post</button></div>
 <p id="fsp-perr" class="fsp-err" role="alert"></p>
 </form>
 
-<div class="fsp-head"><h2>Latest</h2><button type="button" class="btn sm ghost" id="fsp-refresh">Refresh</button></div>
+<div id="fsp-board" hidden>
+<div class="fsp-head" id="fsp-headrow"><h2>Latest</h2><button type="button" class="btn sm ghost" id="fsp-refresh">Refresh</button></div>
 <ol id="fsp-feed" class="fsp-feed" aria-live="polite"><li class="fsp-empty">Loading...</li></ol>
+<div id="fsp-detail" class="fsp-detail" hidden></div>
+</div>
 
 <p class="fsp-fine">Posts are the opinions of the people who write them, not GFA LAW, PLLC. Nothing here is legal advice, and posting does not create an attorney-client relationship. Do not post about your own legal matter. <a href="/a7/rules">The Only Rule</a> &middot; <a href="/a7/privacy">Privacy</a></p>
 </div>
