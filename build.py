@@ -64,8 +64,9 @@ NAV = [
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
-   ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0)]),
+   ('Pocket Constitution', '/constitution', 'Every article and amendment', 0)]),
  ('Gun Bills', '/resources/gun-bill-tracker'),
+ ('Daily Game', '/trivia'),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
    ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
@@ -801,8 +802,7 @@ if __name__ == '__main__':
     pages += const_pages(CJ)
     pages.append(vault_page(M))
     pages += bill_pages()
-    _tv = open(os.path.join(SRC, 'pages', 'fun-trivia.html'), encoding='utf-8').read()
-    TRIVIA_WIDGET = '<div class="game" id="tv"><p class="q">Loading today\'s question...</p></div>' + _tv[_tv.index('<script>'):_tv.index('</script>') + 9]
+    TRIVIA_WIDGET = '<p><a class="btn" href="/trivia">Play today&rsquo;s Daily Game</a></p>'  # the daily game lives on /trivia
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:

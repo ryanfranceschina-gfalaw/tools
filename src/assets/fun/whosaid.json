@@ -1,0 +1,402 @@
+[
+{
+"f": [
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+],
+[
+"BF",
+"franklin",
+"Benjamin Franklin",
+"Printer, diplomat"
+],
+[
+"TJ",
+"jefferson",
+"Thomas Jefferson",
+"3rd President"
+],
+[
+"JA",
+"adams",
+"John Adams",
+"2nd President"
+]
+],
+"q": [
+{
+"t": "Of all the dispositions and habits which lead to political prosperity, Religion and morality are indispensable supports.",
+"a": "GW",
+"s": "Farewell Address, September 19, 1796"
+},
+{
+"t": "Those who would give up essential Liberty, to purchase a little temporary Safety, deserve neither Liberty nor Safety.",
+"a": "BF",
+"s": "Pennsylvania Assembly: Reply to the Governor, November 11, 1755"
+},
+{
+"t": "I have sworn upon the altar of god eternal hostility against every form of tyranny over the mind of man.",
+"a": "TJ",
+"s": "Letter to Benjamin Rush, September 23, 1800"
+},
+{
+"t": "Our Constitution was made only for a moral and religious People. It is wholly inadequate to the government of any other.",
+"a": "JA",
+"s": "Letter to the Massachusetts Militia, October 11, 1798"
+}
+]
+},
+{
+"f": [
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+],
+[
+"AH",
+"hamilton",
+"Alexander Hamilton",
+"1st Treasury Secretary"
+],
+[
+"JM",
+"madison",
+"James Madison",
+"4th President"
+],
+[
+"JJ",
+"jay",
+"John Jay",
+"1st Chief Justice"
+]
+],
+"q": [
+{
+"t": "Liberty, when it begins to take root, is a plant of rapid growth.",
+"a": "GW",
+"s": "Letter to James Madison, March 2, 1788"
+},
+{
+"t": "The judiciary... has no influence over either the sword or the purse.",
+"a": "AH",
+"s": "The Federalist No. 78, May 28, 1788"
+},
+{
+"t": "A popular Government, without popular information, or the means of acquiring it, is but a Prologue to a Farce or a Tragedy; or perhaps both.",
+"a": "JM",
+"s": "Letter to William T. Barry, August 4, 1822"
+},
+{
+"t": "Providence has been pleased to give this one connected country to one united people.",
+"a": "JJ",
+"s": "The Federalist No. 2, October 31, 1787"
+}
+]
+},
+{
+"f": [
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+],
+[
+"TJ",
+"jefferson",
+"Thomas Jefferson",
+"3rd President"
+],
+[
+"BF",
+"franklin",
+"Benjamin Franklin",
+"Printer, diplomat"
+],
+[
+"AH",
+"hamilton",
+"Alexander Hamilton",
+"1st Treasury Secretary"
+]
+],
+"q": [
+{
+"t": "...the Constitution which at any time exists, 'till changed by an explicit and authentic act of the whole People, is sacredly obligatory upon all.",
+"a": "GW",
+"s": "Farewell Address, September 19, 1796"
+},
+{
+"t": "The tree of liberty must be refreshed from time to time with the blood of patriots and tyrants.",
+"a": "TJ",
+"s": "Letter to William S. Smith, November 13, 1787"
+},
+{
+"t": "An Ounce of Prevention is worth a Pound of Cure.",
+"a": "BF",
+"s": "On Protection of Towns from Fire, February 4, 1735"
+},
+{
+"t": "The sacred rights of mankind are not to be rummaged for, among old parchments, or musty records.",
+"a": "AH",
+"s": "The Farmer Refuted, February 23, 1775"
+}
+]
+},
+{
+"f": [
+[
+"JA",
+"adams",
+"John Adams",
+"2nd President"
+],
+[
+"JM",
+"madison",
+"James Madison",
+"4th President"
+],
+[
+"JJ",
+"jay",
+"John Jay",
+"1st Chief Justice"
+],
+[
+"TJ",
+"jefferson",
+"Thomas Jefferson",
+"3rd President"
+]
+],
+"q": [
+{
+"t": "Liberty cannot be preserved without a general knowledge among the people...",
+"a": "JA",
+"s": "A Dissertation on the Canon and the Feudal Law, 1765"
+},
+{
+"t": "Conscience is the most sacred of all property.",
+"a": "JM",
+"s": "\"Property,\" National Gazette, March 27, 1792"
+},
+{
+"t": "...nations in general will make war whenever they have a prospect of getting any thing by it...",
+"a": "JJ",
+"s": "The Federalist No. 4, November 7, 1787"
+},
+{
+"t": "I cannot live without books.",
+"a": "TJ",
+"s": "Letter to John Adams, June 10, 1815"
+}
+]
+},
+{
+"f": [
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+],
+[
+"BF",
+"franklin",
+"Benjamin Franklin",
+"Printer, diplomat"
+],
+[
+"JM",
+"madison",
+"James Madison",
+"4th President"
+],
+[
+"AH",
+"hamilton",
+"Alexander Hamilton",
+"1st Treasury Secretary"
+]
+],
+"q": [
+{
+"t": "To be prepared for war is one of the most effectual means of preserving peace.",
+"a": "GW",
+"s": "First Annual Message to Congress, January 8, 1790"
+},
+{
+"t": "Early to bed and early to rise, makes a man healthy wealthy and wise.",
+"a": "BF",
+"s": "Poor Richard's Almanack, 1735"
+},
+{
+"t": "The Religion then of every man must be left to the conviction and conscience of every man...",
+"a": "JM",
+"s": "Memorial and Remonstrance against Religious Assessments, 1785"
+},
+{
+"t": "Energy in the Executive is a leading character in the definition of good government.",
+"a": "AH",
+"s": "The Federalist No. 70, March 15, 1788"
+}
+]
+},
+{
+"f": [
+[
+"JA",
+"adams",
+"John Adams",
+"2nd President"
+],
+[
+"TJ",
+"jefferson",
+"Thomas Jefferson",
+"3rd President"
+],
+[
+"JJ",
+"jay",
+"John Jay",
+"1st Chief Justice"
+],
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+]
+],
+"q": [
+{
+"t": "I must study Politicks and War that my sons may have liberty to study Mathematicks and Philosophy.",
+"a": "JA",
+"s": "Letter to Abigail Adams, May 12, 1780"
+},
+{
+"t": "...a little rebellion now and then is a good thing...",
+"a": "TJ",
+"s": "Letter to James Madison, January 30, 1787"
+},
+{
+"t": "Among the many objects to which a wise and free people find it necessary to direct their attention, that of providing for their safety seems to be the first.",
+"a": "JJ",
+"s": "The Federalist No. 3, 1787"
+},
+{
+"t": "It is better to offer no excuse than a bad one.",
+"a": "GW",
+"s": "Letter to Harriot Washington, October 30, 1791"
+}
+]
+},
+{
+"f": [
+[
+"BF",
+"franklin",
+"Benjamin Franklin",
+"Printer, diplomat"
+],
+[
+"JM",
+"madison",
+"James Madison",
+"4th President"
+],
+[
+"AH",
+"hamilton",
+"Alexander Hamilton",
+"1st Treasury Secretary"
+],
+[
+"JA",
+"adams",
+"John Adams",
+"2nd President"
+]
+],
+"q": [
+{
+"t": "Well done is better than well said.",
+"a": "BF",
+"s": "Poor Richard's Almanack, 1737"
+},
+{
+"t": "A well instructed people alone can be permanently a free people.",
+"a": "JM",
+"s": "Annual Message to Congress, December 5, 1810"
+},
+{
+"t": "Why has government been instituted at all? Because the passions of men will not conform to the dictates of reason and justice, without constraint.",
+"a": "AH",
+"s": "The Federalist No. 15, December 1, 1787"
+},
+{
+"t": "The only maxim of a free government ought to be to trust no man living with power to endanger the public liberty.",
+"a": "JA",
+"s": "Notes for an Oration at Braintree, 1772"
+}
+]
+},
+{
+"f": [
+[
+"TJ",
+"jefferson",
+"Thomas Jefferson",
+"3rd President"
+],
+[
+"GW",
+"washington",
+"George Washington",
+"1st President"
+],
+[
+"JA",
+"adams",
+"John Adams",
+"2nd President"
+],
+[
+"BF",
+"franklin",
+"Benjamin Franklin",
+"Printer, diplomat"
+]
+],
+"q": [
+{
+"t": "When angry, count ten, before you speak; if very angry, an hundred.",
+"a": "TJ",
+"s": "Letter to Thomas Jefferson Smith, February 21, 1825"
+},
+{
+"t": "Discipline is the soul of an army.",
+"a": "GW",
+"s": "Instructions to Company Captains, July 29, 1757"
+},
+{
+"t": "Liberty once lost is lost forever.",
+"a": "JA",
+"s": "Letter to Abigail Adams, July 7, 1775"
+},
+{
+"t": "Remember that time is money.",
+"a": "BF",
+"s": "Advice to a Young Tradesman, 1748"
+}
+]
+}
+]
