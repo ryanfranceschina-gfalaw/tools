@@ -1,82 +1,134 @@
 path: /a7
-title: The Secret Free Speech Platform | GFA LAW, PLLC
-short: The Secret Free Speech Platform
-desc: A hidden GFA LAW message board.
+title: GFA LAW, PLLC
+short: A7
+desc: Members only.
 noindex: 1
 hidden: 1
 head: <meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/assets/a7/a7.css">
 ---
-<section class="phero fsp-hero"><div class="wrap">
-<p class="eyebrow">You found it</p>
-<h1>The Secret Free Speech Platform</h1>
-<p class="lede">Say what you think. Everyone sees everything. Reply, give it a thumbs up or a thumbs down. That is the whole platform.</p>
-</div></section>
-
-<section class="sec tight"><div class="wrap fsp" id="fsp">
-<div id="fsp-lock" class="fsp-card" hidden><h2>Nothing to see here</h2><p>This page is not open to the public. <a href="/">Go to the home page</a>.</p></div>
+<section class="gc-wrap"><div class="gc" id="fsp">
+<div id="fsp-lock" class="gc-card" hidden><h2>Nothing to see here</h2><p>This page is not open to the public. <a href="/">Go to the home page</a>.</p></div>
 
 <div id="fsp-app" hidden>
-<p id="fsp-mode" class="fsp-note" hidden></p>
 
-<form id="fsp-join" class="fsp-card" hidden novalidate>
-<h2>Pick your name and face</h2>
-<p class="fsp-alt" id="fsp-tologin-wrap">Already a member? <button type="button" class="fsp-link" id="fsp-tologin">Sign in</button></p>
-<div class="fsp-secret"><b>This is a secret club.</b> You only got here because someone trusted you or you found the way in yourself. It stays a tight circle: word of mouth only, never posted anywhere public. Be careful who you tell.</div>
-<label class="fsp-l" for="fsp-name">Username</label>
-<input id="fsp-name" name="name" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="3 to 20 characters">
-<p class="sm">Letters, numbers, spaces, dots, dashes and underscores. Names of the firm and its attorneys are reserved. Do not use your real name unless you want it public.</p>
-<div id="fsp-claimwrap" hidden><label class="fsp-l" for="fsp-claim">Claim code</label>
-<input id="fsp-claim" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="From the person who invited you"></div>
-<div id="fsp-pwwrap"><label class="fsp-l" for="fsp-pw">Password (optional)</label>
-<input id="fsp-pw" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
-<p class="sm">A password lets you sign in with the same username on your other devices. Without one, your username lives only in this browser.</p>
-<p class="fsp-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p></div>
-<fieldset class="fsp-avs"><legend class="fsp-l">Profile picture</legend><div id="fsp-avgrid" class="fsp-avgrid"></div></fieldset>
-<div class="fsp-hp" aria-hidden="true"><label for="fsp-site">Leave this empty</label><input id="fsp-site" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-<label class="fsp-chk"><input id="fsp-adult" type="checkbox"> I am 18 or older.</label>
-<label class="fsp-chk"><input id="fsp-secret" type="checkbox"> I will <b>never</b> post, share or mention this platform anywhere public: no social media, no screenshots, no links. Word of mouth only, and only with people I trust to keep the secret.</label>
-<label class="fsp-chk"><input id="fsp-agree" type="checkbox"> I have read <a href="/a7/rules" target="_blank" rel="noopener">The Only Rule</a>, and I understand posts are public.</label>
-<p id="fsp-jerr" class="fsp-err" role="alert"></p>
-<button class="btn" type="submit" id="fsp-jbtn">Join</button>
+<div id="gate" class="gc-gate" hidden>
+<div class="gc-brand"><img src="/assets/img/seal-300.png" alt="" width="64" height="64"><div><h1>The Secret GFA Group Chat</h1><p>Members only. What is said here stays here.</p></div></div>
+
+<form id="join" class="gc-card" novalidate>
+<div class="gc-tabs"><button type="button" class="on" data-to="join">Join</button><button type="button" data-to="login">Sign in</button></div>
+<div class="gc-secret"><b>This is a secret group chat.</b> You only got here because someone trusted you, or you found the way in yourself. It stays a tight circle: word of mouth only, never posted anywhere public. Do not leak the group chat. Be careful who you tell.</div>
+<label class="gc-l" for="j-name">Username</label>
+<input id="j-name" type="text" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="3 to 20 characters">
+<p class="gc-sm">Letters, numbers, spaces, dots, dashes and underscores. You can change it later. Names of the firm and its attorneys are reserved.</p>
+<div id="j-claimwrap" hidden><label class="gc-l" for="j-claim">Claim code</label>
+<input id="j-claim" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="From the person who invited you"></div>
+<label class="gc-l" for="j-pw">Password</label>
+<input id="j-pw" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
+<p class="gc-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p>
+<div class="gc-l">Profile picture</div>
+<div class="gc-picker" data-picker="join"></div>
+<div class="gc-hp" aria-hidden="true"><label for="j-site">Leave this empty</label><input id="j-site" type="text" tabindex="-1" autocomplete="off"></div>
+<label class="gc-chk"><input id="j-adult" type="checkbox"> I am 18 or older.</label>
+<label class="gc-chk"><input id="j-secret" type="checkbox"> I will <b>never</b> leak the group chat: no posting, sharing or mentioning it anywhere public, no screenshots, no links. Word of mouth only, and only with people I trust to keep the secret.</label>
+<label class="gc-chk"><input id="j-agree" type="checkbox"> I have read <a href="/a7/rules" target="_blank" rel="noopener">The Only Rule</a>, and I understand messages are seen by every member.</label>
+<p id="j-err" class="gc-err" role="alert"></p>
+<button class="btn gc-wide" type="submit" id="j-btn">Join the chat</button>
 </form>
 
-<form id="fsp-login" class="fsp-card" hidden novalidate>
-<h2>Sign in</h2>
-<p class="sm">Use the username and password you set on another device.</p>
-<label class="fsp-l" for="fsp-lname">Username</label>
-<input id="fsp-lname" type="text" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false">
-<label class="fsp-l" for="fsp-lpw">Password</label>
-<input id="fsp-lpw" type="password" maxlength="100" autocomplete="current-password">
-<p id="fsp-lerr" class="fsp-err" role="alert"></p>
-<div class="fsp-row"><button type="button" class="fsp-link" id="fsp-tojoin">New here? Join instead</button><button class="btn" type="submit" id="fsp-lbtn">Sign in</button></div>
+<form id="login" class="gc-card" novalidate hidden>
+<div class="gc-tabs"><button type="button" data-to="join">Join</button><button type="button" class="on" data-to="login">Sign in</button></div>
+<label class="gc-l" for="l-name">Username</label>
+<input id="l-name" type="text" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false">
+<label class="gc-l" for="l-pw">Password</label>
+<input id="l-pw" type="password" maxlength="100" autocomplete="current-password">
+<p id="l-err" class="gc-err" role="alert"></p>
+<button class="btn gc-wide" type="submit" id="l-btn">Sign in</button>
 </form>
-
-<form id="fsp-pwform" class="fsp-card" hidden novalidate>
-<h2 id="fsp-pwtitle">Set a password</h2>
-<div id="fsp-oldwrap"><label class="fsp-l" for="fsp-old">Current password</label>
-<input id="fsp-old" type="password" maxlength="100" autocomplete="current-password"></div>
-<label class="fsp-l" for="fsp-new">New password</label>
-<input id="fsp-new" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
-<p class="fsp-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p>
-<p id="fsp-pwerr" class="fsp-err" role="alert"></p>
-<div class="fsp-row"><button type="button" class="fsp-link" id="fsp-pwcancel">Cancel</button><button class="btn" type="submit" id="fsp-pwbtn">Save password</button></div>
-</form>
-
-<form id="fsp-compose" class="fsp-card fsp-compose" hidden novalidate>
-<div class="fsp-me"><img id="fsp-meav" alt="" width="44" height="44"><b id="fsp-mename"></b><span class="fsp-acts"><button type="button" class="fsp-link" id="fsp-edit">Picture</button><button type="button" class="fsp-link" id="fsp-setpw">Set password</button><button type="button" class="fsp-link" id="fsp-out">Sign out</button></span></div>
-<label class="vh" for="fsp-text">Your post</label>
-<textarea id="fsp-text" rows="3" maxlength="400" placeholder="Say it in 280 characters"></textarea>
-<div class="fsp-row"><span id="fsp-count" class="fsp-count">280</span><button class="btn sm" type="submit" id="fsp-pbtn">Post</button></div>
-<p id="fsp-perr" class="fsp-err" role="alert"></p>
-</form>
-
-<div id="fsp-board" hidden>
-<div class="fsp-head" id="fsp-headrow"><h2>Latest</h2><button type="button" class="btn sm ghost" id="fsp-refresh">Refresh</button></div>
-<ol id="fsp-feed" class="fsp-feed" aria-live="polite"><li class="fsp-empty">Loading...</li></ol>
-<div id="fsp-detail" class="fsp-detail" hidden></div>
 </div>
 
-<p class="fsp-fine">Posts are the opinions of the people who write them, not GFA LAW, PLLC. Nothing here is legal advice, and posting does not create an attorney-client relationship. Do not post about your own legal matter. <a href="/a7/rules">The Only Rule</a> &middot; <a href="/a7/privacy">Privacy</a></p>
+<form id="rack" class="gc-card gc-gate" novalidate hidden>
+<h2>One more step</h2>
+<div class="gc-secret"><b>Do not leak the group chat.</b> It stays a tight circle: word of mouth only, never posted anywhere public.</div>
+<div id="rack-pw"><label class="gc-l" for="r-pw">Set a password</label>
+<input id="r-pw" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
+<p class="gc-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p></div>
+<div id="rack-rules"><label class="gc-chk"><input id="r-adult" type="checkbox"> I am 18 or older.</label>
+<label class="gc-chk"><input id="r-secret" type="checkbox"> I will <b>never</b> leak the group chat: no posting, sharing or mentioning it anywhere public, no screenshots, no links. Word of mouth only.</label>
+<label class="gc-chk"><input id="r-agree" type="checkbox"> I have read <a href="/a7/rules" target="_blank" rel="noopener">The Only Rule</a>.</label></div>
+<p id="r-err" class="gc-err" role="alert"></p>
+<button class="btn gc-wide" type="submit" id="r-btn">Continue to the chat</button>
+</form>
+
+<div id="chat" class="gc-chat" hidden>
+<header class="gc-top">
+<img src="/assets/img/seal-300.png" alt="" width="36" height="36" class="gc-seal">
+<div class="gc-title"><b>The Secret GFA Group Chat</b><span id="c-sub">Members only</span></div>
+<button type="button" class="gc-me" id="c-me" aria-haspopup="true" aria-expanded="false"><img id="c-meav" alt="" width="34" height="34"><span class="vh">Your account</span></button>
+<div class="gc-menu" id="c-menu" hidden>
+<div class="gc-menu-who" id="c-mename"></div>
+<button type="button" data-panel="name">Change name</button>
+<button type="button" data-panel="pic">Change picture</button>
+<button type="button" data-panel="pw">Change password</button>
+<a href="/a7/rules" target="_blank" rel="noopener">The Only Rule</a>
+<a href="/a7/privacy" target="_blank" rel="noopener">Privacy</a>
+<a href="/">Leave to the home page</a>
+<button type="button" id="c-out">Sign out</button>
+</div>
+</header>
+<p id="c-mode" class="gc-mode" hidden></p>
+<div class="gc-list" id="c-list" aria-live="polite"><p class="gc-empty">Loading the chat...</p></div>
+<button type="button" class="gc-newpill" id="c-new" hidden>New messages &darr;</button>
+<form class="gc-compose" id="c-form" novalidate>
+<div class="gc-replybar" id="c-replybar" hidden><div><b id="c-replyto"></b><span id="c-replytx"></span></div><button type="button" id="c-replyx" aria-label="Cancel reply">&times;</button></div>
+<div class="gc-row">
+<label class="vh" for="c-text">Message</label>
+<textarea id="c-text" rows="1" maxlength="400" placeholder="Message" enterkeyhint="send" autocomplete="off"></textarea>
+<button class="gc-send" type="submit" id="c-send" aria-label="Send"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></svg></button>
+</div>
+<div class="gc-meta"><span id="c-err" class="gc-err" role="alert"></span><span id="c-count" class="gc-count"></span></div>
+<div class="gc-hp" aria-hidden="true"><input id="c-site" type="text" tabindex="-1" autocomplete="off"></div>
+</form>
+</div>
+
+<div id="board" class="gb" hidden>
+<div class="gb-top">
+<img src="/assets/img/seal-300.png" alt="" width="44" height="44">
+<div class="gb-title"><h1>The Secret GFA Group Chat</h1><span>Members only. Do not leak it.</span></div>
+<div class="gb-mewrap" id="b-mewrap"></div>
+</div>
+<p id="b-mode" class="gc-mode" hidden></p>
+<button type="button" class="gb-back" id="b-back" hidden>&larr; Back</button>
+<div id="b-focus"></div>
+<form class="gb-compose" id="b-form" novalidate>
+<img id="b-meav" alt="" width="46" height="46" class="gb-av">
+<div class="gb-cbody">
+<label class="vh" for="b-text">Post</label>
+<textarea id="b-text" rows="2" maxlength="400" placeholder="What's happening?"></textarea>
+<div class="gb-cfoot"><span id="b-err" class="gc-err" role="alert"></span><span id="b-count" class="gc-count"></span><button class="btn" type="submit" id="b-send">Post</button></div>
+</div>
+</form>
+<div class="gb-list" id="b-list" aria-live="polite"></div>
+</div>
+
+<div class="gc-sheet" id="sheet" hidden>
+<div class="gc-sheet-in gc-card" role="dialog" aria-modal="true" aria-labelledby="s-title">
+<button type="button" class="gc-x" id="s-x" aria-label="Close">&times;</button>
+<h2 id="s-title"></h2>
+<form id="p-name" novalidate hidden><label class="gc-l" for="n-name">New username</label>
+<input id="n-name" type="text" maxlength="20" autocapitalize="off" spellcheck="false">
+<p class="gc-sm">Change it as often as you like. Your old messages will show your new name.</p>
+<p id="n-err" class="gc-err" role="alert"></p><button class="btn gc-wide" type="submit">Save name</button></form>
+<form id="p-pic" novalidate hidden><div class="gc-picker" data-picker="edit"></div>
+<p id="pc-err" class="gc-err" role="alert"></p><button class="btn gc-wide" type="submit">Save picture</button></form>
+<form id="p-pw" novalidate hidden><label class="gc-l" for="pw-old">Current password</label>
+<input id="pw-old" type="password" maxlength="100" autocomplete="current-password">
+<label class="gc-l" for="pw-new">New password</label>
+<input id="pw-new" type="password" maxlength="100" autocomplete="new-password" placeholder="8 or more characters">
+<p class="gc-warn"><b>This platform is not secure.</b> Please use a new and unique password that you do not use anywhere else. There is no password reset.</p>
+<p id="pw-err" class="gc-err" role="alert"></p><button class="btn gc-wide" type="submit">Save password</button></form>
+</div>
+</div>
+
 </div>
 </div></section>
 <script src="/assets/a7/app.js" defer></script>
