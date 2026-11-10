@@ -69,7 +69,7 @@ NAV = [
    ('Can the Cop Do That?', '/tools/can-the-cop-do-that', '', 1), ('Deadline Checker', '/tools/deadline-checker', '', 1),
    ('Case Review Finder', '/tools/case-review-finder', '', 1), ('Records Request Builder', '/tools/records-request-builder', '', 1),
    ('Firearm Return and Expunction Checker', '/tools/firearm-return-and-expunction-checker', '', 1),
-   ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('The Stop', '/tools/the-stop', '', 1), ('Wallet Card Maker', '/tools/wallet-card', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
+   ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
  ('Gun Bills', '/resources/gun-bill-tracker'),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
@@ -697,7 +697,7 @@ def bill_pages():
             '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">How It Works</p><h2>How a Texas bill becomes law</h2></div><ol class="btl">%s</ol></div></section>\n'
             '<section class="sec alt"><div class="wrap"><div class="sec-head"><p class="eyebrow">Recent Changes</p><h2>What changed lately</h2></div><div class="lgrid">%s</div></div></section>\n'
             '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">The Foundation</p><h2>Long-standing gun law every Texan should know</h2></div><div class="lgrid">%s</div>'
-            '<div class="btns" style="margin-top:26px"><a class="btn" href="/resources/know-your-rights">Read our Know Your Rights guides</a><a class="btn ghost" href="/tools/the-stop">Play The Stop</a><a class="btn ghost" href="/trivia">Daily trivia</a></div>'
+            '<div class="btns" style="margin-top:26px"><a class="btn" href="/resources/know-your-rights">Read our Know Your Rights guides</a><a class="btn ghost" href="/constitution">Read the Pocket Constitution</a><a class="btn ghost" href="/trivia">Daily trivia</a></div>'
             '<p class="sm" style="margin-top:28px">Bills come from the Texas Legislature, the U.S. Government Publishing Office and the Maryland General Assembly. Titles, captions, statuses and bill text are the official versions those bodies publish. GFA LAW sorts each bill as pro-gun (expands or protects the right to keep and bear arms), anti-gun (restricts it) or neutral; new bills show as "Not yet sorted" until we review them. Always check the official page for the latest action. This page is general information, not legal advice.</p>'
             '</div></section>\n'
             '<script>window.BILLGAME=%s;</script>'
@@ -717,7 +717,7 @@ def bill_pages():
             'function play(){if(!G.length){box.innerHTML="<p>Check back soon.</p>";return}var b=G[Math.floor(Math.random()*G.length)];'
             'box.innerHTML="<p class=\\"eyebrow\\">"+esc(b.n)+"</p><p class=\\"q\\">"+esc(b.t)+"</p><div class=\\"btns\\" style=\\"margin-top:6px\\"><button class=\\"btn bpro\\" type=\\"button\\" data-g=\\"pro\\">Pro-gun</button><button class=\\"btn banti\\" type=\\"button\\" data-g=\\"anti\\">Anti-gun</button></div><div id=\\"bgfb\\"></div>";'
             'box.querySelectorAll("[data-g]").forEach(function(x){x.onclick=function(){var ok=x.dataset.g===b.l;sc.n++;if(ok)sc.r++;box.querySelectorAll("[data-g]").forEach(function(y){y.disabled=true});if(window.gtag)gtag("event","bill_game",{correct:ok});'
-            'document.getElementById("bgfb").innerHTML="<div class=\\"fb "+(ok?"ok":"no")+"\\"><b>"+(ok?"You called it.":"We sorted this one differently.")+"</b> GFA LAW sorted this bill as <b>"+(b.l==="pro"?"pro-gun":"anti-gun")+"</b>. Score: "+sc.r+" of "+sc.n+".</div><div class=\\"btns\\" style=\\"margin-top:0\\"><a class=\\"btn sm\\" href=\\""+b.u+"\\">Read the bill</a><button class=\\"btn sm ghost\\" type=\\"button\\" id=\\"bgn\\">Next bill</button></div>";document.getElementById("bgn").onclick=play}})}play()})()</script>{{band}}') % (
+            'document.getElementById("bgfb").innerHTML="<div class=\\"fb "+(ok?"ok":"no")+"\\"><b>"+(ok?"You called it.":"We sorted this one differently.")+"</b> GFA LAW sorted this bill as <b>"+(b.l==="pro"?"pro-gun":"anti-gun")+"</b>. Score: "+sc.r+" of "+sc.n+".</div><div class=\\"btns\\" style=\\"margin-top:0\\"><a class=\\"btn sm\\" href=\\""+b.u+"\\">Read the bill</a><button class=\\"btn sm ghost\\" type=\\"button\\" id=\\"bgn\\">Next bill</button></div>";document.getElementById("bgn").onclick=play;if(sc.n>=3&&window.GFA&&GFA.find)GFA.find("bills")}})}play()})()</script>{{band}}') % (
             json.dumps(stats), stats['TX'][0], stats['TX'][1], stats['TX'][2], stats['TX'][3], upd_txt, tabhtml, cols, tl, rc, lc, json.dumps(game, ensure_ascii=False).replace('</', '<\\/'))
     pages = [({'path': base, 'title': 'Texas Gun Bill Tracker: 2027 Session Firearm Bills | GFA LAW, PLLC',
                'desc': 'Track every firearm bill filed for the 2027 Texas legislative session, sorted as pro-gun or anti-gun, with official bill text, new Texas gun laws, and federal and Maryland bills.',
@@ -733,7 +733,7 @@ def bill_pages():
                       '<script>(function(){var el=document.querySelector(".billview"),url=el.dataset.pdf;if(!window.pdfjsLib){el.innerHTML=\'<p>The bill viewer could not load. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\';return}'
                       'pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";'
                       'pdfjsLib.getDocument(url).promise.then(function(pdf){el.innerHTML="";var w=Math.min(el.clientWidth,900),chain=Promise.resolve();for(var i=1;i<=pdf.numPages;i++){(function(n){chain=chain.then(function(){return pdf.getPage(n).then(function(pg){var v1=pg.getViewport({scale:1}),s=w/v1.width,dpr=window.devicePixelRatio||1,v=pg.getViewport({scale:s*dpr}),c=document.createElement("canvas");c.width=v.width;c.height=v.height;c.style.width=(v.width/dpr)+"px";c.setAttribute("aria-label","Page "+n+" of "+pdf.numPages);c.className="bpage";el.appendChild(c);return pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise})})})(i)}'
-                      'return chain}).catch(function(){el.innerHTML=\'<p>The bill text could not be displayed here. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\'})})()</script>') % b['text']
+                      'return chain.then(function(){if(window.GFA&&GFA.find)GFA.find("billtext")})}).catch(function(){el.innerHTML=\'<p>The bill text could not be displayed here. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\'})})()</script>') % b['text']
             dl = '<a class="btn sm ghost" href="%s" download>Download PDF</a>' % b['text']
         elif b.get('textExternal'):
             viewer = '<p>This bill is too large to display here. <a href="%s" target="_blank" rel="noopener">Open the official bill text (PDF)</a>.</p>' % esc(b['textExternal'])
@@ -808,7 +808,7 @@ if __name__ == '__main__':
     # 404 uses absolute links, it is served at any depth
     m404 = {'path': '/404', 'title': 'Page not found | GFA LAW, PLLC', 'short': 'Page not found', 'desc': 'This page could not be found.', 'noindex': '1'}
     b404 = '''<section class="sec"><div class="wrap center"><p class="eyebrow">Error 404</p><h1>This page is exercising its right to remain silent</h1><p class="lede">We searched, but without a warrant we could not find the page you asked for. It may have moved, or it never existed.</p>
-<p>While you are here: try the <a href="/trivia">daily Constitution trivia</a>, play <a href="/tools/the-stop">The Stop</a>, or <a href="/games">visit the game room</a>.</p>
+<p>While you are here: try the <a href="/trivia">daily Constitution trivia</a>, check the <a href="/resources/gun-bill-tracker">Gun Bill Tracker</a>, or <a href="/games">visit the game room</a>.</p>
 <div data-seal-slot="lost" style="margin:6px 0 0"></div>
 <div class="btns"><a class="btn" href="/">Go to the home page</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div>
 <form class="hsearch" action="/search/" method="get" role="search"><label class="vh" for="q404">Search the site</label><input id="q404" name="q" type="search" placeholder="Search the site"><button class="btn" type="submit">Search</button></form></div></section>'''
