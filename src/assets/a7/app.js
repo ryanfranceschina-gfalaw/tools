@@ -38,7 +38,10 @@
   // ---- pictures ----
   var FOUNDERS = [['washington', 'George Washington'], ['franklin', 'Benjamin Franklin'], ['jefferson', 'Thomas Jefferson'],
     ['adams', 'John Adams'], ['hamilton', 'Alexander Hamilton'], ['jay', 'John Jay'], ['madison', 'James Madison']];
-  var SPECIALS = [['lasereyes', 'Laser Eyes', 'a7/pfp/lasereyes.jpg']];
+  var SPECIALS = [['lasereyes', 'Laser Eyes', 'a7/pfp/lasereyes.jpg'], ['sadie', 'Sadie', 'a7/pfp/sadie.jpg']];
+  var EXCL = { sadie: 'sadiegirl216' };   // pictures only one member may pick
+  function ukOf(n) { return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function canUse(k) { var o = EXCL[k]; return !o || ukOf(ME ? ME.name : $('j-name').value) === o; }
   var ICONS = [['bell', 'Liberty Bell'], ['gavel', 'Gavel'], ['quill', 'Quill'], ['scales', 'Scales'], ['star', 'Lone Star'],
     ['torch', 'Torch'], ['scroll', 'Scroll'], ['megaphone', 'Megaphone'], ['shield', 'Shield'], ['key', 'Key'], ['anchor', 'Anchor'],
     ['compass', 'Compass'], ['crown', 'Crown'], ['horseshoe', 'Horseshoe'], ['mountain', 'Mountain'], ['sun', 'Sun'], ['moon', 'Moon'],
@@ -100,9 +103,10 @@
         });
         ICONS.forEach(function (a) { var k = a[0] + (cur === 'green' ? '' : '.' + cur); grid.appendChild(cell(k, a[1])); });
       } else if (t === 'founders') FOUNDERS.forEach(function (a) { grid.appendChild(cell(a[0], a[1])); });
-      else SPECIALS.forEach(function (a) { grid.appendChild(cell(a[0], a[1])); });
+      else SPECIALS.forEach(function (a) { if (canUse(a[0])) grid.appendChild(cell(a[0], a[1])); });
     }
     return {
+      redraw: function () { if (state.pick && !canUse(state.pick)) state.pick = ''; draw(); },
       get: function () { return state.pick; },
       set: function (k) {
         state.pick = k || ''; var p = String(k || '').split('.'), a = avMap[p[0]];
@@ -227,6 +231,9 @@
   // ---- gate: join and sign in ----
   var joinPick = picker(document.querySelector('[data-picker=join]'));
   joinPick.set('');
+  $('j-name').addEventListener('input', function () {
+    if (ukOf($('j-name').value) === EXCL.sadie && !joinPick.get()) joinPick.set('sadie'); else joinPick.redraw();
+  });
   document.querySelectorAll('.gc-tabs button').forEach(function (b) {
     b.addEventListener('click', function () { $('join').hidden = b.dataset.to !== 'join'; $('login').hidden = b.dataset.to !== 'login'; });
   });
