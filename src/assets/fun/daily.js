@@ -1,4 +1,4 @@
-/* GFA LAW Daily Game: one shared streak across a weekly rotation of games.
+/* GFA LAW Daily Game: one shared streak across a weekly rotation of games. The streak counts consecutive days played, win or lose.
    Sun Inkwell, Mon Inkwell, Tue Who Said It?, Wed Inkwell, Thu Timeline, Fri Inkwell, Sat Who Said It?.
    The leaderboard server (Google Apps Script) uses the same schedule and puzzle files to check results. */
 (function(){
@@ -32,7 +32,7 @@ var DAY,G,P,NUM;
 function start(){
   var T;try{var o={};new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date()).forEach(function(x){o[x.type]=+x.value});T={y:o.year,m:o.month,d:o.day}}catch(e){var n=new Date();T={y:n.getFullYear(),m:n.getMonth()+1,d:n.getDate()}}
   DAY=Math.round((Date.UTC(T.y,T.m-1,T.d)-START)/864e5);G=game(DAY);NUM=DAY+1;
-  var s=rec();if(s.streak&&s.lastWin!==DAY&&s.lastWin!==DAY-1&&s.last!==DAY){s.streak=0;rec(s)}
+  var s=rec();if(s.streak&&s.last!==DAY&&s.last!==DAY-1){s.streak=0;rec(s)}   /* a missed day ends the streak */
   fetch('/assets/fun/'+G+'.json').then(function(r){return r.json()}).then(function(bank){
     P=bank[idx(DAY)%bank.length];
     var head='<div class="dg-head"><p class="dg-num">Daily Game #'+NUM+'</p><h2 class="dg-title">'+NAMES[G]+'</h2><p class="dg-week">'+week()+'</p></div>';
@@ -47,8 +47,8 @@ function week(){var L=['S','M','T','W','T','F','S'],t=wd(DAY);return L.map(funct
 /* ---------- finishing: streak, share, leaderboard ---------- */
 function finish(won,share,data,summary){
   var s=rec();
-  if(s.last!==DAY){s.last=DAY;s.played=(s.played||0)+1;
-    if(won){s.wins=(s.wins||0)+1;s.streak=(s.lastWin===DAY-1?(s.streak||0):0)+1;s.lastWin=DAY;s.best=Math.max(s.best||0,s.streak)}else s.streak=0;
+  if(s.last!==DAY){s.streak=(s.last===DAY-1?(s.streak||0):0)+1;s.best=Math.max(s.best||0,s.streak);s.last=DAY;s.played=(s.played||0)+1;   /* playing, win or lose, keeps the streak */
+    if(won){s.wins=(s.wins||0)+1;s.lastWin=DAY}
     s.res={won:won,share:share,data:data,sum:summary};rec(s);
     if(W.gtag)gtag('event','daily_game',{game:G,won:won,streak:s.streak||0,best_streak:s.best||0,day_number:NUM});
     if(won&&W.GFA&&GFA.find)GFA.find('trivia');
