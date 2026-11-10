@@ -33,6 +33,10 @@ UA = {'User-Agent': 'GFA-LAW-bill-tracker/1.0 (+https://www.gfalaw.us/resources/
 
 TX_SESSIONS = [('90R', '90th Legislature, Regular Session')]
 TX_START = {'90R': dt.date(2027, 1, 12)}
+# Recently enacted Texas laws (shown as "recent changes"): only bills signed or filed without signature
+TX_ENACTED = [('89R', '89th Legislature, Regular Session (2025)'), ('891', '89th Legislature, 1st Called Session (2025)'),
+              ('892', '89th Legislature, 2nd Called Session (2025)')]
+MAX_PDF = 4_000_000  # larger official PDFs are linked, not copied
 US_CONGRESSES = [119]
 MD_SESSIONS = ['2026RS', '2027RS']
 
@@ -101,10 +105,13 @@ def tx_status(action, session_open):
 
 def texas(cur, force):
     out = []
-    for sess, sess_name in TX_SESSIONS:
+    jobs = [(s_, n_, ('housefiled', 'senatefiled'), False) for s_, n_ in TX_SESSIONS] + \
+           [(s_, n_, ('signedbygov', 'filedwogovsign'), True) for s_, n_ in TX_ENACTED]
+    seen = set()
+    for sess, sess_name, reports, enacted in jobs:
         start = TX_START.get(sess, dt.date.today())
         session_open = dt.date.today() >= start
-        for rid in ('housefiled', 'senatefiled'):
+        for rid in reports:
             try:
                 page = get(f'https://capitol.texas.gov/Reports/Report.aspx?LegSess={sess}&ID={rid}', timeout=120)
             except Exception as e:  # noqa: BLE001
@@ -115,11 +122,14 @@ def texas(cur, force):
                                  page, re.S):
                 typ, num, author, action, caption = m.group(1), int(m.group(2)), clean(m.group(3)), clean(m.group(4)), clean(m.group(5))
                 bid = f'tx-{sess.lower()}-{typ.lower()}{num}'
-                if bid in cur['exclude']:
+                if bid in seen or bid in cur['exclude']:
                     continue
                 if not (KW.search(caption) or bid in force) or (NOT_GUN.search(caption) and bid not in force):
                     continue
+                seen.add(bid)
                 status, cat = tx_status(action, session_open)
+                if enacted:
+                    status, cat = ('Signed into law' if rid == 'signedbygov' else 'Became law without signature'), 'passed'
                 hist = f'https://capitol.texas.gov/BillLookup/History.aspx?LegSess={sess}&Bill={typ}{num}'
                 pdf = None
                 base = f'https://capitol.texas.gov/tlodocs/{sess}/billtext/pdf/{TX_PFX.get(typ, typ)}{num:05d}'
@@ -128,7 +138,7 @@ def texas(cur, force):
                         pdf = (base + ver + '.pdf', ver)
                         break
                 out.append({
-                    'id': bid, 'juris': 'TX', 'jurisName': 'Texas', 'session': sess_name,
+                    'id': bid, 'juris': 'TX', 'jurisName': 'Texas', 'session': sess_name, 'legSession': sess,
                     'number': f'{typ} {num}', 'title': caption, 'sponsor': author,
                     'status': status, 'category': cat,
                     'lastAction': re.sub(r'^\d{1,2}/\d{1,2}/\d{4}\s*', '', action),
@@ -304,7 +314,9 @@ def main():
             if not os.path.exists(path):
                 try:
                     data = get(src, binary=True, timeout=120)
-                    if data[:4] == b'%PDF':
+                    if data[:4] == b'%PDF' and len(data) > MAX_PDF:
+                        b['textExternal'] = src
+                    elif data[:4] == b'%PDF':
                         open(path, 'wb').write(data)
                         time.sleep(0.3)
                 except Exception as e:  # noqa: BLE001

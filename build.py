@@ -63,7 +63,6 @@ NAV = [
    ('David T. Amad 1791 Scholarship', '/about-the-firm/david-t-amad-1791-scholarship-application', '', 0)]),
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
-   ('Gun Bill Tracker', '/resources/gun-bill-tracker', 'New Texas, federal and Maryland gun bills', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
    ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0),
    ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
@@ -71,6 +70,7 @@ NAV = [
    ('Case Review Finder', '/tools/case-review-finder', '', 1), ('Records Request Builder', '/tools/records-request-builder', '', 1),
    ('Firearm Return and Expunction Checker', '/tools/firearm-return-and-expunction-checker', '', 1),
    ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('The Stop', '/tools/the-stop', '', 1), ('Wallet Card Maker', '/tools/wallet-card', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
+ ('Gun Bills', '/resources/gun-bill-tracker'),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
    ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
@@ -126,7 +126,8 @@ def nav_html(cur):
             ac = ' aria-current="page"' if tgt == cur else ''
             if tgt.startswith('http'):
                 ac = ' class="ext" target="_blank" rel="noopener"'
-            out.append(f'<li><a href="{tgt}"{ac}>{esc(name)}</a></li>')
+            hot = ' class="hot"' if tgt == '/resources/gun-bill-tracker' else ''
+            out.append(f'<li><a href="{tgt}"{hot}{ac}>{esc(name)}</a></li>')
         else:
             out.append(f'<li><button type="button" aria-haspopup="true" aria-expanded="false">{esc(name)}{ICON["chev"]}</button><ul class="sub">')
             for n, p, sm, ind in tgt:
@@ -617,6 +618,11 @@ def fdate(s):
     except ValueError:
         return ''
 
+def bill_tab(b):
+    if b['juris'] == 'TX':
+        return 'TX' if b.get('legSession', '90R') == '90R' and not b['session'].startswith('89') else 'TX25'
+    return b['juris']
+
 def bill_pages():
     p = os.path.join(SRC, 'data', 'gun-bills.json')
     D = json.load(open(p)) if os.path.exists(p) else {'bills': [], 'updated': ''}
@@ -624,6 +630,7 @@ def bill_pages():
     CU = json.load(open(cp)) if os.path.exists(cp) else {}
     lean, excl = CU.get('lean', {}), set(CU.get('exclude', []))
     bills = [dict(b, lean=lean.get(b['id'], b.get('lean', ''))) for b in D.get('bills', []) if b['id'] not in excl]
+    for b in bills: b['tab'] = bill_tab(b)
     base = '/resources/gun-bill-tracker'
     upd = D.get('updated', '')
     upd_txt = fdate(upd[:10]) if upd else 'pending first update'
@@ -631,41 +638,90 @@ def bill_pages():
         q = (b['number'] + ' ' + b['title'] + ' ' + b.get('sponsor', '') + ' ' + b['jurisName']).lower()
         meta = []
         if b.get('sponsor'): meta.append(esc(b['sponsor']))
-        d = fdate(b.get('filed')) 
+        d = fdate(b.get('filed'))
         if d: meta.append(('Filed ' if b['juris'] != 'US' else 'Introduced ') + d)
-        meta.append(esc(b['session']))
+        if b['tab'] != 'TX': meta.append(esc(b['session']))
         return ('<article class="bill" data-j="%s" data-c="%s" data-q="%s"><div class="bhead"><span class="bnum"><span class="bj">%s</span> %s</span>'
                 '<span class="bst st-%s">%s</span></div><p class="btitle">%s</p><p class="bmeta">%s</p>'
                 '<div class="bact"><a class="btn sm" href="%s/%s">Read the bill</a><a class="btn sm ghost" href="%s" target="_blank" rel="noopener">Official page</a></div></article>') % (
-                b['juris'], b['category'], esc(q), b['juris'] if b['juris'] != 'US' else 'U.S.', esc(b['number']), b['category'], esc(b['status']),
+                b['tab'], b['category'], esc(q), {'TX': 'TX', 'TX25': 'TX', 'US': 'U.S.', 'MD': 'MD'}[b['tab']], esc(b['number']), b['category'], esc(b['status']),
                 esc(b['title']), ' &middot; '.join(meta), base, b['id'], esc(b['official']))
     cols = ''
     for key in ('pro', 'anti', 'neutral', ''):
         bs = [b for b in bills if b['lean'] == key]
         if not bs and key in ('neutral', ''): continue
-        cols += ('<section class="bcol bcol-%s" aria-labelledby="h-%s"><h2 id="h-%s">%s <span class="bcount" data-count></span></h2>%s<p class="bnone" hidden>No bills match these filters.</p></section>') % (
+        cols += ('<section class="bcol bcol-%s" aria-labelledby="h-%s"><h3 id="h-%s">%s <span class="bcount" data-count></span></h3>%s<p class="bnone" hidden>No bills match these filters.</p></section>') % (
             key or 'unsorted', key or 'unsorted', key or 'unsorted', LEAN[key], ''.join(card(b) for b in bs))
-    n = len(bills)
-    by = {j: sum(1 for b in bills if b['juris'] == j) for j in ('TX', 'US', 'MD')}
-    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Free Resource</p><h1>Gun Bill Tracker</h1>\n'
-            '<p class="lede">Firearm and weapons bills filed in the Texas Legislature, the U.S. Congress and the Maryland General Assembly, sorted as pro-gun or anti-gun. Open any bill to read its official text.</p>\n'
-            '<p class="sm">%d bills: %d Texas, %d federal, %d Maryland. Updated from official sources daily; last updated %s.</p></div></section>\n'
+    def cnt(tab, lean_=None):
+        return sum(1 for b in bills if b['tab'] == tab and (lean_ is None or b['lean'] == lean_))
+    stats = {t: [cnt(t), cnt(t, 'pro'), cnt(t, 'anti'), cnt(t, 'neutral')] for t in ('TX', 'TX25', 'US', 'MD')}
+    game = [{'n': ('Texas ' if b['juris'] == 'TX' else 'Federal ' if b['juris'] == 'US' else 'Maryland ') + b['number'], 't': b['title'], 'l': b['lean'], 'u': base + '/' + b['id']}
+            for b in bills if b['lean'] in ('pro', 'anti') and b['tab'] in ('TX', 'TX25', 'US')]
+    tabs = [('TX', '90th Texas Legislature', 'Bills filed for 2027'), ('TX25', 'New Texas laws', 'Passed in 2025'), ('US', 'Federal', '119th Congress'), ('MD', 'Maryland', 'General Assembly')]
+    tabhtml = ''.join('<button type="button" role="tab" class="btab%s" data-v="%s" aria-selected="%s"><b>%s</b><small>%s</small><span class="bt-n">%d</span></button>' % (
+        ' on' if t == 'TX' else '', t, 'true' if t == 'TX' else 'false', n, s, stats[t][0]) for t, n, s in tabs)
+    steps = [('Prefiling', 'Bills for the 90th Legislature could be filed starting November 9, 2026. Every bill filed so far appears on this page.'),
+             ('Session opens', 'The regular session convenes January 12, 2027, and can last no longer than 140 days (Tex. Const. art. III, sec. 24), through May 31, 2027.'),
+             ('Committee', 'Each bill is referred to a committee in the House or Senate, which can hold a public hearing and vote the bill out.'),
+             ('Both chambers', 'To pass, a bill must be approved by both the House and the Senate in the same form.'),
+             ('The governor', 'The governor can sign, veto, or let a bill become law without a signature. While the Legislature is in session the governor has 10 days, Sundays excepted; after adjournment, a veto must be filed within 20 days (Tex. Const. art. IV, sec. 14).'),
+             ('Effective date', 'A new law ordinarily takes effect 90 days after the session adjourns, unless two-thirds of each house votes for an earlier date (Tex. Const. art. III, sec. 39).')]
+    tl = ''.join('<li><span class="tl-n">%d</span><div><h3>%s</h3><p>%s</p></div></li>' % (i + 1, h, t) for i, (h, t) in enumerate(steps))
+    recent = [('2025', 'New Texas gun laws', 'The 89th Legislature passed new laws on handgun licenses, reciprocity with other states, short-barreled firearms, local firearm regulation and more. Read every one in the <a href="#TX25" data-tabjump="TX25">New Texas laws</a> tab.'),
+              ('Jan. 1, 2026', 'The NFA tax drops to $0', 'The federal making and transfer tax is now $0 for suppressors, short-barreled rifles and shotguns, and "any other weapons" (26 U.S.C. 5811, 5821). Machine guns and destructive devices still carry the $200 tax, and NFA registration and approval are still required.'),
+              ('2025', '<i>Bondi v. VanDerStok</i>', 'The Supreme Court rejected a facial challenge to the ATF rule treating certain weapon parts kits and partially complete frames or receivers as "firearms" (604 U.S. 458).'),
+              ('2025', '<i>Smith &amp; Wesson v. Mexico</i>', 'The Supreme Court held that the Protection of Lawful Commerce in Arms Act bars Mexico\'s lawsuit against American gun manufacturers (605 U.S. 280).'),
+              ('2024', '<i>United States v. Rahimi</i>', 'The Supreme Court upheld the federal law that temporarily disarms a person subject to a domestic violence restraining order after a court finds the person is a credible threat (602 U.S. 680).'),
+              ('2024', '<i>Garland v. Cargill</i>', 'The Supreme Court held that a bump stock is not a "machinegun" under federal law (602 U.S. 406).')]
+    rc = ''.join('<article class="lcard"><p class="eyebrow">%s</p><h3>%s</h3><p>%s</p></article>' % r for r in recent)
+    longs = [('The Second Amendment', 'The Supreme Court has held that the Second Amendment protects an individual right to keep and bear arms (<i>District of Columbia v. Heller</i>, 2008), that it applies to the states (<i>McDonald v. City of Chicago</i>, 2010), and that it covers carrying a handgun in public for self-defense, with gun laws judged against the nation\'s historical tradition of firearm regulation (<i>N.Y. State Rifle &amp; Pistol Ass\'n v. Bruen</i>, 2022).', ''),
+             ('The Texas Constitution', 'Article I, section 23: "Every citizen shall have the right to keep and bear arms in the lawful defence of himself or the State; but the Legislature shall have power, by law, to regulate the wearing of arms, with a view to prevent crime."', ''),
+             ('Permitless carry', 'Since September 1, 2021 (H.B. 1927, the Firearm Carry Act of 2021), Texans 21 and older who are not otherwise prohibited can carry a handgun, openly in a holster or concealed, without a license (Penal Code 46.02).', '/resources/know-your-rights/carrying-a-handgun-in-texas'),
+             ('Why a License to Carry still matters', 'A license helps with carry in other states that recognize it and with certain locations. License holders are also subject to "30.06" and "30.07" notices, written signs or oral notice that a property owner forbids concealed or open carry (Penal Code 30.06, 30.07).', '/resources/know-your-rights/carrying-a-handgun-in-texas'),
+             ('Places weapons are prohibited', 'Penal Code 46.03 lists places where weapons are off limits, such as polling places during voting, courts and court offices, racetracks, secured airport areas and certain businesses that serve alcohol.', ''),
+             ('Defending your home, car or business', 'Texas law presumes deadly force was reasonable against someone who unlawfully and forcibly enters your occupied home, vehicle or place of business, if you did not provoke them and were not engaged in other criminal activity. There is no duty to retreat where you have a right to be (Penal Code 9.32).', '/resources/know-your-rights')]
+    lc = ''.join('<article class="lcard"><h3>%s</h3><p>%s</p>%s</article>' % (h, t, ('<a class="more" href="%s">Learn more</a>' % u) if u else '') for h, t, u in longs)
+    body = ('<section class="phero bhero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">90th Texas Legislature &middot; 2027 Session</p><h1>Texas Gun Bill Tracker</h1>\n'
+            '<p class="lede">Every firearm and weapons bill filed for the 2027 Texas legislative session, sorted as pro-gun or anti-gun, with the official text one click away. We also track Congress and Maryland.</p>\n'
+            '<div class="bcount-pill" id="bcd" aria-live="polite">Session opens January 12, 2027</div>'
+            '<div class="bstats" id="bstats" data-stats=\'%s\'><div class="bs"><b data-k="0">%d</b><span>Bills tracked</span></div><div class="bs bs-pro"><b data-k="1">%d</b><span>Pro-gun</span></div><div class="bs bs-anti"><b data-k="2">%d</b><span>Anti-gun</span></div><div class="bs"><b data-k="3">%d</b><span>Neutral</span></div></div>'
+            '<p class="sm">Updated from official sources every night. Last updated %s.</p></div></section>\n'
             '<section class="sec tight"><div class="wrap">'
+            '<div class="btabs" role="tablist" aria-label="Choose a legislature">%s</div>'
             '<div class="bfilters" role="group" aria-label="Filter bills">'
-            '<div class="chips" data-f="j"><button type="button" class="chip on" aria-pressed="true" data-v="">All</button><button type="button" class="chip" aria-pressed="false" data-v="TX">Texas</button><button type="button" class="chip" aria-pressed="false" data-v="US">Federal</button><button type="button" class="chip" aria-pressed="false" data-v="MD">Maryland</button></div>'
             '<div class="chips" data-f="c"><button type="button" class="chip on" aria-pressed="true" data-v="proposed">Proposed</button><button type="button" class="chip on" aria-pressed="true" data-v="passed">Passed</button><button type="button" class="chip" aria-pressed="false" data-v="dead">Did not pass</button></div>'
             '<label class="vh" for="bq">Search bills</label><input id="bq" class="search" type="search" placeholder="Search by number, title or author"></div>'
-            '<div class="bcols">%s</div>'
-            '<p class="sm" style="margin-top:28px">Bills are pulled from the Texas Legislature, the U.S. Government Publishing Office (congress.gov data) and the Maryland General Assembly. Titles, captions, statuses and bill text are the official versions published by those bodies. GFA LAW sorts each bill as pro-gun (expands or protects the right to keep and bear arms), anti-gun (restricts it) or neutral; newly filed bills appear under "Not yet sorted" until we review them. Always check the official page for the latest action. This page is general information, not legal advice.</p>'
+            '<div class="bcols">%s</div></div></section>\n'
+            '<section class="sec bgame-sec"><div class="wrap" style="max-width:820px"><div class="sec-head center"><p class="eyebrow">Play</p><h2>Pro-gun or anti-gun? You make the call</h2><p>Read a real bill title and guess how it would affect lawful gun owners. Then read the bill and decide for yourself.</p></div>'
+            '<div class="game bgame" id="bgame"><p class="q">Loading a bill...</p></div></div></section>\n'
+            '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">How It Works</p><h2>How a Texas bill becomes law</h2></div><ol class="btl">%s</ol></div></section>\n'
+            '<section class="sec alt"><div class="wrap"><div class="sec-head"><p class="eyebrow">Recent Changes</p><h2>What changed lately</h2></div><div class="lgrid">%s</div></div></section>\n'
+            '<section class="sec"><div class="wrap"><div class="sec-head"><p class="eyebrow">The Foundation</p><h2>Long-standing gun law every Texan should know</h2></div><div class="lgrid">%s</div>'
+            '<div class="btns" style="margin-top:26px"><a class="btn" href="/resources/know-your-rights">Read our Know Your Rights guides</a><a class="btn ghost" href="/tools/the-stop">Play The Stop</a><a class="btn ghost" href="/trivia">Daily trivia</a></div>'
+            '<p class="sm" style="margin-top:28px">Bills come from the Texas Legislature, the U.S. Government Publishing Office and the Maryland General Assembly. Titles, captions, statuses and bill text are the official versions those bodies publish. GFA LAW sorts each bill as pro-gun (expands or protects the right to keep and bear arms), anti-gun (restricts it) or neutral; new bills show as "Not yet sorted" until we review them. Always check the official page for the latest action. This page is general information, not legal advice.</p>'
             '</div></section>\n'
-            '<script>(function(){var f={j:"",c:{proposed:1,passed:1}},q="";function run(){document.querySelectorAll(".bcol").forEach(function(col){var n=0;col.querySelectorAll(".bill").forEach(function(b){var ok=(!f.j||b.dataset.j===f.j)&&f.c[b.dataset.c]&&(!q||b.dataset.q.indexOf(q)>-1);b.hidden=!ok;if(ok)n++});col.querySelector("[data-count]").textContent="("+n+")";col.querySelector(".bnone").hidden=n>0})}'
-            'document.querySelectorAll(".chips").forEach(function(g){g.addEventListener("click",function(e){var c=e.target.closest(".chip");if(!c)return;if(g.dataset.f==="j"){g.querySelectorAll(".chip").forEach(function(x){x.classList.toggle("on",x===c)});f.j=c.dataset.v}else{c.classList.toggle("on");f.c[c.dataset.v]=c.classList.contains("on")?1:0}c.setAttribute("aria-pressed",c.classList.contains("on"));run()})});'
+            '<script>window.BILLGAME=%s;</script>'
+            '<script>(function(){var tab="TX",f={proposed:1,passed:1},q="",S=JSON.parse(document.getElementById("bstats").dataset.stats);'
+            'function run(){document.querySelectorAll(".bcol").forEach(function(col){var n=0,lim=col.dataset.all||q?1e9:10;col.querySelectorAll(".bill").forEach(function(b){var ok=b.dataset.j===tab&&f[b.dataset.c]&&(!q||b.dataset.q.indexOf(q)>-1);if(ok)n++;b.hidden=!ok||n>lim});col.querySelector("[data-count]").textContent="("+n+")";col.querySelector(".bnone").hidden=n>0;var m=col.querySelector(".bmore");if(!m){m=document.createElement("button");m.type="button";m.className="btn sm ghost bmore";m.onclick=function(){col.dataset.all=col.dataset.all?"":"1";run()};col.appendChild(m)}m.hidden=n<=10||!!q;m.textContent=col.dataset.all?"Show fewer":"Show all "+n});'
+            'var s=S[tab];document.querySelectorAll("#bstats [data-k]").forEach(function(e){e.textContent=s[+e.dataset.k]})}'
+            'function setTab(v){tab=v;document.querySelectorAll(".btab").forEach(function(x){var on=x.dataset.v===v;x.classList.toggle("on",on);x.setAttribute("aria-selected",on)});'
+            'if(v==="TX25"){f.dead=0;}history.replaceState(null,"","#"+v);run()}'
+            'document.querySelectorAll(".btab").forEach(function(b){b.onclick=function(){setTab(b.dataset.v)}});'
+            'document.querySelectorAll("[data-tabjump]").forEach(function(a){a.onclick=function(e){e.preventDefault();setTab(a.dataset.tabjump);document.querySelector(".btabs").scrollIntoView({behavior:"smooth"})}});'
+            'document.querySelector(".chips[data-f=c]").addEventListener("click",function(e){var c=e.target.closest(".chip");if(!c)return;c.classList.toggle("on");c.setAttribute("aria-pressed",c.classList.contains("on"));f[c.dataset.v]=c.classList.contains("on")?1:0;run()});'
             'var i=document.getElementById("bq");i.addEventListener("input",function(){q=i.value.trim().toLowerCase();run()});'
-            'var h=(location.hash||"").slice(1).toUpperCase();if(/^(TX|US|MD)$/.test(h)){var c=document.querySelector(\'.chips[data-f=j] .chip[data-v="\'+h+\'"]\');if(c)c.click()}run()})()</script>{{band}}') % (
-            n, by['TX'], by['US'], by['MD'], upd_txt, cols)
-    pages = [({'path': base, 'title': 'Gun Bill Tracker: Texas, Federal and Maryland Firearm Bills | GFA LAW, PLLC',
-               'desc': 'Track firearm and weapons bills in the Texas Legislature, Congress and the Maryland General Assembly, sorted as pro-gun or anti-gun, with the official text of every bill.',
-               'short': 'Gun Bill Tracker', 'schema': 'CollectionPage', 'ogsub': 'Every new Texas, federal and Maryland gun bill, with the official text'}, body)]
+            'var h=(location.hash||"").slice(1).toUpperCase();setTab(/^(TX|TX25|US|MD)$/.test(h)?h:"TX");'
+            'var cd=document.getElementById("bcd"),now=new Date(),st=new Date(2027,0,12),en=new Date(2027,4,31,23,59),day=864e5;'
+            'if(now<st){var d=Math.ceil((st-now)/day);cd.innerHTML="<b>"+d+"</b> days until the 90th Legislature convenes on January 12, 2027"}else if(now<=en){cd.innerHTML="Session is live: <b>Day "+(Math.floor((now-st)/day)+1)+"</b> of 140"}else{cd.textContent="The 2027 regular session adjourned May 31, 2027"}'
+            'var G=window.BILLGAME||[],box=document.getElementById("bgame"),sc={r:0,n:0};function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;"}[c]})}'
+            'function play(){if(!G.length){box.innerHTML="<p>Check back soon.</p>";return}var b=G[Math.floor(Math.random()*G.length)];'
+            'box.innerHTML="<p class=\\"eyebrow\\">"+esc(b.n)+"</p><p class=\\"q\\">"+esc(b.t)+"</p><div class=\\"btns\\" style=\\"margin-top:6px\\"><button class=\\"btn bpro\\" type=\\"button\\" data-g=\\"pro\\">Pro-gun</button><button class=\\"btn banti\\" type=\\"button\\" data-g=\\"anti\\">Anti-gun</button></div><div id=\\"bgfb\\"></div>";'
+            'box.querySelectorAll("[data-g]").forEach(function(x){x.onclick=function(){var ok=x.dataset.g===b.l;sc.n++;if(ok)sc.r++;box.querySelectorAll("[data-g]").forEach(function(y){y.disabled=true});if(window.gtag)gtag("event","bill_game",{correct:ok});'
+            'document.getElementById("bgfb").innerHTML="<div class=\\"fb "+(ok?"ok":"no")+"\\"><b>"+(ok?"You called it.":"We sorted this one differently.")+"</b> GFA LAW sorted this bill as <b>"+(b.l==="pro"?"pro-gun":"anti-gun")+"</b>. Score: "+sc.r+" of "+sc.n+".</div><div class=\\"btns\\" style=\\"margin-top:0\\"><a class=\\"btn sm\\" href=\\""+b.u+"\\">Read the bill</a><button class=\\"btn sm ghost\\" type=\\"button\\" id=\\"bgn\\">Next bill</button></div>";document.getElementById("bgn").onclick=play}})}play()})()</script>{{band}}') % (
+            json.dumps(stats), stats['TX'][0], stats['TX'][1], stats['TX'][2], stats['TX'][3], upd_txt, tabhtml, cols, tl, rc, lc, json.dumps(game, ensure_ascii=False).replace('</', '<\\/'))
+    pages = [({'path': base, 'title': 'Texas Gun Bill Tracker: 2027 Session Firearm Bills | GFA LAW, PLLC',
+               'desc': 'Track every firearm bill filed for the 2027 Texas legislative session, sorted as pro-gun or anti-gun, with official bill text, new Texas gun laws, and federal and Maryland bills.',
+               'short': 'Gun Bill Tracker', 'schema': 'CollectionPage', 'ogsub': 'Every 2027 Texas gun bill, sorted pro and anti, with the official text'}, body)]
     for b in bills:
         rows = [('Jurisdiction', b['jurisName']), ('Session', b['session']), ('Sponsor' if b['juris'] != 'TX' else 'Author', b.get('sponsor', '')),
                 ('Status', b['status']), ('Last action', ((fdate(b.get('lastActionDate')) + ': ') if b.get('lastActionDate') else '') + b.get('lastAction', '')),
@@ -679,6 +735,9 @@ def bill_pages():
                       'pdfjsLib.getDocument(url).promise.then(function(pdf){el.innerHTML="";var w=Math.min(el.clientWidth,900),chain=Promise.resolve();for(var i=1;i<=pdf.numPages;i++){(function(n){chain=chain.then(function(){return pdf.getPage(n).then(function(pg){var v1=pg.getViewport({scale:1}),s=w/v1.width,dpr=window.devicePixelRatio||1,v=pg.getViewport({scale:s*dpr}),c=document.createElement("canvas");c.width=v.width;c.height=v.height;c.style.width=(v.width/dpr)+"px";c.setAttribute("aria-label","Page "+n+" of "+pdf.numPages);c.className="bpage";el.appendChild(c);return pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise})})})(i)}'
                       'return chain}).catch(function(){el.innerHTML=\'<p>The bill text could not be displayed here. <a href="\'+url+\'">Open the bill text (PDF)</a>.</p>\'})})()</script>') % b['text']
             dl = '<a class="btn sm ghost" href="%s" download>Download PDF</a>' % b['text']
+        elif b.get('textExternal'):
+            viewer = '<p>This bill is too large to display here. <a href="%s" target="_blank" rel="noopener">Open the official bill text (PDF)</a>.</p>' % esc(b['textExternal'])
+            dl = ''
         else:
             viewer = '<p>The official text of this bill has not been published yet. Check the <a href="%s" target="_blank" rel="noopener">official bill page</a>.</p>' % esc(b['official'])
             dl = ''
@@ -689,7 +748,7 @@ def bill_pages():
                 '<div class="btns"><a class="btn sm" href="%s" target="_blank" rel="noopener">Official bill page</a>%s<a class="btn sm ghost" href="%s#%s">Back to the tracker</a></div>'
                 '<h2 style="margin-top:30px">Official bill text</h2>%s'
                 '<p class="sm" style="margin-top:24px">Text as published by the %s. Check the official bill page for later versions and actions. This page is general information, not legal advice.</p></div></section>{{band}}') % (
-                esc(b['jurisName']), esc(b['number']), esc(b['title']), lb, b['category'], esc(b['status']), tbl, esc(b['official']), dl, base, b['juris'], viewer,
+                esc(b['jurisName']), esc(b['number']), esc(b['title']), lb, b['category'], esc(b['status']), tbl, esc(b['official']), dl, base, b['tab'], viewer,
                 {'TX': 'Texas Legislature', 'US': 'U.S. Government Publishing Office', 'MD': 'Maryland General Assembly'}[b['juris']])
         t = '%s %s' % (b['jurisName'] if b['juris'] != 'US' else 'Federal', b['number'])
         pages.append(({'path': base + '/' + b['id'], 'title': '%s: %s | Gun Bill Tracker | GFA LAW, PLLC' % (t, b['title'][:70]),
