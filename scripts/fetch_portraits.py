@@ -39,5 +39,26 @@ def main():
         except Exception as e:
             print('Portrait download failed for', key, e)
 
+# Other source images the website needs, downloaded once into incoming/ (not published) for editing.
+EXTRA = {
+    'incoming/cj-grisham-headshot-original.jpg': 'https://bloximages.newyork1.vip.townnews.com/tdtnews.com/content/tncms/assets/v3/editorial/0/c2/0c2bb8bc-c080-4d00-b1db-4dfe0d209984/67f400e4e5420.image.jpg',
+}
+
+def extra():
+    root = os.path.join(os.path.dirname(__file__), '..')
+    for rel, src in EXTRA.items():
+        dest = os.path.join(root, rel)
+        if os.path.exists(dest):
+            continue
+        try:
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            req = urllib.request.Request(src, headers={'User-Agent': 'Mozilla/5.0 (GFALAW-website)'})
+            data = urllib.request.urlopen(req, timeout=30).read()
+            open(dest, 'wb').write(data)
+            print('Saved', rel, len(data), 'bytes')
+        except Exception as e:
+            print('Download failed for', rel, e)
+
 if __name__ == '__main__':
     main()
+    extra()
