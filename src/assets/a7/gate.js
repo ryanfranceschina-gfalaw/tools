@@ -1,0 +1,1 @@
+(function(){try{if(localStorage.getItem('gfa_a7'))return}catch(e){}document.documentElement.style.display='none';location.replace((document.currentScript?document.currentScript.src.replace(/assets\/a7\/gate\.js.*$/,''):'/'));})();
