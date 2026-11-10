@@ -13,6 +13,7 @@ function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)|
 function wd(day){return ((4+day)%7+7)%7}            /* day 0 = Thursday, Nov 5, 2026 */
 function game(day){return SCHED[wd(day)]}
 function idx(day){var g=game(day),n=0;for(var d=0;d<day;d++)if(game(d)===g)n++;return n}
+function how(short,long){return '<p class="dg-how">'+short+' <button type="button" class="dg-rules" aria-expanded="false" onclick="var n=this.parentNode.nextElementSibling;n.hidden=!n.hidden;this.setAttribute(\'aria-expanded\',String(!n.hidden))">How to play</button></p><p class="dg-long" hidden>'+long+'</p>'}
 function quills(spent,max){var h='';for(var i=0;i<max;i++)h+=QUILL.replace('class="dg-quill"','class="dg-quill'+(i>=max-spent?' spent':'')+'"');return '<span class="dg-ink"><span>Ink left</span><span class="dg-pips">'+h+'</span></span>'}
 function shuffled(a,seed){a=a.slice();for(var i=a.length-1;i>0;i--){seed=(seed*9301+49297)%233280;var j=Math.floor(seed/233280*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 
@@ -34,14 +35,14 @@ function start(){
   var s=rec();if(s.streak&&s.lastWin!==DAY&&s.lastWin!==DAY-1&&s.last!==DAY){s.streak=0;rec(s)}
   fetch('/assets/fun/'+G+'.json').then(function(r){return r.json()}).then(function(bank){
     P=bank[idx(DAY)%bank.length];
-    var head='<div class="dg-head"><p class="eyebrow">Daily Game #'+NUM+'</p><h2 class="dg-title">'+NAMES[G]+'</h2><p class="dg-week">'+week()+'</p></div>';
+    var head='<div class="dg-head"><p class="dg-num">Daily Game #'+NUM+'</p><h2 class="dg-title">'+NAMES[G]+'</h2><p class="dg-week">'+week()+'</p></div>';
     var s=rec();
     if(s.last===DAY&&s.res){box.innerHTML=head+'<div id="dg-play"></div>';done(s.res,true);return}
     box.innerHTML=head+'<div id="dg-play"></div>';
     ({inkwell:inkwell,whosaid:whosaid,timeline:timeline})[G]($('dg-play'));
   }).catch(function(){box.innerHTML='<p>The daily game could not load right now. Please try again later.</p>'});
 }
-function week(){var L=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],t=wd(DAY);return L.map(function(l,i){return '<span'+(i===t?' class="on"':'')+' title="'+NAMES[SCHED[i]]+'">'+l+'</span>'}).join('')}
+function week(){var L=['S','M','T','W','T','F','S'],t=wd(DAY);return L.map(function(l,i){return '<span'+(i===t?' class="on"':'')+' title="'+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][i]+': '+NAMES[SCHED[i]]+'">'+l+'</span>'}).join('')}
 
 /* ---------- finishing: streak, share, leaderboard ---------- */
 function finish(won,share,data,summary){
@@ -59,7 +60,7 @@ function done(res,returning){
   var el=$('dg-done');if(!el){el=D.createElement('div');el.id='dg-done';$('dg-play').appendChild(el)}
   el.innerHTML=(returning?'<div class="fb '+(res.won?'ok':'no')+'"><b>You already played today.</b> '+esc(res.sum||'')+'</div>':'')+stats()+
     '<div class="btns" style="margin-top:0"><button class="btn sm" type="button" id="dg-sh">Share your result</button></div>'+
-    '<p class="sm" style="margin-top:14px">Come back tomorrow for '+NAMES[game(DAY+1)]+'. A new game unlocks at midnight Central time.</p><div class="lb" id="dg-lb"></div>';
+    '<p class="sm" style="margin-top:14px">Tomorrow&rsquo;s game: <b>'+NAMES[game(DAY+1)]+'</b> unlocks at midnight Central time.</p><div class="lb" id="dg-lb"></div>';
   var sh=$('dg-sh');sh.onclick=function(){var t=res.share+'\ngfalaw.us/daily-game';if(navigator.share)navigator.share({text:t}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){sh.textContent='Copied'},function(){})};
   board();
 }
@@ -84,7 +85,7 @@ function post(refresh){
 function inkwell(el){
   var MAX=6,rows=[],cur='',over=false,keys={},DICT=null,CL=['miss','near','hit'],ans=P.w;
   fetch('/assets/fun/words5.txt').then(function(r){return r.text()}).then(function(t){DICT={};for(var i=0;i<t.length;i+=5)DICT[t.substr(i,5)]=1;DICT[ans]=1}).catch(function(){});
-  el.innerHTML='<p class="dg-how">Guess the five-letter word from America&rsquo;s founding documents. Green is the right letter in the right spot; gold is in the word but somewhere else. Each guess uses a quill of ink.</p><div class="dg-bar" id="iw-ink"></div><div class="iw-rows" id="iw-rows"></div><p class="dg-msg" id="iw-msg" aria-live="polite"></p><div class="iw-kb" id="iw-kb"></div>';
+  el.innerHTML=how('Guess the founding word in six tries.','Every answer is a five-letter word from the Declaration of Independence, the Constitution or the Bill of Rights. Type a word and press Enter. Green means the right letter in the right spot; gold means the letter is in the word but somewhere else. Each guess uses one of six quills of ink.')+'<div class="dg-bar" id="iw-ink"></div><div class="iw-wrap"><div class="iw-left"><div class="iw-rows" id="iw-rows"></div><p class="dg-msg" id="iw-msg" aria-live="polite"></p></div><div class="iw-kb" id="iw-kb"></div></div>';
   function score(g){var r=[0,0,0,0,0],left={},i;for(i=0;i<5;i++){if(g[i]===ans[i])r[i]=2;else left[ans[i]]=(left[ans[i]]||0)+1}for(i=0;i<5;i++)if(!r[i]&&left[g[i]]){r[i]=1;left[g[i]]--}return r}
   function drawRows(flip){var h='';for(var r=0;r<MAX;r++){var g=rows[r],c2='';for(var c=0;c<5;c++){var ch='',cls='iw-c';
       if(g){ch=g.w[c];cls+=' '+CL[g.s[c]]+(flip&&r===rows.length-1?' flip':'')}else if(r===rows.length&&!over){ch=cur[c]||'';if(ch)cls+=' full'}
@@ -114,7 +115,7 @@ function inkwell(el){
 function whosaid(el){
   var ink=3,doneQ={},log=[],m=[],selQ=null,selF=null,over=false;
   var oq=shuffled([0,1,2,3],DAY*7+3),of=shuffled([0,1,2,3],DAY*13+5);
-  el.innerHTML='<p class="dg-how">Four real quotations, four founders. Tap a quote, then the founder who wrote it. A wrong match spills a quill of ink; you have three.</p><div class="dg-bar" id="ws-ink"></div>'+
+  el.innerHTML=how('Match each quote to the founder who wrote it.','Tap a quotation, then tap the founder you think wrote it. Every quote is checked against the founder&rsquo;s own papers. A wrong match spills one of three quills of ink.')+'<div class="dg-bar" id="ws-ink"></div>'+
     '<div class="ws-qs">'+oq.map(function(i){var q=P.q[i],f=P.f.filter(function(x){return x[0]===q.a})[0];return '<button type="button" class="ws-q" data-i="'+i+'"><span class="ws-mark" aria-hidden="true">&ldquo;</span><span class="ws-t">'+esc(q.t)+'</span><span class="ws-who">'+f[2]+'</span><span class="ws-src">'+esc(q.s)+'</span></button>'}).join('')+'</div>'+
     '<div class="ws-fs">'+of.map(function(i){var f=P.f[i];return '<button type="button" class="ws-f" data-k="'+f[0]+'"><img src="/assets/img/founders/faces/'+f[1]+'.jpg" alt="" width="64" height="64" loading="lazy"><b>'+f[2]+'</b><small>'+f[3]+'</small></button>'}).join('')+'</div><p class="dg-msg" id="ws-msg" aria-live="polite"></p>';
   function inkd(){$('ws-ink').innerHTML=quills(3-ink,3)}inkd();
@@ -134,7 +135,7 @@ function whosaid(el){
 /* ---------- Timeline ---------- */
 function timeline(el){
   var MAX=4,ord=P.s.slice(),lock=[0,0,0,0,0],rows=[],tries=[],over=false,drag=null,LBL=['1st','2nd','3rd','4th','5th'];
-  el.innerHTML='<p class="dg-how">'+esc(P.n)+': put these five events in the order they happened, earliest on the left. Drag a card and the others slide over. Lock it in to check; correct cards turn green and stay. Each wrong try spills a quill of ink.</p><div class="dg-bar" id="tl-ink"></div>'+
+  el.innerHTML=how(esc(P.n)+': put the five events in order, earliest first.','Drag a card along the timeline and the others slide over to make room, or use the arrows. Press Lock it in to check: cards in the right spot turn green and stay put. Each wrong try spills one of four quills of ink.')+'<div class="dg-bar" id="tl-ink"></div>'+
     '<div class="tl-ends" aria-hidden="true"><span>&larr; Earliest</span><span>Latest &rarr;</span></div><div class="tl-scroll" id="tl-sc"><div class="tl-track" id="tl-tr"></div></div><p class="tl-hint">Swipe the timeline sideways to see all five.</p>'+
     '<div class="btns" style="justify-content:center"><button class="btn" type="button" id="tl-go">Lock it in</button></div><p class="dg-msg" id="tl-msg" aria-live="polite"></p>';
   function free(i){return !over&&!lock[i]}

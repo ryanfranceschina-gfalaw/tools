@@ -703,3 +703,73 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 @media(max-width:759px){.tl-hint{display:block}}
 @media(prefers-reduced-motion:reduce){.dg *{animation:none!important;transition:none!important}}
 @media(min-width:1201px) and (max-width:1340px){.nav>ul>li>a,.nav>ul>li>button{padding:10px 7px;font-size:14px}.btn.hdr-cta{padding-left:16px;padding-right:16px;font-size:14px}}
+
+/* daily game layout v2: game first, sized to the screen */
+.dg-sec{padding-top:clamp(14px,2.5vw,28px)}
+.dg-h1{font:600 12px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);text-align:center;margin:0 0 12px}
+.game.dg{padding:clamp(14px,2.4vw,26px) clamp(10px,2.4vw,28px)}
+.dg-about{max-width:640px;margin:22px auto 0;color:var(--dim)}
+.dg-about p{margin:0 0 10px}
+.dg-num{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.dg-title{font-size:clamp(44px,7vw,60px);margin:0 0 4px}
+.dg-week{gap:3px}
+.dg-week span{width:24px;height:24px;padding:0;display:grid;place-items:center;font-size:11px;letter-spacing:0}
+.dg-how{margin:8px auto 6px;font-size:14.5px}
+.dg-rules{background:none;border:0;padding:0;margin-left:4px;color:var(--gold2);font:600 13.5px var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.dg-long{max-width:56ch;margin:0 auto 10px;text-align:center;font-size:14px;color:var(--dim);background:rgba(14,29,17,.5);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.dg-bar{margin:0 0 10px}
+.iw-rows{width:min(100%,330px,max(210px,calc((100dvh - 470px)*.83)));gap:5px}
+.iw-row{gap:5px}
+.iw-c{font-size:clamp(22px,4.5vh,32px)}
+.dg-msg{margin:8px 0;min-height:22px}
+@media(max-height:820px){.iw-k{height:46px}}
+@media(max-width:600px){.iw-kr{gap:4px}.iw-k{font-size:14px}.iw-kb{gap:5px}}
+.tl-slot>.tl-ev{flex:1}
+/* inkwell: board beside keyboard on wide screens, stacked and screen-fitted on phones */
+.iw-wrap{display:flex;flex-direction:column;gap:4px}
+@media(min-width:900px){
+ .iw-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center}
+ .iw-left .iw-rows{width:min(330px,max(220px,calc((100dvh - 380px)*.83)))}
+ .iw-kb{max-width:440px;width:100%}
+}
+@media(max-width:899px){
+ .dg-h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .dg-sec{padding-top:12px}
+ .dg-title{font-size:42px}
+ .dg-how{font-size:13.5px;margin:6px auto 4px}
+ .dg-bar{margin:0 0 8px}
+ .iw-left .iw-rows{width:min(100%,330px,max(200px,calc((100dvh - var(--iwx,500px))*.83)))}
+ .iw-k{height:clamp(40px,6.2dvh,54px)}
+}
+@media(max-width:899px){
+ body:has(#dg) .callbar{display:none}
+ .game.dg{padding-top:8px;padding-bottom:10px}
+ .dg-num,.dg-week{display:none}
+ .dg-title{font-size:38px;margin:0}
+ .dg-how{margin:2px auto 2px}
+ .dg-bar{margin:0 0 6px}
+ .iw-left .iw-rows{width:min(100%,330px,max(150px,calc((100dvh - 382px)*.83)))}
+ .iw-wrap .dg-msg{margin:4px 0;min-height:20px}
+}
+.dg-h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.iw-kb{width:100%}
+@media(min-width:900px){.iw-wrap{grid-template-columns:auto minmax(320px,440px);justify-content:center;gap:36px}}
+/* who said it on phones: founders stay pinned at the bottom of the screen */
+@media(max-width:899px){
+ .ws-qs{gap:8px}
+ .ws-q{padding:10px 12px 10px 34px}
+ .ws-mark{left:10px;top:4px;font-size:34px}
+ .ws-t{font-size:16px;line-height:1.4}
+ .ws-fs{position:sticky;bottom:0;z-index:5;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px -6px 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(23,48,29,.92),#17301d 30%);border-top:1px solid var(--line);border-radius:12px 12px 0 0}
+ .ws-f{padding:6px 2px;gap:4px;background:rgba(14,29,17,.6)}
+ .ws-f img{width:44px;height:44px;border-width:2px}
+ .ws-f b{font-size:11.5px}
+ .ws-f small{display:none}
+}
+@media(max-width:759px){
+ .tl-track{grid-template-columns:repeat(5,122px);gap:8px}
+ .tl-ev{min-height:128px;padding:10px 8px 8px;gap:8px}
+ .tl-ev .tl-t{font-size:14.5px;line-height:1.3}
+ .tl-mv button{height:26px;font-size:13px}
+ .tl-ends{margin-bottom:4px}
+}
