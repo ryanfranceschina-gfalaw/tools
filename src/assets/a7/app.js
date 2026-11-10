@@ -208,9 +208,19 @@
     $('b-form').hidden = m !== 'open';
   }
   // same data, two presentations: the post-and-reply board on desktop, the group chat on phones
-  var MQ = window.matchMedia('(min-width: 900px)'), BOARD = MQ.matches;
-  function onMQ() { var b = MQ.matches; if (b === BOARD) return; BOARD = b; screen(); render(true); if (!BOARD) toBottom(); }
-  if (MQ.addEventListener) MQ.addEventListener('change', onMQ); else MQ.addListener(onMQ);
+  // Computers (mouse or trackpad) get the board, phones and tablets get the chat, whatever the window size.
+  // A member can override it from the menu; the choice is remembered on that device.
+  var MQD = window.matchMedia('(hover: hover) and (pointer: fine)'), MQW = window.matchMedia('(min-width: 600px)');
+  function wantBoard() { var v = sget('gfa_a7_view'); if (v === 'board') return true; if (v === 'chat') return false; return MQD.matches && MQW.matches; }
+  var BOARD = wantBoard();
+  function onMQ() { var b = wantBoard(); if (b === BOARD) return; BOARD = b; screen(); render(true); if (!BOARD) toBottom(); viewLabel(); }
+  [MQD, MQW].forEach(function (q) { if (q.addEventListener) q.addEventListener('change', onMQ); else q.addListener(onMQ); });
+  function viewLabel() { var b = $('c-view'); if (b) b.textContent = BOARD ? 'Switch to chat view' : 'Switch to board view'; }
+  $('c-view').addEventListener('click', function (e) {
+    e.stopPropagation(); menuOpen(false);
+    sset('gfa_a7_view', BOARD ? 'chat' : 'board'); onMQ(); window.scrollTo(0, 0);
+  });
+  viewLabel();
   function errEl() { return BOARD ? $('b-err') : $('c-err'); }
   function screen() {
     var inChat = !!ME && ME.hasPw && ME.rules === RULES;
