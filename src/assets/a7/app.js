@@ -406,7 +406,29 @@
     row.appendChild(col);
     if (!m.pend) {
       b.tabIndex = 0;
-      b.addEventListener('click', function (e) { e.stopPropagation(); toggleActs(row, m, mine); });
+      // press and hold (phones) opens the reaction picker; a tap or click works too
+      var lp = 0, held = false, sx = 0, sy = 0;
+      var stopHold = function () { clearTimeout(lp); b.classList.remove('press'); };
+      b.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'mouse') return;
+        held = false; sx = e.clientX; sy = e.clientY; b.classList.add('press');
+        lp = setTimeout(function () {
+          held = true; b.classList.remove('press');
+          try { if (navigator.vibrate) navigator.vibrate(12); } catch (z) {}
+          if (!(openActs && openActs.row === row)) toggleActs(row, m, mine);
+          // swallow the click the finger lift makes, wherever it lands, so the menu stays open
+          var swallow = function (ev) { ev.stopPropagation(); ev.preventDefault(); window.removeEventListener('click', swallow, true); };
+          window.addEventListener('click', swallow, true);
+          setTimeout(function () { window.removeEventListener('click', swallow, true); }, 1000);
+        }, 420);
+      });
+      b.addEventListener('pointermove', function (e) { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) stopHold(); });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (t) { b.addEventListener(t, stopHold); });
+      b.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleActs(row, m, mine);
+      });
       b.addEventListener('keydown', function (e) { if (e.key === 'Enter') toggleActs(row, m, mine); });
     }
     return row;
@@ -421,6 +443,13 @@
       b.addEventListener('click', function (ev) { ev.stopPropagation(); closeActs(); react(m, e); });
       bar.appendChild(b);
     });
+    var cpb = el('button', 'gc-act', 'Copy'); cpb.type = 'button';
+    cpb.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var done = function () { cpb.textContent = 'Copied'; setTimeout(closeActs, 700); };
+      try { navigator.clipboard.writeText(m.x).then(done, done); } catch (z) { done(); }
+    });
+    bar.appendChild(cpb);
     var rp = el('button', 'gc-act', 'Reply'); rp.type = 'button';
     rp.addEventListener('click', function (ev) { ev.stopPropagation(); closeActs(); startReply(m); });
     bar.appendChild(rp);

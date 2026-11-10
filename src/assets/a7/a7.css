@@ -173,3 +173,7 @@ html.gc-kb .gc-compose{padding-bottom:8px}
 .gb-pick{display:flex;flex-wrap:wrap;gap:2px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:4px;margin-top:8px;width:max-content;max-width:100%;box-shadow:var(--shadow-sm)}
 .gb-list .gc-empty{padding:40px 10px}
 .gb-list>.gb-post:last-child{border-bottom:0}
+/* press and hold on phones */
+.gc-bub{transition:transform .15s ease}
+.gc-bub.press{transform:scale(.96)}
+@media (pointer:coarse){.gc-bub{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
