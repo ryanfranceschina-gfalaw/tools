@@ -24,6 +24,13 @@ import time
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
+from concurrent.futures import ThreadPoolExecutor
+
+T0 = time.time()
+
+
+def log(*a):
+    print(f'[{time.time() - T0:6.0f}s]', *a, flush=True)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'src', 'data', 'gun-bills.json')
@@ -65,10 +72,13 @@ def get(url, binary=False, tries=3, timeout=60):
     raise last
 
 
+OLD = {}
+
+
 def head_ok(url):
     try:
         req = urllib.request.Request(url, headers=UA, method='HEAD')
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=15) as r:
             return r.status == 200 and 'pdf' in (r.headers.get('Content-Type') or 'pdf').lower()
     except Exception:  # noqa: BLE001
         return False
@@ -105,6 +115,7 @@ def tx_status(action, session_open):
 
 def texas(cur, force):
     out = []
+    prev_all = OLD
     jobs = [(s_, n_, ('housefiled', 'senatefiled'), False) for s_, n_ in TX_SESSIONS] + \
            [(s_, n_, ('signedbygov', 'filedwogovsign'), True) for s_, n_ in TX_ENACTED]
     seen = set()
@@ -115,8 +126,7 @@ def texas(cur, force):
             try:
                 page = get(f'https://capitol.texas.gov/Reports/Report.aspx?LegSess={sess}&ID={rid}', timeout=120)
             except Exception as e:  # noqa: BLE001
-                print('TX report failed', sess, rid, e)
-                continue
+                raise RuntimeError(f'TX report failed {sess} {rid}: {e}')
             for m in re.finditer(r'Bill=([A-Z]+)(\d+)">.*?Author</b>:\s*</div>\s*<div[^>]*>(.*?)</div>.*?'
                                  r'Last Action:</b></div>\s*<div[^>]*>(.*?)</div>.*?Caption</b>:\s*</div>\s*<div[^>]*>(.*?)</div>',
                                  page, re.S):
@@ -131,12 +141,10 @@ def texas(cur, force):
                 if enacted:
                     status, cat = ('Signed into law' if rid == 'signedbygov' else 'Became law without signature'), 'passed'
                 hist = f'https://capitol.texas.gov/BillLookup/History.aspx?LegSess={sess}&Bill={typ}{num}'
-                pdf = None
                 base = f'https://capitol.texas.gov/tlodocs/{sess}/billtext/pdf/{TX_PFX.get(typ, typ)}{num:05d}'
-                for ver in ('F', 'S', 'E', 'H', 'I'):
-                    if head_ok(base + ver + '.pdf'):
-                        pdf = (base + ver + '.pdf', ver)
-                        break
+                pv = prev_all.get(bid, {})
+                reuse = pv.get('textSource') and pv.get('lastAction') == re.sub(r'^\d{1,2}/\d{1,2}/\d{4}\s*', '', action)
+                pdf = (pv['textSource'], pv.get('textVersion', '')) if reuse else ('?' + base, '')
                 out.append({
                     'id': bid, 'juris': 'TX', 'jurisName': 'Texas', 'session': sess_name, 'legSession': sess,
                     'number': f'{typ} {num}', 'title': caption, 'sponsor': author,
@@ -146,6 +154,19 @@ def texas(cur, force):
                     'official': hist, 'textSource': pdf[0] if pdf else '', 'textVersion': pdf[1] if pdf else '',
                 })
             time.sleep(1)
+        log('TX', sess, 'done', len(out))
+
+    def probe(b):
+        if b['textSource'].startswith('?'):
+            base = b['textSource'][1:]
+            b['textSource'], b['textVersion'] = '', ''
+            for ver in ('F', 'S', 'E', 'H', 'I'):
+                if head_ok(base + ver + '.pdf'):
+                    b['textSource'], b['textVersion'] = base + ver + '.pdf', ver
+                    break
+    with ThreadPoolExecutor(8) as ex:
+        list(ex.map(probe, out))
+    log('TX probed', len(out))
     return out
 
 
@@ -162,8 +183,11 @@ def federal(cur, force):
             try:
                 z = zipfile.ZipFile(io.BytesIO(get(f'https://www.govinfo.gov/bulkdata/BILLSTATUS/{cong}/{typ}/BILLSTATUS-{cong}-{typ}.zip', True, timeout=300)))
             except Exception as e:  # noqa: BLE001
+                if typ in ('hr', 's'):
+                    raise RuntimeError(f'US zip failed {cong} {typ}: {e}')
                 print('US zip failed', cong, typ, e)
                 continue
+            log('US zip', cong, typ)
             for name in z.namelist():
                 if not name.endswith('.xml'):
                     continue
@@ -203,7 +227,7 @@ def federal(cur, force):
                 for t in tv:
                     u = x(t, 'formats/item/url')
                     if u:
-                        pdf = re.sub(r'/xml/(BILLS-[^/]+)\.xml$', r'/pdf/\1.pdf', u)
+                        pdf = re.sub(r'/(?:xml|uslm)/((?:BILLS|PLAW)-[^/]+)\.xml$', r'/pdf/\1.pdf', u)
                         ver = re.search(r'BILLS-\d+[a-z]+\d+([a-z]+)', u).group(1) if re.search(r'BILLS-\d+[a-z]+\d+([a-z]+)', u) else ''
                         break
                 spon = b.find('sponsors/item')
@@ -228,6 +252,8 @@ def maryland(cur, force):
         try:
             data = json.loads(get(f'https://mgaleg.maryland.gov/{sess}/misc/billsmasterlist/legislation.json', timeout=180))
         except Exception as e:  # noqa: BLE001
+            if sess == MD_SESSIONS[0]:
+                raise RuntimeError(f'MD feed failed {sess}: {e}')
             print('MD feed not available', sess, e)
             continue
         year = int(sess[:4])
@@ -256,11 +282,11 @@ def maryland(cur, force):
                 status, cat = st or 'Introduced', 'proposed'
             kind = re.match(r'[A-Z]+', bn).group(0).lower()
             folder = {'hb': 'hb', 'sb': 'sb', 'hj': 'hj', 'sj': 'sj'}.get(kind, kind)
-            pdf, ver = '', ''
-            for v in [(b.get('BillVersion') or '').lower(), 't', 'e', 'f']:
-                if v and head_ok(f'https://mgaleg.maryland.gov/{sess}/bills/{folder}/{bn.lower()}{v}.pdf'):
-                    pdf, ver = f'https://mgaleg.maryland.gov/{sess}/bills/{folder}/{bn.lower()}{v}.pdf', v
-                    break
+            pv = OLD.get(bid, {})
+            if pv.get('textSource') and pv.get('lastAction') == st and pv.get('status') == status:
+                pdf, ver = pv['textSource'], pv.get('textVersion', '')
+            else:
+                pdf, ver = '?' + '|'.join(f'https://mgaleg.maryland.gov/{sess}/bills/{folder}/{bn.lower()}{v}.pdf' for v in dict.fromkeys([(b.get('BillVersion') or '').lower(), 't', 'e', 'f']) if v), ''
             dates = [b.get(k) or '' for k in ('ThirdReadingDateOppositeHouse', 'ThirdReadingDateHouseOfOrigin',
                                              'SecondReadingDateHouseOfOrigin', 'ReportDateHouseOfOrigin',
                                              'FirstReadingDateHouseOfOrigin')]
@@ -276,6 +302,19 @@ def maryland(cur, force):
                 'official': f'https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/{bn.lower()}?ys={sess}',
                 'textSource': pdf, 'textVersion': ver,
             })
+        log('MD', sess, len(out))
+
+    def probe(b):
+        if b['textSource'].startswith('?'):
+            urls = b['textSource'][1:].split('|')
+            b['textSource'], b['textVersion'] = '', ''
+            for u in urls:
+                if head_ok(u):
+                    b['textSource'], b['textVersion'] = u, re.search(r'([a-z])\.pdf$', u).group(1)
+                    break
+    with ThreadPoolExecutor(8) as ex:
+        list(ex.map(probe, out))
+    log('MD probed', len(out))
     return out
 
 
@@ -290,6 +329,7 @@ def main():
     old = {}
     if os.path.exists(DATA):
         old = {b['id']: b for b in json.load(open(DATA)).get('bills', [])}
+    OLD.update(old)
 
     bills, ok = [], {}
     for name, fn in (('TX', texas), ('US', federal), ('MD', maryland)):
@@ -300,33 +340,41 @@ def main():
             print('Source failed', name, e)
             got, ok[name] = [b for b in old.values() if b['juris'] == name], False
         bills.extend(got)
-        print(name, len(got))
+        log(name, len(got))
 
     keep_files = set()
+
+    def fetch(b):
+        prev = old.get(b['id'], {})
+        src = b.get('textSource')
+        if not src:
+            return
+        fname = f"{b['id']}-{b.get('textVersion') or 'x'}.pdf"
+        path = os.path.join(PDFDIR, fname)
+        if not os.path.exists(path) and not (prev.get('textExternal') == src):
+            try:
+                data = get(src, binary=True, timeout=120)
+                if data[:4] == b'%PDF' and len(data) > MAX_PDF:
+                    b['textExternal'] = src
+                elif data[:4] == b'%PDF':
+                    open(path, 'wb').write(data)
+            except Exception as e:  # noqa: BLE001
+                print('PDF failed', b['id'], e)
+        if prev.get('textExternal') == src:
+            b['textExternal'] = src
+        if os.path.exists(path):
+            b['text'] = '/assets/bills/' + fname
+            keep_files.add(fname)
+        elif prev.get('text'):
+            b['text'] = prev['text']
+            keep_files.add(os.path.basename(prev['text']))
+
     for b in bills:
         b['lean'] = cur['lean'].get(b['id'], '')
-        prev = old.get(b['id'], {})
-        b['firstSeen'] = prev.get('firstSeen') or dt.date.today().isoformat()
-        src = b.get('textSource')
-        if src:
-            fname = f"{b['id']}-{b.get('textVersion') or 'x'}.pdf"
-            path = os.path.join(PDFDIR, fname)
-            if not os.path.exists(path):
-                try:
-                    data = get(src, binary=True, timeout=120)
-                    if data[:4] == b'%PDF' and len(data) > MAX_PDF:
-                        b['textExternal'] = src
-                    elif data[:4] == b'%PDF':
-                        open(path, 'wb').write(data)
-                        time.sleep(0.3)
-                except Exception as e:  # noqa: BLE001
-                    print('PDF failed', b['id'], e)
-            if os.path.exists(path):
-                b['text'] = '/assets/bills/' + fname
-                keep_files.add(fname)
-            elif prev.get('text'):
-                b['text'] = prev['text']
-                keep_files.add(os.path.basename(prev['text']))
+        b['firstSeen'] = old.get(b['id'], {}).get('firstSeen') or dt.date.today().isoformat()
+    with ThreadPoolExecutor(6) as ex:
+        list(ex.map(fetch, bills))
+    log('PDFs done', len(keep_files))
     for f in os.listdir(PDFDIR):
         if f.endswith('.pdf') and f not in keep_files:
             os.remove(os.path.join(PDFDIR, f))
