@@ -601,3 +601,13 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 .lawpanel summary{cursor:pointer;font:700 17px var(--sans);color:var(--text)}.lawpanel summary .eyebrow{display:inline;margin-right:8px}
 .lawlist{list-style:none;margin:12px 0 6px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:8px 22px}
 .lawlist li{padding:8px 0;border-top:1px solid var(--line)}.lawlist b{color:var(--gold2)}.lawlist span{display:block;font-size:14px;color:var(--muted)}
+
+/* Pocket Constitution: founding-era lettering */
+.chead{font-family:'Pinyon Script','Playfair Display',cursive;font-weight:400;font-size:clamp(46px,6.4vw,82px);line-height:1.1;letter-spacing:0}
+.cblock h2{font-family:'Pinyon Script','Playfair Display',cursive;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:0}
+.ctext{font-family:'IM Fell English',Georgia,'Times New Roman',serif;font-size:19px;line-height:1.75}
+
+.lb{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}.lb h3{font-size:22px;margin:0 0 12px}
+.lbg{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:560px){.lbg{grid-template-columns:1fr}}
+.lbl{margin:0;padding-left:22px}.lbl li{padding:5px 0;border-bottom:1px solid var(--line);font-size:15px}.lbl li span{overflow-wrap:anywhere}.lbl li b{float:right;color:var(--gold2);margin-left:10px}
+.lbf label{display:block;font-weight:600;margin:12px 0 6px}.lbf div{display:flex;gap:8px;flex-wrap:wrap}.lbf input{flex:1;min-width:180px;padding:10px 12px;border-radius:9px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--text);font:15px var(--sans)}

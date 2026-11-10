@@ -183,13 +183,13 @@ FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, 
         "telephone": "+1-254-405-1726", "email": "intake@gfalaw.us",
         "image": SITE + "/assets/img/og-gfa-law.jpg", "logo": SITE + "/assets/img/seal-300.png",
         "address": ADDR, "geo": {"@type": "GeoCoordinates", "latitude": 31.0982, "longitude": -97.3080},
-        "areaServed": [{"@type": "State", "name": "Texas"}, {"@type": "State", "name": "Maryland"},
+        "areaServed": [{"@type": "State", "name": "Texas"},
                        {"@type": "City", "name": "Temple, Texas"}, {"@type": "City", "name": "Belton, Texas"}, {"@type": "City", "name": "Killeen, Texas"},
                        {"@type": "City", "name": "Waco, Texas"}, {"@type": "City", "name": "Austin, Texas"},
                        {"@type": "AdministrativeArea", "name": "Bell County, Texas"}, {"@type": "AdministrativeArea", "name": "Coryell County, Texas"},
                        {"@type": "AdministrativeArea", "name": "McLennan County, Texas"}, {"@type": "AdministrativeArea", "name": "Williamson County, Texas"}],
         "hasMap": "https://www.google.com/maps/search/?api=1&query=4970+E+Business+190+Temple+TX+76501",
-        "contactPoint": [{"@type": "ContactPoint", "telephone": "+1-254-405-1726", "contactType": "customer service", "areaServed": ["US-TX", "US-MD"], "availableLanguage": ["English", "Spanish"]}],
+        "contactPoint": [{"@type": "ContactPoint", "telephone": "+1-254-405-1726", "contactType": "customer service", "areaServed": ["US-TX"], "availableLanguage": ["English", "Spanish"]}],
         "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Legal services", "itemListElement": [
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Section 1983 civil rights lawsuits", "url": SITE + "/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits"}},
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Criminal defense (Innocent Defense)", "url": SITE + "/about-the-firm/practice-areas/innocent-defense"}},
@@ -566,6 +566,9 @@ def const_meta_line(e):
     r = ' &middot; Ratified ' + fmt_date(e['ratified']) if e.get('ratified') else ''
     return '<p class="topic">' + esc(e.get('topic', 'We the People')) + r + '</p>'
 
+LB_URL = ''  # Google Apps Script web app URL for the trivia leaderboard
+CONST_FONT = '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">'
+
 def const_pages(J):
     pages = []
     toc = ''.join('<a href="#%s">%s</a>' % (e['id'], esc(e['short'])) for e in J)
@@ -574,14 +577,14 @@ def const_pages(J):
         blocks += ('<div class="cblock" id="%s"><h2>%s</h2>%s<div class="ctext">%s</div>'
                    '<div class="tools"><a class="btn sm ghost" href="/constitution/%s">Share %s</a></div></div>') % (
                    e['id'], esc(e['title']), const_meta_line(e), const_body(e), e['id'], esc(e['short']))
-    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1>The Constitution of the United States</h1>\n'
+    body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1 class="chead">The Constitution of the United States</h1>\n'
             '<p class="lede">The full text of the Constitution and all 27 amendments, from the National Archives transcription. Every article and amendment has its own page you can share.</p>\n'
             '<div class="btns"><a class="btn" href="#amendment-1">Jump to the Bill of Rights</a><a class="btn ghost" href="/trivia">Test yourself with daily trivia</a></div>\n</div></section>\n'
             '<section class="sec tight"><div class="wrap" style="max-width:860px"><nav class="toc" aria-label="Articles and amendments">' + toc + '</nav>' + blocks +
             '<p class="sm" style="margin-top:30px">Text from the National Archives transcription of the Constitution and amendments, with original spelling and punctuation. Portions of the original text have been changed by later amendments, as noted. This page is general information, not legal advice.</p></div></section>{{band}}')
     pages.append(({'path': '/constitution', 'title': 'The U.S. Constitution, Full Text | Pocket Constitution | GFA LAW, PLLC',
                    'desc': 'Read the full text of the U.S. Constitution and all 27 amendments, including the Bill of Rights, with a shareable page for every article and amendment.',
-                   'short': 'Pocket Constitution', 'schema': 'CollectionPage', 'ogsub': 'Every article and amendment, free to read and share'}, body))
+                   'short': 'Pocket Constitution', 'schema': 'CollectionPage', 'head': CONST_FONT, 'ogsub': 'Every article and amendment, free to read and share'}, body))
     for i, e in enumerate(J):
         prev = J[i - 1] if i else None
         nxt = J[i + 1] if i + 1 < len(J) else None
@@ -593,14 +596,14 @@ def const_pages(J):
         if prev: pn += '<a class="btn ghost sm" href="/constitution/%s">&larr; %s</a>' % (prev['id'], esc(prev['short']))
         if nxt: pn += '<a class="btn ghost sm" href="/constitution/%s">%s &rarr;</a>' % (nxt['id'], esc(nxt['short']))
         pn += '<a class="btn ghost sm" href="/constitution">Full Constitution</a></div>'
-        body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1>' + esc(e['title']) + '</h1>' + const_meta_line(e) + '\n</div></section>\n'
+        body = ('<section class="phero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Pocket Constitution</p><h1 class="chead">' + esc(e['title']) + '</h1>' + const_meta_line(e) + '\n</div></section>\n'
                 '<section class="sec tight"><div class="wrap" style="max-width:860px"><div class="ctext">' + const_body(e) + '</div>' + hist +
                 '<div class="btns"><button class="btn sm" type="button" data-share="' + esc(e['title']) + '">Share</button><a class="btn sm ghost" href="#" data-copy>Copy link</a></div>\n'
                 + pn + slot + '<p class="sm" style="margin-top:30px">Text from the National Archives transcription. This page is general information, not legal advice.</p></div></section>{{band}}')
         kind = 'to' if e['id'].startswith('amendment') else 'of'
         pages.append(({'path': '/constitution/' + e['id'], 'title': e['title'] + ' | Full Text | Pocket Constitution | GFA LAW, PLLC',
                        'desc': '%s %s the U.S. Constitution, full text: "%s"' % (e['title'], kind, snippet),
-                       'short': e['title'], 'ogtitle': e['title'], 'ogsub': e.get('topic', 'We the People of the United States')}, body))
+                       'short': e['title'], 'head': CONST_FONT, 'ogtitle': e['title'], 'ogsub': e.get('topic', 'We the People of the United States')}, body))
     return pages
 
 
@@ -804,6 +807,7 @@ if __name__ == '__main__':
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
         body = body.replace('{{home_news}}', home_news(R))
+        body = body.replace('__LB_URL__', LB_URL)
         if '{{trivia_widget}}' in body:
             body = body.replace('{{trivia_widget}}', TRIVIA_WIDGET)
         if not meta.get('noindex') and not meta.get('ogimg') and meta['path'] != '/':

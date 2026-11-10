@@ -21,18 +21,31 @@ function start(){
  G=window.GFA||{};
  var T=G.today||{y:new Date().getFullYear(),m:new Date().getMonth()+1,d:new Date().getDate()},day=Math.round((Date.UTC(T.y,T.m-1,T.d)-Date.UTC(2026,10,5))/864e5);
  fetch('/assets/fun/trivia.json').then(function(r){return r.json()}).then(function(Q){
-  var s=st(),n=((day*37)%Q.length+Q.length)%Q.length,num=day+1;
+  var s=st(),n=((day*37)%Q.length+Q.length)%Q.length,num=day+1;G.day=day;
   if(s.streak&&s.lastWin!==day&&s.lastWin!==day-1&&s.last!==day){s.streak=0;st(s)}
   function stats(){s=st();return '<div class="stats"><span class="stat">Streak <b>'+(s.streak||0)+'</b></span><span class="stat">Best <b>'+(s.best||0)+'</b></span><span class="stat">Played <b>'+(s.played||0)+'</b></span><span class="stat">Correct <b>'+(s.wins||0)+'</b></span></div>'}
+  var LB='__LB_URL__';
+  function pid(){try{var x=localStorage.getItem('gfa_pid');if(!x){x=(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)).replace(/[^a-z0-9]/g,'').slice(0,32);localStorage.setItem('gfa_pid',x)}return x}catch(e){return ''}}
+  function pname(v){try{if(v!==undefined)localStorage.setItem('gfa_lbname',v);return localStorage.getItem('gfa_lbname')||''}catch(e){return ''}}
+  function list(a,k){if(!a||!a.length)return'<p class="sm">No one yet. Be the first.</p>';return'<ol class="lbl">'+a.map(function(x){return'<li><span>'+esc(x.n)+'</span><b>'+(+x[k]||0)+'</b></li>'}).join('')+'</ol>'}
+  function show(){var el=document.getElementById('tvlb');if(!el||LB.indexOf('http')!==0)return;
+   fetch(LB).then(function(r){return r.json()}).then(function(d){if(!d.ok)return;var nm=pname();
+    el.innerHTML='<h3>Leaderboard</h3><div class="lbg"><div><p class="eyebrow">Current streaks</p>'+list(d.current,'s')+'</div><div><p class="eyebrow">All-time best</p>'+list(d.allTime,'b')+'</div></div>'+
+     (nm?'<p class="sm">Playing as <b>'+esc(nm)+'</b>. <a href="#" id="lbch">Change name</a></p>':'<form id="lbf" class="lbf"><label for="lbn">Join the leaderboard: pick a display name</label><div><input id="lbn" maxlength="60" required placeholder="Your name or a nickname"><button class="btn sm" type="submit">Join</button></div><p class="sm">Your display name is public. It is stored with your streak in a Google Sheet owned by GFA LAW. See our <a href="/privacy">privacy policy</a>.</p></form>');
+    var f=document.getElementById('lbf');if(f)f.onsubmit=function(e){e.preventDefault();var v=document.getElementById('lbn').value.trim();if(!v)return;pname(v);var s2=st();if(s2.last===G.day)post(s2.pick,true);else show()};
+    var ch=document.getElementById('lbch');if(ch)ch.onclick=function(e){e.preventDefault();pname('');show()}}).catch(function(){})}
+  function post(pick,refresh){var nm=pname();if(!nm||LB.indexOf('http')!==0)return refresh&&show();
+   fetch(LB,{method:'POST',body:JSON.stringify({type:'trivia',id:pid(),name:nm,day:G.day,pick:pick})}).then(function(){show()}).catch(function(){show()})}
+  function board(pick){if(LB.indexOf('http')!==0)return;if(pick!==null&&pname())post(pick,true);else show()}
   function render(q,daily,prior){
    var h=(daily?'<p class="eyebrow">Question #'+num+'</p>':'<p class="eyebrow">Practice question</p>')+(daily?stats():'')+'<p class="q">'+esc(q.q)+'</p><ul class="opts">'+q.choices.map(function(c,i){return'<li><button class="opt" type="button" data-i="'+i+'">'+esc(c)+'</button></li>'}).join('')+'</ul><div id="tvfb"></div>';
    box.innerHTML=h;var bs=box.querySelectorAll('.opt');
    function answer(i,save){bs.forEach(function(b,j){b.disabled=true;if(j===q.a)b.classList.add('ok');else if(j===i)b.classList.add('no')});var ok=i===q.a;
     if(save){s=st();s.last=day;s.pick=i;s.played=(s.played||0)+1;if(ok){s.wins=(s.wins||0)+1;s.streak=(s.lastWin===day-1?(s.streak||0):0)+1;s.lastWin=day;s.best=Math.max(s.best||0,s.streak)}else s.streak=0;st(s);if(window.gtag)gtag('event','trivia_answer',{correct:ok,streak:s.streak||0,best_streak:s.best||0,question_number:num});if(ok&&G.find)G.find('trivia')}
     var share='GFA LAW Constitution Trivia #'+num+': '+(ok?'Correct':'Missed it')+(st().streak?' | Streak '+st().streak:'')+' | gfalaw.us/trivia';
-    document.getElementById('tvfb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'Correct.':'Not quite.')+'</b> '+esc(q.why)+'</div>'+(daily?stats():'')+'<div class="btns" style="margin-top:0">'+(daily?'<button class="btn sm" type="button" id="tvsh">Share your result</button>':'')+'<button class="btn sm ghost" type="button" id="tvpr">Practice question</button></div>'+(daily?'<p class="sm" style="margin-top:16px">Come back tomorrow for question #'+(num+1)+'.</p>':'');
+    document.getElementById('tvfb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'Correct.':'Not quite.')+'</b> '+esc(q.why)+'</div>'+(daily?stats():'')+'<div class="btns" style="margin-top:0">'+(daily?'<button class="btn sm" type="button" id="tvsh">Share your result</button>':'')+'<button class="btn sm ghost" type="button" id="tvpr">Practice question</button></div>'+(daily?'<p class="sm" style="margin-top:16px">Come back tomorrow for question #'+(num+1)+'.</p><div class="lb" id="tvlb"></div>':'');
     var sh=document.getElementById('tvsh');if(sh)sh.onclick=function(){if(navigator.share)navigator.share({text:share}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(share).then(function(){sh.textContent='Copied'})};
-    document.getElementById('tvpr').onclick=function(){var k;do{k=Math.floor(Math.random()*Q.length)}while(k===n&&Q.length>1);render(Q[k],false)}}
+    document.getElementById('tvpr').onclick=function(){var k;do{k=Math.floor(Math.random()*Q.length)}while(k===n&&Q.length>1);render(Q[k],false)};if(daily)board(save?i:null)}
    if(prior!==undefined)answer(prior,false);else bs.forEach(function(b){b.onclick=function(){answer(+b.dataset.i,daily)}});
   }
   render(Q[n],true,s.last===day?s.pick:undefined);
