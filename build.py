@@ -64,12 +64,7 @@ NAV = [
  ('Resources', [('Search the Site', '/search', 'Find any page, guide or tool', 0),
    ('Know Your Rights', '/resources/know-your-rights', 'Plain-English guides to Texas law', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
-   ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0),
-   ('All Free Tools', '/tools', 'Deadlines, records and screening', 0),
-   ('Can the Cop Do That?', '/tools/can-the-cop-do-that', '', 1), ('Deadline Checker', '/tools/deadline-checker', '', 1),
-   ('Case Review Finder', '/tools/case-review-finder', '', 1), ('Records Request Builder', '/tools/records-request-builder', '', 1),
-   ('Firearm Return and Expunction Checker', '/tools/firearm-return-and-expunction-checker', '', 1),
-   ('Know Your Rights Guide', '/tools/know-your-rights-guide', '', 1), ('Restore My Rights', '/tools/restore-my-rights', 'Federal firearm rights restoration', 1)]),
+   ('Pocket Constitution', '/constitution', 'Every article and amendment', 0), ('Daily Trivia', '/trivia', 'One Constitution question a day', 0)]),
  ('Gun Bills', '/resources/gun-bill-tracker'),
  ('Press', '/press-releases'),
  ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
@@ -219,7 +214,7 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <p><a href="tel:+12544051726">254-405-1726</a> (call or <a href="sms:+12544051726">text</a>)<br><a href="mailto:intake@gfalaw.us">intake@gfalaw.us</a><br>Media: <a href="mailto:press@gfalaw.us">press@gfalaw.us</a></p></div>
 <div><p class="fh">Practice</p><ul><li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Civil Rights Lawsuits</a></li><li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li><li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li><li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Rights Restoration</a></li><li><a href="/about-the-firm/practice-areas">All Practice Areas</a></li></ul></div>
 <div><p class="fh">Firm</p><ul><li><a href="/about-the-firm">About the Firm</a></li><li><a href="/about-the-firm/cj-grisham">CJ Grisham</a></li><li><a href="/about-the-firm/ryan-franceschina">Ryan Franceschina</a></li><li><a href="/press-releases">Press Releases</a></li><li><a href="/about-the-firm/david-t-amad-1791-scholarship-application">1791 Scholarship</a></li><li><a href="/merch">Merch</a></li></ul></div>
-<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/tools">Free Tools</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/es">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
+<div><p class="fh">Get Help</p><ul><li><a href="/contact/contact-gfa-law">Request a Case Review</a></li><li><a href="/tools/case-review-finder">Case Review Finder</a></li><li><a href="/payments">Payments</a></li><li><a href="/contact/faq">FAQ</a></li><li><a href="/es">Español</a></li><li><a href="/contact/socials">Socials</a></li><li><a href="/videos">Videos</a></li><li><a href="/complaints">Complaints</a></li></ul></div>
 </div>
 <div class="legal">
 <p>Lawyers responsible for the content of this website are Ryan Franceschina and CJ Grisham. Primary practice location: Temple, Texas. The attorneys of GFA LAW, PLLC are not certified by the Texas Board of Legal Specialization.</p>
@@ -236,7 +231,7 @@ SIDE_PRACTICE = '''<aside class="side">
 <li><a href="/about-the-firm/practice-areas/innocent-defense">Innocent Defense</a></li>
 <li><a href="/about-the-firm/practice-areas/firearm-rights-and-expunction">Firearm Rights and Expunction</a></li>
 <li><a href="/about-the-firm/practice-areas/federal-firearm-rights-restoration">Federal Firearm Rights Restoration</a></li>
-<li><a href="/tools">Free Tools</a></li></ul></div>
+</ul></div>
 </aside>'''
 
 LEGAL_ES = '''<div class="legal" lang="es">
@@ -620,7 +615,7 @@ def fdate(s):
 
 def bill_tab(b):
     if b['juris'] == 'TX':
-        return 'TX' if b.get('legSession', '90R') == '90R' and not b['session'].startswith('89') else 'TX25'
+        return 'TX' if b.get('legSession', '90R') == '90R' and not re.match(r'8\d', b['session']) else 'TX25'
     return b['juris']
 
 def bill_pages():
@@ -657,7 +652,7 @@ def bill_pages():
     stats = {t: [cnt(t), cnt(t, 'pro'), cnt(t, 'anti'), cnt(t, 'neutral')] for t in ('TX', 'TX25', 'US', 'MD')}
     game = [{'n': ('Texas ' if b['juris'] == 'TX' else 'Federal ' if b['juris'] == 'US' else 'Maryland ') + b['number'], 't': b['title'], 'l': b['lean'], 'u': base + '/' + b['id']}
             for b in bills if b['lean'] in ('pro', 'anti') and b['tab'] in ('TX', 'TX25', 'US')]
-    tabs = [('TX', '90th Texas Legislature', 'Bills filed for 2027'), ('TX25', 'New Texas laws', 'Passed in 2025'), ('US', 'Federal', '119th Congress'), ('MD', 'Maryland', 'General Assembly')]
+    tabs = [('TX', '90th Texas Legislature', 'Bills filed for 2027'), ('TX25', 'Recent Texas laws', 'Passed 2021 to 2025'), ('US', 'Federal', '119th Congress'), ('MD', 'Maryland', 'Bills and recent laws')]
     tabhtml = ''.join('<button type="button" role="tab" class="btab%s" data-v="%s" aria-selected="%s"><b>%s</b><small>%s</small><span class="bt-n">%d</span></button>' % (
         ' on' if t == 'TX' else '', t, 'true' if t == 'TX' else 'false', n, s, stats[t][0]) for t, n, s in tabs)
     steps = [('Prefiling', 'Bills for the 90th Legislature could be filed starting November 9, 2026. Every bill filed so far appears on this page.'),
@@ -667,7 +662,7 @@ def bill_pages():
              ('The governor', 'The governor can sign, veto, or let a bill become law without a signature. While the Legislature is in session the governor has 10 days, Sundays excepted; after adjournment, a veto must be filed within 20 days (Tex. Const. art. IV, sec. 14).'),
              ('Effective date', 'A new law ordinarily takes effect 90 days after the session adjourns, unless two-thirds of each house votes for an earlier date (Tex. Const. art. III, sec. 39).')]
     tl = ''.join('<li><span class="tl-n">%d</span><div><h3>%s</h3><p>%s</p></div></li>' % (i + 1, h, t) for i, (h, t) in enumerate(steps))
-    recent = [('2025', 'New Texas gun laws', 'The 89th Legislature passed new laws on handgun licenses, reciprocity with other states, short-barreled firearms, local firearm regulation and more. Read every one in the <a href="#TX25" data-tabjump="TX25">New Texas laws</a> tab.'),
+    recent = [('2025', 'New Texas gun laws', 'The 89th Legislature passed new laws on handgun licenses, reciprocity with other states, short-barreled firearms, local firearm regulation and more. Read every one in the <a href="#TX25" data-tabjump="TX25">Recent Texas laws</a> tab.'),
               ('Jan. 1, 2026', 'The NFA tax drops to $0', 'The federal making and transfer tax is now $0 for suppressors, short-barreled rifles and shotguns, and "any other weapons" (26 U.S.C. 5811, 5821). Machine guns and destructive devices still carry the $200 tax, and NFA registration and approval are still required.'),
               ('2025', '<i>Bondi v. VanDerStok</i>', 'The Supreme Court rejected a facial challenge to the ATF rule treating certain weapon parts kits and partially complete frames or receivers as "firearms" (604 U.S. 458).'),
               ('2025', '<i>Smith &amp; Wesson v. Mexico</i>', 'The Supreme Court held that the Protection of Lawful Commerce in Arms Act bars Mexico\'s lawsuit against American gun manufacturers (605 U.S. 280).'),
@@ -794,10 +789,14 @@ if __name__ == '__main__':
     pages += const_pages(CJ)
     pages.append(vault_page(M))
     pages += bill_pages()
+    _tv = open(os.path.join(SRC, 'pages', 'fun-trivia.html'), encoding='utf-8').read()
+    TRIVIA_WIDGET = '<div class="game" id="tv"><p class="q">Loading today\'s question...</p></div>' + _tv[_tv.index('<script>'):_tv.index('</script>') + 9]
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
         body = body.replace('{{home_news}}', home_news(R))
+        if '{{trivia_widget}}' in body:
+            body = body.replace('{{trivia_widget}}', TRIVIA_WIDGET)
         if not meta.get('noindex') and not meta.get('ogimg') and meta['path'] != '/':
             meta['ogimg'] = make_og(meta)
         write(meta['path'], render(meta, body))
@@ -832,7 +831,6 @@ if __name__ == '__main__':
     for u in urls:
         loc = SITE + ('/' if u == '/' else u + '/')
         sm.append(f'<url><loc>{loc}</loc><lastmod>{today}</lastmod></url>')
-    sm.append(f'<url><loc>{SITE}/know-your-rights-guide.pdf</loc></url>')
     sm.append('</urlset>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
     open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /embeds/\nSitemap: {SITE}/sitemap.xml\n')

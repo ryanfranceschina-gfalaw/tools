@@ -42,10 +42,16 @@ TX_SESSIONS = [('90R', '90th Legislature, Regular Session')]
 TX_START = {'90R': dt.date(2027, 1, 12)}
 # Recently enacted Texas laws (shown as "recent changes"): only bills signed or filed without signature
 TX_ENACTED = [('89R', '89th Legislature, Regular Session (2025)'), ('891', '89th Legislature, 1st Called Session (2025)'),
-              ('892', '89th Legislature, 2nd Called Session (2025)')]
+              ('892', '89th Legislature, 2nd Called Session (2025)'),
+              ('88R', '88th Legislature, Regular Session (2023)'), ('881', '88th Legislature, 1st Called Session (2023)'),
+              ('882', '88th Legislature, 2nd Called Session (2023)'), ('883', '88th Legislature, 3rd Called Session (2023)'),
+              ('884', '88th Legislature, 4th Called Session (2023)'),
+              ('87R', '87th Legislature, Regular Session (2021)'), ('871', '87th Legislature, 1st Called Session (2021)'),
+              ('872', '87th Legislature, 2nd Called Session (2021)'), ('873', '87th Legislature, 3rd Called Session (2021)')]
 MAX_PDF = 4_000_000  # larger official PDFs are linked, not copied
 US_CONGRESSES = [119]
-MD_SESSIONS = ['2026RS', '2027RS']
+MD_SESSIONS = ['2026RS', '2027RS', '2025RS', '2024RS', '2023RS']
+MD_PASSED_ONLY = {'2025RS', '2024RS', '2023RS'}  # earlier sessions: enacted laws only
 
 KW = re.compile(r'firearm|handgun|\bguns?\b|\brifles?\b|shotgun|ammunition|\bweapons?\b|license to carry|'
                 r'concealed carry|suppressor|silencer|second amendment|bump stock|machine ?gun|'
@@ -269,6 +275,8 @@ def maryland(cur, force):
             if not (hit or bid in force):
                 continue
             chap = b.get('ChapterNumber') or ''
+            if sess in MD_PASSED_ONLY and not (chap or b.get('PassedByMGA')):
+                continue
             st = b.get('Status') or ''
             if chap:
                 status, cat = f'Signed into law (Chapter {chap})', 'passed'
