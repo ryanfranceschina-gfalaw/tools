@@ -64,4 +64,8 @@ def main():
     print(f'Merch updated: {len(items)} listings.')
 
 if __name__ == '__main__':
+    try:  # one-time download of the founders' portraits for the daily games
+        sys.path.insert(0, os.path.dirname(__file__)); import fetch_portraits; fetch_portraits.main()
+    except Exception as e:
+        print('Portrait step skipped:', e)
     main()

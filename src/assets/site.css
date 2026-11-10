@@ -611,3 +611,13 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 .lbg{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:560px){.lbg{grid-template-columns:1fr}}
 .lbl{margin:0;padding-left:22px}.lbl li{padding:5px 0;border-bottom:1px solid var(--line);font-size:15px}.lbl li span{overflow-wrap:anywhere}.lbl li b{float:right;color:var(--gold2);margin-left:10px}
 .lbf label{display:block;font-weight:600;margin:12px 0 6px}.lbf div{display:flex;gap:8px;flex-wrap:wrap}.lbf input{flex:1;min-width:180px;padding:10px 12px;border-radius:9px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--text);font:15px var(--sans)}
+
+.playbtn{display:inline-flex;align-items:center;gap:14px;margin:0 0 22px;padding:10px 12px 10px 14px;border-radius:999px;background:linear-gradient(180deg,#e7cd86,#c9a54b);color:#16180f;text-decoration:none;box-shadow:0 6px 22px rgba(201,165,75,.35);max-width:100%;text-align:left;transition:transform .15s,box-shadow .15s}
+.playbtn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,165,75,.45);color:#16180f}
+.playbtn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.playbtn .pb-ic{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#16180f;color:#e7cd86;font-size:16px;flex:none}
+.playbtn b{display:block;font-size:15.5px;line-height:1.2}
+.playbtn small{display:block;font-size:12.5px;opacity:.8;line-height:1.3}
+.playbtn .pb-go{flex:none;font-weight:700;font-size:13.5px;padding:8px 14px;border-radius:999px;background:#16180f;color:#e7cd86}
+@media(prefers-reduced-motion:reduce){.playbtn{transition:none}}
+@media(max-width:420px){.playbtn small{display:none}}
