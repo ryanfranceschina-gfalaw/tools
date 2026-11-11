@@ -65,7 +65,10 @@
     var c = p[1] || 'green';
     return { src: BASE + 'assets/a7/' + (brightSet[c] ? 'avw/' : 'av/') + p[0] + '.svg', bg: colMap[c], n: a.n, icon: 1 };
   }
-  function setAv(img, k) { var v = avInfo(k); img.src = v.src; img.style.backgroundColor = v.bg; img.classList.toggle('ico', !!v.icon); img.alt = ''; }
+  var BLACK = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><rect width="1" height="1" fill="#000"/></svg>');
+  function setAv(img, k) {
+    if (k === '_black') { img.src = BLACK; img.style.backgroundColor = '#000'; img.classList.remove('ico'); img.alt = ''; return; }
+    var v = avInfo(k); img.src = v.src; img.style.backgroundColor = v.bg; img.classList.toggle('ico', !!v.icon); img.alt = ''; }
 
   function picker(host) {
     var state = { pick: '', theme: 'founders', dark: 'green', bright: 'red' };
@@ -383,7 +386,7 @@
     row.dataset.id = m.id;
     if (!mine) {
       var im = document.createElement('img'); im.className = 'gc-av'; im.width = 34; im.height = 34; im.loading = 'lazy';
-      if (!grouped) setAv(im, m.av); else im.style.visibility = 'hidden';
+      if (!grouped) setAv(im, m.bk ? '_black' : m.av); else im.style.visibility = 'hidden';
       row.appendChild(im);
     }
     var col = el('div', 'gc-col');
@@ -500,7 +503,7 @@
       var d = new Date(m.at), day = d.toDateString();
       if (day !== lastDay) { list.appendChild(el('div', 'gc-day', dayLabel(d))); lastDay = day; prev = null; }
       var mine = isMine(m);
-      var grouped = prev && prev.u === m.u && (d - new Date(prev.at)) < 5 * 60 * 1000 && !m.q;
+      var grouped = prev && prev.u === m.u && (d - new Date(prev.at)) < 5 * 60 * 1000 && !m.q && !m.bk && !prev.bk;
       list.appendChild(bubble(m, grouped, mine));
       prev = m;
     });
@@ -584,7 +587,7 @@
   window.addEventListener('hashchange', function () { if (BOARD) { bOpen = ''; render(true); window.scrollTo(0, 0); } });
   function card(m, kids, big) {
     var li = el('article', 'gb-post' + (big ? ' big' : '') + (m.pend ? ' pend' : '')); li.dataset.id = m.id;
-    var im = document.createElement('img'); im.className = 'gb-av'; im.width = 46; im.height = 46; setAv(im, m.av); li.appendChild(im);
+    var im = document.createElement('img'); im.className = 'gb-av'; im.width = 46; im.height = 46; setAv(im, m.bk ? '_black' : m.av); li.appendChild(im);
     var bd = el('div', 'gb-body');
     var hd = el('div', 'gb-head'), nm = el('b', null, m.u); hd.appendChild(nm); if (m.v) hd.appendChild(badge());
     var t = el('time', null, m.pend ? 'posting...' : ago(m.at)); t.setAttribute('datetime', m.at); t.title = new Date(m.at).toLocaleString(); hd.appendChild(t);
