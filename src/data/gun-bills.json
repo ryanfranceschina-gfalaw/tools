@@ -1,15 +1,12 @@
 {
- "updated": "2026-11-13T23:22Z",
+ "updated": "2026-11-14T15:57Z",
  "sourcesOk": {
   "TX": true,
   "US": true,
   "MD": true
  },
  "count": 318,
- "unsorted": [
-  "tx-90r-hb1140",
-  "tx-90r-hb1159"
- ],
+ "unsorted": [],
  "bills": [
   {
    "id": "tx-90r-hb1140",
@@ -28,7 +25,7 @@
    "official": "https://capitol.texas.gov/BillLookup/History.aspx?LegSess=90R&Bill=HB1140",
    "textSource": "https://capitol.texas.gov/tlodocs/90R/billtext/pdf/HB01140I.pdf",
    "textVersion": "I",
-   "lean": "",
+   "lean": "neutral",
    "firstSeen": "2026-11-13",
    "text": "/assets/bills/tx-90r-hb1140-I.pdf"
   },
@@ -49,7 +46,7 @@
    "official": "https://capitol.texas.gov/BillLookup/History.aspx?LegSess=90R&Bill=HB1159",
    "textSource": "https://capitol.texas.gov/tlodocs/90R/billtext/pdf/HB01159I.pdf",
    "textVersion": "I",
-   "lean": "",
+   "lean": "anti",
    "firstSeen": "2026-11-13",
    "text": "/assets/bills/tx-90r-hb1159-I.pdf"
   },
