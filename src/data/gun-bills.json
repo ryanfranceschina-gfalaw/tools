@@ -1,13 +1,36 @@
 {
- "updated": "2026-11-18T18:14Z",
+ "updated": "2026-11-19T18:27Z",
  "sourcesOk": {
   "TX": true,
   "US": true,
   "MD": true
  },
- "count": 318,
- "unsorted": [],
+ "count": 319,
+ "unsorted": [
+  "tx-90r-hb1228"
+ ],
  "bills": [
+  {
+   "id": "tx-90r-hb1228",
+   "juris": "TX",
+   "jurisName": "Texas",
+   "session": "90th Legislature, Regular Session",
+   "legSession": "90R",
+   "number": "HB 1228",
+   "title": "Relating to increasing the criminal penalty for the offense of making a firearm accessible to a child.",
+   "sponsor": "Herbert",
+   "status": "Prefiled",
+   "category": "proposed",
+   "lastAction": "H Filed",
+   "lastActionDate": "2026-11-18",
+   "filed": "2026-11-18",
+   "official": "https://capitol.texas.gov/BillLookup/History.aspx?LegSess=90R&Bill=HB1228",
+   "textSource": "https://capitol.texas.gov/tlodocs/90R/billtext/pdf/HB01228I.pdf",
+   "textVersion": "I",
+   "lean": "",
+   "firstSeen": "2026-11-19",
+   "text": "/assets/bills/tx-90r-hb1228-I.pdf"
+  },
   {
    "id": "tx-90r-hb1140",
    "juris": "TX",
@@ -3091,26 +3114,6 @@
    "text": "/assets/bills/us-119-hr1-x.pdf"
   },
   {
-   "id": "us-119-hr4261",
-   "juris": "US",
-   "jurisName": "Federal",
-   "session": "119th Congress",
-   "number": "H.R. 4261",
-   "title": "Stopping the Fraudulent Sales of Firearms Act",
-   "sponsor": "Rep. Scanlon, Mary Gay [D-PA-5]",
-   "status": "Introduced",
-   "category": "proposed",
-   "lastAction": "Referred to the House Committee on the Judiciary.",
-   "lastActionDate": "2025-06-30",
-   "filed": "2025-06-30",
-   "official": "https://www.congress.gov/bill/119th-congress/house-bill/4261",
-   "textSource": "https://www.govinfo.gov/content/pkg/BILLS-119hr4261ih/pdf/BILLS-119hr4261ih.pdf",
-   "textVersion": "ih",
-   "lean": "anti",
-   "firstSeen": "2026-11-10",
-   "text": "/assets/bills/us-119-hr4261-ih.pdf"
-  },
-  {
    "id": "us-119-hr4270",
    "juris": "US",
    "jurisName": "Federal",
@@ -3149,6 +3152,26 @@
    "lean": "anti",
    "firstSeen": "2026-11-10",
    "text": "/assets/bills/us-119-hr4251-ih.pdf"
+  },
+  {
+   "id": "us-119-hr4261",
+   "juris": "US",
+   "jurisName": "Federal",
+   "session": "119th Congress",
+   "number": "H.R. 4261",
+   "title": "Stopping the Fraudulent Sales of Firearms Act",
+   "sponsor": "Rep. Scanlon, Mary Gay [D-PA-5]",
+   "status": "Introduced",
+   "category": "proposed",
+   "lastAction": "Referred to the House Committee on the Judiciary.",
+   "lastActionDate": "2025-06-30",
+   "filed": "2025-06-30",
+   "official": "https://www.congress.gov/bill/119th-congress/house-bill/4261",
+   "textSource": "https://www.govinfo.gov/content/pkg/BILLS-119hr4261ih/pdf/BILLS-119hr4261ih.pdf",
+   "textVersion": "ih",
+   "lean": "anti",
+   "firstSeen": "2026-11-10",
+   "text": "/assets/bills/us-119-hr4261-ih.pdf"
   },
   {
    "id": "us-119-hr4225",
