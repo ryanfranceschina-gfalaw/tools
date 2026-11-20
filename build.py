@@ -200,8 +200,8 @@ FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, 
         "knowsAbout": ["Civil rights litigation", "42 U.S.C. 1983", "First Amendment", "Second Amendment",
                        "Criminal defense", "Expunction", "Firearm return", "Federal firearm rights restoration"],
         "founder": [{"@id": SITE + "/about-the-firm/cj-grisham#person"}, {"@id": SITE + "/about-the-firm/ryan-franceschina#person"}],
-        "sameAs": ["https://www.facebook.com/profile.php?id=61586460771001", "https://www.youtube.com/@gfalaw",
-                   "https://www.etsy.com/shop/GFALAWmerchandise"]}
+        "sameAs": ["https://www.facebook.com/profile.php?id=61586460771001", "https://x.com/GFALAWPLLC",
+                   "https://www.youtube.com/@gfalaw", "https://www.etsy.com/shop/GFALAWmerchandise"]}
 
 FOOT = '''<section class="band sec tight"><div class="wrap band-in">
 <div><h2>Request a case review</h2><p>Requesting a case review is free. If we can help, the consultation is $350. Submitting a request does not create an attorney-client relationship.</p></div>
