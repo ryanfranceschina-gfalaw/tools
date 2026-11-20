@@ -1,15 +1,55 @@
 {
- "updated": "2026-11-19T18:27Z",
+ "updated": "2026-11-20T17:54Z",
  "sourcesOk": {
   "TX": true,
   "US": true,
   "MD": true
  },
- "count": 319,
+ "count": 321,
  "unsorted": [
+  "us-119-hr11108",
+  "us-119-s5791",
   "tx-90r-hb1228"
  ],
  "bills": [
+  {
+   "id": "us-119-hr11108",
+   "juris": "US",
+   "jurisName": "Federal",
+   "session": "119th Congress",
+   "number": "H.R. 11108",
+   "title": "To enhance safety and security at federally licensed gun shops, and for other purposes.",
+   "sponsor": "Rep. Morelle, Joseph D. [D-NY-25]",
+   "status": "Introduced",
+   "category": "proposed",
+   "lastAction": "Referred to the Committee on the Judiciary, and in addition to the Committee on Rules, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+   "lastActionDate": "2026-11-19",
+   "filed": "2026-11-19",
+   "official": "https://www.congress.gov/bill/119th-congress/house-bill/11108",
+   "textSource": "",
+   "textVersion": "",
+   "lean": "",
+   "firstSeen": "2026-11-20"
+  },
+  {
+   "id": "us-119-s5791",
+   "juris": "US",
+   "jurisName": "Federal",
+   "session": "119th Congress",
+   "number": "S. 5791",
+   "title": "A bill to enhance safety and security at federally licensed gun shops, and for other purposes.",
+   "sponsor": "Sen. Blunt Rochester, Lisa [D-DE]",
+   "status": "Introduced",
+   "category": "proposed",
+   "lastAction": "Read twice and referred to the Committee on the Judiciary.",
+   "lastActionDate": "2026-11-19",
+   "filed": "2026-11-19",
+   "official": "https://www.congress.gov/bill/119th-congress/senate-bill/5791",
+   "textSource": "",
+   "textVersion": "",
+   "lean": "",
+   "firstSeen": "2026-11-20"
+  },
   {
    "id": "tx-90r-hb1228",
    "juris": "TX",
