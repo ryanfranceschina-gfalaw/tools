@@ -1,16 +1,12 @@
 {
- "updated": "2026-11-20T17:54Z",
+ "updated": "2026-11-21T16:53Z",
  "sourcesOk": {
   "TX": true,
   "US": true,
   "MD": true
  },
  "count": 321,
- "unsorted": [
-  "us-119-hr11108",
-  "us-119-s5791",
-  "tx-90r-hb1228"
- ],
+ "unsorted": [],
  "bills": [
   {
    "id": "us-119-hr11108",
@@ -28,7 +24,7 @@
    "official": "https://www.congress.gov/bill/119th-congress/house-bill/11108",
    "textSource": "",
    "textVersion": "",
-   "lean": "",
+   "lean": "anti",
    "firstSeen": "2026-11-20"
   },
   {
@@ -47,7 +43,7 @@
    "official": "https://www.congress.gov/bill/119th-congress/senate-bill/5791",
    "textSource": "",
    "textVersion": "",
-   "lean": "",
+   "lean": "anti",
    "firstSeen": "2026-11-20"
   },
   {
@@ -67,7 +63,7 @@
    "official": "https://capitol.texas.gov/BillLookup/History.aspx?LegSess=90R&Bill=HB1228",
    "textSource": "https://capitol.texas.gov/tlodocs/90R/billtext/pdf/HB01228I.pdf",
    "textVersion": "I",
-   "lean": "",
+   "lean": "anti",
    "firstSeen": "2026-11-19",
    "text": "/assets/bills/tx-90r-hb1228-I.pdf"
   },
