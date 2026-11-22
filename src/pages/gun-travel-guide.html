@@ -1,0 +1,48 @@
+path: /resources/gun-travel-guide
+title: Gun Travel Guide: Carry Laws on Your Route | GFA LAW, PLLC
+desc: Plan a road trip, flight or train ride with a firearm. Pick your home state and carry license, tap your route, and see each state's carry, vehicle, magazine and transport rules with sources.
+short: Gun Travel Guide
+ogsub: Tap your route. See the gun laws in every state you cross.
+---
+<section class="phero gt-hero"><div class="wrap">{{crumbs}}
+<p class="eyebrow">Know before you go</p>
+<h1>Gun Travel Guide</h1>
+<p class="lede">Driving through five states with a handgun in the console? Flying with a rifle? Tell us where you live and what license you hold, tap your route, and see what each state lets you do, with links to the official sources.</p>
+</div></section>
+<section class="sec tight gt"><div class="wrap">
+<div class="gt-setup" role="group" aria-label="About you">
+ <label class="gt-f"><span>I live in</span><select id="gtHome"></select></label>
+ <label class="gt-f"><span>My carry license is from</span><select id="gtLic"><option value="none">I have no license</option></select></label>
+ <label class="gt-f"><span>My age</span><select id="gtAge"><option value="21">21 or older</option><option value="18">18 to 20</option></select></label>
+ <label class="gt-f"><span>Heading to</span><select id="gtTo"><option value="">Pick a destination</option></select></label>
+</div>
+<div class="gt-modes" role="tablist" aria-label="How are you traveling?">
+ <button type="button" role="tab" class="gt-mode on" data-m="drive" aria-selected="true"><b>Drive</b><small>Car, truck, RV</small></button>
+ <button type="button" role="tab" class="gt-mode" data-m="fly" aria-selected="false"><b>Fly</b><small>Checked bag</small></button>
+ <button type="button" role="tab" class="gt-mode" data-m="train" aria-selected="false"><b>Train</b><small>Amtrak</small></button>
+ <button type="button" role="tab" class="gt-mode" data-m="bus" aria-selected="false"><b>Bus</b><small>Greyhound</small></button>
+ <button type="button" role="tab" class="gt-mode" data-m="transit" aria-selected="false"><b>Transit</b><small>Subway, light rail</small></button>
+</div>
+<div class="gt-board">
+ <div class="gt-mapwrap">
+  <div class="gt-maphead"><h2>Your route</h2><p class="sm" id="gtHint">Pick a destination to draw a route, or tap states on the map in the order you will cross them.</p></div>
+  <div class="gt-map" id="gtMap" aria-label="Map of the United States. Tap a state to add it to your route."></div>
+  <ul class="gt-legend" aria-label="Map key">
+   <li><i class="k-permit"></i>Your license works</li>
+   <li><i class="k-pc"></i>No permit needed</li>
+   <li><i class="k-veh"></i>Vehicle or open carry only</li>
+   <li><i class="k-tr"></i>Unloaded and locked</li>
+  </ul>
+  <div class="gt-routebar"><ol id="gtChips" class="gt-chips"></ol><button type="button" class="btn sm ghost" id="gtClear">Clear route</button></div>
+ </div>
+ <div class="gt-out" id="gtOut" aria-live="polite"></div>
+</div>
+<div class="gt-modeinfo" id="gtMode"></div>
+<details class="gt-fed"><summary><h2>Federal rules that follow you everywhere</h2></summary><div id="gtFed"></div></details>
+<div class="gt-note">
+<p><b>General information, not legal advice.</b> Gun laws change often and cities can add their own rules. We check each state&rsquo;s entry against the official state source and re-verify every week; each state shows the date it was last checked. When the law is unclear, take the safest route: unloaded, locked, out of reach. For advice about your trip, <a href="/contact/contact-gfa-law">contact GFA LAW</a>.</p>
+<p class="sm">Updated <span id="gtUpd">weekly</span>. Found something that changed? <a href="/contact/contact-gfa-law">Tell us</a>.</p>
+</div>
+</div></section>
+<script src="/assets/travel/travel.js?v=1" defer></script>
+{{band}}
