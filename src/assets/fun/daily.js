@@ -78,7 +78,8 @@ function board(){
 }
 function post(refresh){
   var s=rec(),nm=pname();if(!nm||!lbOn()||s.last!==DAY||!s.res)return refresh&&board();
-  fetch(LB,{method:'POST',body:JSON.stringify({type:'daily',id:pid(),name:nm,day:DAY,game:G,data:s.res.data})}).then(function(){board()}).catch(function(){board()});
+  fetch(LB,{method:'POST',body:JSON.stringify({type:'daily',id:pid(),name:nm,day:DAY,game:G,data:s.res.data})}).then(function(r){return r.json()}).then(function(d){
+    if(d&&d.error==='reserved'){pname('');board();var f=$('dg-f');if(f)f.insertAdjacentHTML('afterbegin','<p class="sm" style="color:#f08f7c">That name is reserved for the firm. Please pick another.</p>');return}board()}).catch(function(){board()});
 }
 
 /* ---------- Inkwell ---------- */
