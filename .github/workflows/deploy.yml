@@ -10,10 +10,9 @@ on:
     - cron: '17 9 * * *'   # nightly, about 3:17 a.m. Central
   workflow_dispatch:
 
+# Each job gets only the access it needs (security review, Nov 2026).
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 concurrency:
   group: pages
@@ -22,6 +21,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # saves the nightly data refresh back to the repository
+      pages: write
     steps:
       - uses: actions/checkout@v5
       - name: Unpack an uploaded site-src.zip
@@ -64,6 +66,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
