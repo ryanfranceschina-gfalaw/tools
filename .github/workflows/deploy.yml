@@ -25,7 +25,7 @@ jobs:
       contents: write   # saves the nightly data refresh back to the repository
       pages: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Unpack an uploaded site-src.zip
         run: |
           if [ -f site-src.zip ]; then
