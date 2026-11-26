@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T19:26Z",
+ "updated": "2026-11-26T19:10Z",
  "sourcesOk": {
   "TX": true,
   "US": true,
@@ -14,7 +14,7 @@
    "jurisName": "Federal",
    "session": "119th Congress",
    "number": "H.R. 11108",
-   "title": "To enhance safety and security at federally licensed gun shops, and for other purposes.",
+   "title": "Gun Theft Prevention Act",
    "sponsor": "Rep. Morelle, Joseph D. [D-NY-25]",
    "status": "Introduced",
    "category": "proposed",
@@ -22,10 +22,11 @@
    "lastActionDate": "2026-11-19",
    "filed": "2026-11-19",
    "official": "https://www.congress.gov/bill/119th-congress/house-bill/11108",
-   "textSource": "",
-   "textVersion": "",
+   "textSource": "https://www.govinfo.gov/content/pkg/BILLS-119hr11108ih/pdf/BILLS-119hr11108ih.pdf",
+   "textVersion": "ih",
    "lean": "anti",
-   "firstSeen": "2026-11-20"
+   "firstSeen": "2026-11-20",
+   "text": "/assets/bills/us-119-hr11108-ih.pdf"
   },
   {
    "id": "us-119-s5791",
@@ -4465,26 +4466,6 @@
    "text": "/assets/bills/us-119-s1039-is.pdf"
   },
   {
-   "id": "us-119-hr2060",
-   "juris": "US",
-   "jurisName": "Federal",
-   "session": "119th Congress",
-   "number": "H.R. 2060",
-   "title": "Traveler’s Gun Rights Act",
-   "sponsor": "Rep. Johnson, Dusty [R-SD-At Large]",
-   "status": "Introduced",
-   "category": "proposed",
-   "lastAction": "Referred to the House Committee on the Judiciary.",
-   "lastActionDate": "2025-03-11",
-   "filed": "2025-03-11",
-   "official": "https://www.congress.gov/bill/119th-congress/house-bill/2060",
-   "textSource": "https://www.govinfo.gov/content/pkg/BILLS-119hr2060ih/pdf/BILLS-119hr2060ih.pdf",
-   "textVersion": "ih",
-   "lean": "pro",
-   "firstSeen": "2026-11-10",
-   "text": "/assets/bills/us-119-hr2060-ih.pdf"
-  },
-  {
    "id": "us-119-hr2039",
    "juris": "US",
    "jurisName": "Federal",
@@ -4503,6 +4484,26 @@
    "lean": "pro",
    "firstSeen": "2026-11-10",
    "text": "/assets/bills/us-119-hr2039-ih.pdf"
+  },
+  {
+   "id": "us-119-hr2060",
+   "juris": "US",
+   "jurisName": "Federal",
+   "session": "119th Congress",
+   "number": "H.R. 2060",
+   "title": "Traveler’s Gun Rights Act",
+   "sponsor": "Rep. Johnson, Dusty [R-SD-At Large]",
+   "status": "Introduced",
+   "category": "proposed",
+   "lastAction": "Referred to the House Committee on the Judiciary.",
+   "lastActionDate": "2025-03-11",
+   "filed": "2025-03-11",
+   "official": "https://www.congress.gov/bill/119th-congress/house-bill/2060",
+   "textSource": "https://www.govinfo.gov/content/pkg/BILLS-119hr2060ih/pdf/BILLS-119hr2060ih.pdf",
+   "textVersion": "ih",
+   "lean": "pro",
+   "firstSeen": "2026-11-10",
+   "text": "/assets/bills/us-119-hr2060-ih.pdf"
   },
   {
    "id": "us-119-s966",
