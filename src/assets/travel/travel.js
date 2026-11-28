@@ -103,7 +103,7 @@
       rule('Telling an officer', esc(d.it || (d.inf ? 'Required.' : 'No general duty to inform; answer truthfully if asked.'))) +
       rule('Stops and off-limits places', esc(d.pl || 'Schools, courthouses, government buildings, airports past security, and posted private property are commonly off limits. Federal rules below also apply.')) +
       rule('Also know', esc(d.x)) +
-      '<p class="gt-src">' + checked + (src ? ' Sources: ' + src : '') + '</p></details></article>';
+      '<p class="gt-src">' + checked + (src ? ' Sources: ' + src : '') + ' <a href="/resources/gun-travel-guide/' + d.n.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '">Open the ' + esc(d.n) + ' page</a></p></details></article>';
   }
   function drawOut() {
     var o = $('gtOut');
@@ -202,6 +202,10 @@
     $('gtClear').addEventListener('click', function () { $('gtTo').value = ''; setRoute([]); });
     $('gtFed').innerHTML = '<div class="gt-mgrid">' + FED.map(function (x) { return '<article class="lcard"><h3>' + x[0] + '</h3><p>' + x[1] + '</p></article>'; }).join('') + '</div>';
     drawMode(); refresh();
+    try {
+      var q = new URLSearchParams(location.search).get('to');
+      if (q && S[q.toUpperCase()]) { var sel = $('gtTo'); sel.value = q.toUpperCase(); sel.dispatchEvent(new Event('change')); }
+    } catch (e) {}
   }
   fetch('/assets/travel/states.json?v=' + Date.now().toString().slice(0, 6)).then(function (r) { return r.json(); }).then(init).catch(function () {
     $('gtOut').innerHTML = '<p>Sorry, the travel data did not load. Please refresh the page.</p>';

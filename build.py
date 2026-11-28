@@ -765,6 +765,115 @@ def bill_pages():
                        'short': t, 'ogimg': SITE + '/assets/img/og-gfa-law.jpg'}, body))
     return pages
 
+# ---------- Gun Travel Guide: one crawlable page per state, built from src/assets/travel/states.json ----------
+TRAVEL_BASE = '/resources/gun-travel-guide'
+
+def travel_slug(name):
+    return re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
+
+def travel_data():
+    p = os.path.join(SRC, 'assets', 'travel', 'states.json')
+    return json.load(open(p, encoding='utf-8')) if os.path.exists(p) else None
+
+def travel_summary(c, s):
+    if s.get('pc'):
+        pc = 'No permit needed (%s+)' % s['pc']['a']
+    else:
+        pc = 'Permit required to carry'
+    h = s['h']
+    hon = 'honors every state' if h == 'all' else ('honors no other state' if h == 'none' else 'honors %d states' % len(h))
+    return pc, hon
+
+TRAVEL_GRID = {'AK': (0, 0), 'ME': (10, 0), 'WI': (5, 1), 'VT': (9, 1), 'NH': (10, 1), 'WA': (0, 2), 'ID': (1, 2), 'MT': (2, 2), 'ND': (3, 2), 'MN': (4, 2), 'IL': (5, 2), 'MI': (6, 2), 'NY': (8, 2), 'MA': (9, 2),
+               'OR': (0, 3), 'NV': (1, 3), 'WY': (2, 3), 'SD': (3, 3), 'IA': (4, 3), 'IN': (5, 3), 'OH': (6, 3), 'PA': (7, 3), 'NJ': (8, 3), 'CT': (9, 3), 'RI': (10, 3),
+               'CA': (0, 4), 'UT': (1, 4), 'CO': (2, 4), 'NE': (3, 4), 'MO': (4, 4), 'KY': (5, 4), 'WV': (6, 4), 'VA': (7, 4), 'MD': (8, 4), 'DE': (9, 4),
+               'AZ': (1, 5), 'NM': (2, 5), 'KS': (3, 5), 'AR': (4, 5), 'TN': (5, 5), 'NC': (6, 5), 'SC': (7, 5), 'DC': (8, 5), 'OK': (3, 6), 'LA': (4, 6), 'MS': (5, 6), 'AL': (6, 6), 'GA': (7, 6),
+               'HI': (0, 7), 'TX': (3, 7), 'FL': (8, 7)}
+
+def travel_promo_map():
+    D = travel_data()
+    if not D: return ''
+    S = D['states']
+    def k(s):
+        if s.get('pc'): return 'b'
+        if s['h'] == 'none': return 'd'
+        return 'a' if s['h'] == 'all' else 'c'
+    return '<div class="gtp-wrap"><div class="gtp-map" aria-hidden="true">%s</div><p class="gtp-key"><span><i class="b"></i>No permit needed</span><span><i class="a"></i>Honors all permits</span><span><i class="c"></i>Honors some</span><span><i class="d"></i>Honors none</span></p></div>' % ''.join(
+        '<i class="%s" style="grid-column:%d;grid-row:%d"></i>' % (k(S[c]), x + 1, y + 1) for c, (x, y) in TRAVEL_GRID.items() if c in S)
+
+def travel_pages():
+    D = travel_data()
+    if not D: return [], '', ''
+    S = D['states']
+    codes = sorted(S, key=lambda c: S[c]['n'])
+    link = lambda c: '<a href="%s/%s">%s</a>' % (TRAVEL_BASE, travel_slug(S[c]['n']), esc(S[c]['n']))
+    pages = []
+    for c in codes:
+        s = S[c]; n = s['n']; slug = travel_slug(n)
+        pc, hon = travel_summary(c, s)
+        if s['h'] == 'all':
+            lic = 'Yes. %s %s' % (n, 'honors carry licenses from every state.')
+        elif s['h'] == 'none':
+            lic = 'No. %s does not honor carry licenses from any other state.' % n
+        else:
+            lic = '%s honors licenses from: %s.' % (n, ', '.join(link(x) + (' (%s)' % esc(s['hc'][x]) if s.get('hc', {}).get(x) else '') for x in s['h']))
+            if s.get('hr'): lic += ' The license must be issued by the state where you live.'
+        rows = [
+            ('Carry without a permit', esc(s['pc']['t']) if s.get('pc') else 'Not available. You need a license that %s honors to carry a loaded handgun on your person.' % esc(n)),
+            ('Out-of-state licenses', lic + (' ' + esc(s['ht']) if s.get('ht') else '')),
+            ('In a vehicle', esc(s.get('vt') or ('A person who may lawfully possess a handgun may keep it in a private vehicle.' if s.get('veh') == 'loaded' else 'Keep it unloaded and locked away, out of reach.'))),
+            ('Magazine limits', esc(s.get('mag') or 'No statewide magazine capacity limit.')),
+            ('Assault-weapon laws', esc(s.get('aw') or 'No statewide assault-weapon ban.')),
+            ('Telling an officer', esc(s.get('it') or ('Required.' if s.get('inf') else 'No general duty to inform. Answer truthfully if asked.'))),
+            ('Off-limits places', esc(s.get('pl') or 'Schools, courthouses, government buildings, airports past security and posted private property are commonly off limits. Federal rules also apply.')),
+        ]
+        if s.get('x'): rows.append(('Also know', esc(s['x'])))
+        tbl = ''.join('<tr><th scope="row">%s</th><td>%s</td></tr>' % r for r in rows)
+        src = ' &middot; '.join(('<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(u), esc(l))) if u else esc(l) for l, u in s.get('src', []))
+        checked = ('Last checked against official sources on %s.' % fdate(s['v'])) if s.get('v') else 'This entry is in this week&rsquo;s verification queue.'
+        nb = ', '.join(link(x) for x in sorted(s.get('adj', []), key=lambda x: S[x]['n']))
+        faq = [
+            ('Can I carry a gun in %s with my out-of-state permit?' % n, re.sub('<[^>]+>', '', lic) + (' ' + s['ht'] if s.get('ht') else '')),
+            ('Can I carry a gun in %s without a permit?' % n, s['pc']['t'] if s.get('pc') else '%s does not have permitless carry. Without a license %s honors, keep your firearm unloaded and locked away, and rely on federal safe passage (18 U.S.C. 926A) if you are only passing through.' % (n, n)),
+            ('How do I transport a gun through %s in my car?' % n, (s.get('vt') or '') + ' Under federal law (18 U.S.C. 926A), if you may lawfully have the firearm where your trip starts and ends, you may drive through with it unloaded and with the firearm and ammunition not readily accessible from the passenger area.'),
+            ('Does %s limit magazine capacity?' % n, s.get('mag') or '%s has no statewide magazine capacity limit.' % n),
+        ]
+        faqh = ''.join('<details><summary>%s</summary><div class="a"><p>%s</p></div></details>' % (esc(q), esc(a.strip())) for q, a in faq)
+        body = ('<section class="phero gt-hero"><div class="wrap">{{crumbs}}\n<p class="eyebrow">Gun Travel Guide &middot; %s</p><h1>%s gun laws for travelers</h1>\n'
+                '<p class="lede">Carry, reciprocity, vehicle and magazine rules for anyone driving through, flying into or visiting %s with a firearm.</p>'
+                '<div class="gt-facts"><span>%s</span><span>%s</span></div>'
+                '<div class="btns"><a class="btn" href="%s?to=%s">Plan a route through %s</a><a class="btn ghost" href="%s#gt-states">All states</a></div></div></section>\n'
+                '<section class="sec tight"><div class="wrap" style="max-width:940px">'
+                '<table class="btbl gt-tbl">%s</table>'
+                '<p class="sm">%s %s</p>'
+                '%s'
+                '<h2 style="margin-top:34px">Common questions about carrying in %s</h2><div class="faq">%s</div>'
+                '<h2 style="margin-top:34px">Federal rules that still apply</h2>'
+                '<p>Federal law bars guns in federal buildings and post offices, limits carry within 1,000 feet of a school to licenses issued by that state, and sets the rules for flying (checked bag only, unloaded, locked hard case, declared at the counter). See the <a href="%s#gt-fed">federal rules, flying, Amtrak and Greyhound</a> in the full guide.</p>'
+                '<p class="sm" style="margin-top:24px"><b>General information, not legal advice.</b> Gun laws change often and cities can add their own rules. Sources: %s</p>'
+                '<div class="btns"><a class="btn" href="%s?to=%s">Plan a route through %s</a><a class="btn ghost" href="/contact/contact-gfa-law">Request a Case Review</a></div>'
+                '</div></section>{{band}}') % (
+            esc(fdate(s['v']) if s.get('v') else 'Updated weekly'), esc(n), esc(n), esc(pc), esc(n + ' ' + hon), TRAVEL_BASE, c, esc(n), TRAVEL_BASE,
+            tbl, checked, 'We re-verify every state weekly.',
+            ('<h2 style="margin-top:34px">Neighboring states</h2><p>Driving on? Check %s.</p>' % nb) if nb else '',
+            esc(n), faqh, TRAVEL_BASE, src or 'state statutes', TRAVEL_BASE, c, esc(n))
+        desc = '%s gun laws for travelers: %s; %s. Reciprocity, vehicle carry, magazine limits and off-limits places, checked weekly.' % (n, pc.lower(), hon)
+        pages.append(({'path': '%s/%s' % (TRAVEL_BASE, slug),
+                       'title': '%s Gun Laws for Travelers: Carry Permit Reciprocity | GFA LAW' % n,
+                       'desc': desc[:300], 'short': n, 'ogtitle': '%s gun laws for travelers' % n,
+                       'ogsub': '%s. %s %s.' % (pc, n, hon)}, body))
+    # index of states + FAQ for the main guide page (crawlable, no JavaScript needed)
+    cards = ''.join('<a class="gt-scard" href="%s/%s"><b>%s</b><small>%s<br>%s</small></a>' % (
+        TRAVEL_BASE, travel_slug(S[c]['n']), esc(S[c]['n']), esc(travel_summary(c, S[c])[0]), esc('Out-of-state licenses: ' + travel_summary(c, S[c])[1].replace('honors ', ''))) for c in codes)
+    index = '<h2 id="gt-states">Gun laws by state</h2><p>Open any state for its full carry, reciprocity, vehicle, magazine and off-limits rules, with official sources.</p><div class="gt-sgrid">%s</div>' % cards
+    pcs = [S[c]['n'] for c in codes if S[c].get('pc')]
+    none = [S[c]['n'] for c in codes if S[c]['h'] == 'none']
+    index += ('<h2 style="margin-top:40px">Permitless carry and reciprocity at a glance</h2><div class="faq">'
+              '<details><summary>Which states allow permitless (constitutional) carry?</summary><div class="a"><p>As of our last weekly check, %d states let eligible adults carry a handgun without a permit, though minimum ages and who is covered vary: %s. Open a state for its age limit and rules.</p></div></details>'
+              '<details><summary>Which states do not honor any out-of-state carry license?</summary><div class="a"><p>%s. Some of these issue licenses to nonresidents. Otherwise, travel through them with the firearm unloaded, locked and out of reach under federal safe passage.</p></div></details></div>') % (
+              len(pcs), ', '.join(pcs), ', '.join(none))
+    return pages, index, D.get('updated', '')
+
 
 VAULT_CODE = 'HUNT1791'
 VAULT_TERMS = '15% off GFA LAW merchandise in our Etsy shop, one use per Etsy buyer. The button below applies the code automatically, or enter it at Etsy checkout. Merch only: it has no connection to legal services or fees. Etsy promotion terms apply, and the offer may end at any time.'
@@ -803,11 +912,15 @@ if __name__ == '__main__':
     pages += const_pages(CJ)
     pages.append(vault_page(M))
     pages += bill_pages()
+    tp, t_index, t_upd = travel_pages()
+    pages += tp
     TRIVIA_WIDGET = '<p><a class="btn" href="/daily-game">Play today&rsquo;s Daily Game</a></p>'
     urls = []
     KNOWN.update(m['path'] for m, _ in pages)
     for meta, body in pages:
         body = body.replace('{{home_news}}', home_news(R))
+        body = body.replace('{{travel_index}}', t_index)
+        if '{{travel_promo_map}}' in body: body = body.replace('{{travel_promo_map}}', travel_promo_map())
         body = body.replace('__LB_URL__', LB_URL)
         if '{{trivia_widget}}' in body:
             body = body.replace('{{trivia_widget}}', TRIVIA_WIDGET)
