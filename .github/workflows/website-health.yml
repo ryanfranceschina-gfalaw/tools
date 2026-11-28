@@ -24,7 +24,7 @@ jobs:
           https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft
           https://gfa-law-pllc.mycase.com/contact_us/NTqsGH4GHoUzNbjDfTpv8t1T
           https://www.gfalaw.us/study-portal/
-          https://www.gfalaw.us/deadline-checker.html"
+          https://gfalaw.us/"
           n=0
           for u in $urls; do
             n=$((n+1))
