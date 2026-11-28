@@ -63,7 +63,6 @@ NAV = [
    ('Section 1983 Lawsuits Explained', '/learn/42-usc-1983', '', 1),
    ('Warrant Requirements', '/learn/warrant-requirements', '', 1),
    ('Was Your Police Encounter Lawful?', '/learn/officer-interactions', '', 1),
-   ('Civil Rights Case Strength Evaluator', '/learn/civil-claims-calculator', '', 1),
    ('Pocket Constitution', '/constitution', 'Every article and amendment', 0),
    ('Videos', '/videos', 'Lessons, case updates and testimony', 0),
    ('Search the Site', '/search', 'Find any page, guide or tool', 0)]),
