@@ -23,8 +23,8 @@ V = NOW.strftime('%Y%m%d%H%M')
 ADDR = {"@type": "PostalAddress", "streetAddress": "4970 E. Business 190", "addressLocality": "Temple",
         "addressRegion": "TX", "postalCode": "76501", "addressCountry": "US"}
 FIRM_ID = SITE + '/#firm'
-MYCASE_CIVIL = 'https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc'
-MYCASE_CRIM = 'https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft'
+MYCASE_CIVIL = 'https://gfa-law-pllc.mycase.com/contact_us/cWTQ8ouhC61zdqTNAq3vUXuo'
+MYCASE_CRIM = 'https://gfa-law-pllc.mycase.com/contact_us/cWTQ8ouhC61zdqTNAq3vUXuo'
 LAWPAY = 'https://secure.lawpay.com/pages/gfalaw/trust?amount=350.00&amp;reference=Written%20Legal%20Review&amp;readOnlyFields=amount'
 
 ICON = {
