@@ -79,7 +79,7 @@ var stHooks=[];function onState(f){stHooks.push(f);}
 function paintStates(){document.querySelectorAll('.states button').forEach(function(b){b.classList.toggle('on',b.dataset.st===ST);});}
 document.querySelectorAll('.states button').forEach(function(b){b.onclick=function(){ST=b.dataset.st;try{localStorage.setItem('gfaState',ST);}catch(e){}paintStates();stHooks.forEach(function(f){f();});};});
 paintStates();
-var CIVIL="https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc",CRIM="https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft";
+var CIVIL="https://gfa-law-pllc.mycase.com/contact_us/cWTQ8ouhC61zdqTNAq3vUXuo#civil",CRIM="https://gfa-law-pllc.mycase.com/contact_us/cWTQ8ouhC61zdqTNAq3vUXuo#criminal";
 var $=function(id){return document.getElementById(id);};var st=$('st');
 function steps(){var md=ST==='MD';return {
  start:{q:'What do you need help with in '+stName()+'?',opts:[
@@ -151,15 +151,15 @@ function wirePrep(kind,url){var b=$('p-go');if(!b)return;b.onclick=function(){va
  try{if(window.top.gtag)window.top.gtag('event','case_review_prep',{kind:kind});}catch(e){}
 };}
 function route(n){var S=steps();if(S[n])return ask(n);var md=ST==='MD';
- var C='Use the Criminal Case Review form. Have the charge, the arresting agency, the county and any case number or court date ready.';
+ var C='Use the Written Legal Review request form. Have the charge, the arresting agency, the county and any case number or court date ready.';
  switch(n){
   case 'ffrr':return result('Restore My Rights','The Department of Justice now accepts applications to restore federal firearm rights under 18 U.S.C. 925(c). Start with four screening questions on our Restore My Rights page. If you can continue, it takes you to our secure application.','https://www.gfalaw.us/tools/restore-my-rights','Go to Restore My Rights',false);
-  case 'crimOther':return result('Criminal Case Review','You can fill out the Criminal Case Review form on their behalf. The form asks for your name and your relationship to the person charged. Have the charge, the arresting agency, the county and any case number or court date ready.',CRIM,'Open the Criminal Case Review form',false);
-  case 'custody':case 'soon':return result('Criminal Case Review',C,CRIM,'Open the Criminal Case Review form',true);
-  case 'crimForm':return result('Criminal Case Review',C,CRIM,'Open the Criminal Case Review form',false);
-  case 'civForm':return result('Civil Case Review','Use the Civil Case Review form. Describe what happened, who was involved (the agency or official), the date, the county, and any video, photos or records you already have.',CIVIL,'Open the Civil Case Review form',false);
-  case 'civSoon':return result('Civil Case Review','Use the Civil Case Review form. '+(md?'Claims against Maryland local governments generally require written notice within one year, claims against the State require a claim to the State Treasurer within one year, and federal civil rights claims in Maryland generally must be filed within three years.':'Claims against Texas governments can require written notice within six months or less, and federal civil rights claims in Texas generally must be filed within two years.')+' Do not wait.',CIVIL,'Open the Civil Case Review form',true);
-  case 'civOld':return result('Civil Case Review','The general '+(md?'three-year':'two-year')+' deadline for most civil rights claims in '+stName()+' may have passed. Exceptions sometimes apply, for example when a related criminal case ended later. You can still submit the Civil Case Review form and the firm will look at the dates.',CIVIL,'Open the Civil Case Review form',false);
+  case 'crimOther':return result('Written Legal Review','You can fill out the Written Legal Review request form on their behalf. The form asks for your name and your relationship to the person charged. Have the charge, the arresting agency, the county and any case number or court date ready.',CRIM,'Open the Written Legal Review request',false);
+  case 'custody':case 'soon':return result('Written Legal Review',C,CRIM,'Open the Written Legal Review request',true);
+  case 'crimForm':return result('Written Legal Review',C,CRIM,'Open the Written Legal Review request',false);
+  case 'civForm':return result('Written Legal Review','Use the Written Legal Review request form. Describe what happened, who was involved (the agency or official), the date, the county, and any video, photos or records you already have.',CIVIL,'Open the Written Legal Review request',false);
+  case 'civSoon':return result('Written Legal Review','Use the Written Legal Review request form. '+(md?'Claims against Maryland local governments generally require written notice within one year, claims against the State require a claim to the State Treasurer within one year, and federal civil rights claims in Maryland generally must be filed within three years.':'Claims against Texas governments can require written notice within six months or less, and federal civil rights claims in Texas generally must be filed within two years.')+' Do not wait.',CIVIL,'Open the Written Legal Review request',true);
+  case 'civOld':return result('Written Legal Review','The general '+(md?'three-year':'two-year')+' deadline for most civil rights claims in '+stName()+' may have passed. Exceptions sometimes apply, for example when a related criminal case ended later. You can still submit the Written Legal Review request form and the firm will look at the dates.',CIVIL,'Open the Written Legal Review request',false);
   default:return result('Contact the office','Tell us briefly what is going on and the best way to reach you. If GFA LAW does not handle your type of matter, we will try to point you in the right direction.',null,'',false);
  }}
 onState(function(){ask('start');});ask('start');
