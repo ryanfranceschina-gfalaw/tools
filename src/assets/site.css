@@ -66,6 +66,8 @@ hr{border:0;border-top:1px solid var(--line);margin:40px 0}
 .nav li.open>.sub{display:block}
 @media(hover:hover) and (min-width:1201px){.nav>ul>li:hover>.sub{display:block}.nav>ul>li:hover>button svg{transform:rotate(180deg)}}
 .hdr-cta{flex:none}
+@media(min-width:1201px) and (max-width:1500px){.nav>ul>li>a,.nav>ul>li>button{padding:10px 7px;font-size:14px}.hdr-in{gap:12px}}
+@media(min-width:1201px) and (max-width:1300px){.btn.hdr-cta{display:none}}
 .menu-btn{display:none;margin-left:auto;width:46px;height:46px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--gold2);cursor:pointer;align-items:center;justify-content:center}
 .menu-btn span,.menu-btn span::before,.menu-btn span::after{display:block;width:20px;height:2px;background:currentColor;border-radius:2px;position:relative;transition:.2s}
 .menu-btn span::before,.menu-btn span::after{content:'';position:absolute;left:0}
