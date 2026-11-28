@@ -99,7 +99,7 @@ s.opts.forEach(function(o){h+='<button class="opt" data-n="'+o[1]+'">'+o[0]+'</b
 if(key!=='start')h+='<div class="row"><button class="btn ghost" id="restart">Start over</button></div>';
 st.innerHTML=h;st.className='fade';[].slice.call(st.querySelectorAll('.opt')).forEach(function(b){b.onclick=function(){route(b.dataset.n);};});
 var r=$('restart');if(r)r.onclick=function(){ask('start');};}
-function fee(){var h='<div class="info"><b>Before you submit:</b> consultations with GFA LAW are a flat <b>$350</b>, paid after your consultation time is confirmed. Paying the fee does not mean the firm has agreed to take your case. Submitting the form does not create an attorney-client relationship.</div>';
+function fee(){var h='<div class="info"><b>Before you submit:</b> if we can help, the next step is a flat <b>$350</b> written legal review, paid only after we accept your request. Paying for a review does not mean the firm has agreed to take your case. Submitting the form does not create an attorney-client relationship.</div>';
 if(ST==='MD')h+='<div class="info">Maryland matters are handled by Ryan Franceschina, who is licensed in Maryland. In the form, list the Maryland county where the case is pending or where it happened.</div>';return h;}
 function result(title,txt,url,btn,urgent){var h='<span class="pill">Your next step</span><h2 style="margin-top:10px">'+title+'</h2>';
 if(urgent)h+='<div class="alert"><b>This is time-sensitive.</b> Call the office now at <a href="tel:2544051726"><b>254-405-1726</b></a>, then submit the form so we have the details.</div>';
