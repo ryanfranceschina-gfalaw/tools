@@ -855,3 +855,6 @@ html.y1791 .nav a,html.y1791 .nav button{color:#2b1d0e}
 .gtp-key span{white-space:nowrap;display:inline-flex;align-items:center;gap:5px}.gtp-key i{display:inline-block;width:11px;height:11px;border-radius:3px}
 .gtp-key .a{background:#3fa45a}.gtp-key .b{background:#C9A54B}.gtp-key .c{background:#d9822b}.gtp-key .d{background:#b8443c}
 @media(max-width:800px){.gtp-wrap{max-width:300px}}
+/* Mobile menu: the header's backdrop blur made it the containing block for the fixed menu, squeezing the menu into a short scroll box. Drop the blur while the menu is open so the menu fills the screen. */
+@media(max-width:1200px){body.nav-open .hdr{-webkit-backdrop-filter:none;backdrop-filter:none;background:#0d1a11}body.nav-open .nav{height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr))}}
+body.nav-open canvas.fx{display:none}
