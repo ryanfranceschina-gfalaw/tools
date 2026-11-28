@@ -177,8 +177,10 @@ def crumbs_html(items):
     return '<ol class="crumbs">' + ''.join(lis) + '</ol>'
 
 def crumbs_ld(items):
+    # Google rejects a breadcrumb item with no URL, so leave out crumbs that have no page of their own
+    keep = [(n, p) for i, (n, p) in enumerate(items) if not KNOWN or p in KNOWN or i == len(items) - 1]
     return {"@type": "BreadcrumbList", "itemListElement": [
-        dict({"@type": "ListItem", "position": i + 1, "name": n}, **({"item": SITE + ('/' if p == '/' else p + '/')} if (not KNOWN or p in KNOWN or i == len(items) - 1) else {})) for i, (n, p) in enumerate(items)]}
+        {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + ('/' if p == '/' else p + '/')} for i, (n, p) in enumerate(keep)]}
 
 FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, "name": "GFA LAW, PLLC",
         "legalName": "Grisham Franceschina Attorneys-at-Law, PLLC", "url": SITE + "/",
