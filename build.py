@@ -25,7 +25,7 @@ ADDR = {"@type": "PostalAddress", "streetAddress": "4970 E. Business 190", "addr
 FIRM_ID = SITE + '/#firm'
 MYCASE_CIVIL = 'https://gfa-law-pllc.mycase.com/contact_us/tV99Frbor6aVhkfXGLK2Abhc'
 MYCASE_CRIM = 'https://gfa-law-pllc.mycase.com/contact_us/KRA1LYw2Dno1vnJTEp49mCft'
-LAWPAY = 'https://secure.lawpay.com/pages/gfalaw/trust?amount=350.00&amp;reference=Consultation%20Fee&amp;readOnlyFields=amount'
+LAWPAY = 'https://secure.lawpay.com/pages/gfalaw/trust?amount=350.00&amp;reference=Written%20Legal%20Review&amp;readOnlyFields=amount'
 
 ICON = {
  'sms': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>',
@@ -69,8 +69,8 @@ NAV = [
  ('Gun Bills', '/resources/gun-bill-tracker'),
  ('Daily Game', '/daily-game'),
  ('Press', '/press-releases'),
- ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review, consultation and fees', 0), ('FAQ', '/contact/faq', '', 0),
-   ('Payments', '/payments', 'Consultation fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
+ ('Contact', [('Contact GFA LAW', '/contact/contact-gfa-law', 'Request a case review', 0), ('What Happens Next', '/contact/what-happens-next', 'Review and fees', 0), ('Written Legal Review', '/legal-review', 'Written analysis, no meeting', 0), ('FAQ', '/contact/faq', '', 0),
+   ('Payments', '/payments', 'Written review fee', 0), ('Socials', '/contact/socials', '', 0), ('Español', '/es', '', 0),
    ('Complaints', '/complaints', 'GFA HR Department Portal', 0)]),
  ('Merch', '/merch'),
  ('Client Login', 'https://www.mycase.com/login'),
@@ -199,7 +199,7 @@ FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, 
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Criminal defense (Innocent Defense)", "url": SITE + "/about-the-firm/practice-areas/innocent-defense"}},
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Firearm rights, firearm return and expunction", "url": SITE + "/about-the-firm/practice-areas/firearm-rights-and-expunction"}},
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Federal firearm rights restoration (18 U.S.C. 925(c))", "url": SITE + "/tools/restore-my-rights"}}]},
-        "priceRange": "Free case review; $350 consultation",
+        "priceRange": "Free case review; $350 written legal review",
         "knowsAbout": ["Civil rights litigation", "42 U.S.C. 1983", "First Amendment", "Second Amendment",
                        "Criminal defense", "Expunction", "Firearm return", "Federal firearm rights restoration"],
         "founder": [{"@id": SITE + "/about-the-firm/cj-grisham#person"}, {"@id": SITE + "/about-the-firm/ryan-franceschina#person"}],
@@ -207,7 +207,7 @@ FIRM = {"@type": ["LegalService", "LocalBusiness", "Attorney"], "@id": FIRM_ID, 
                    "https://www.youtube.com/@gfalaw", "https://www.etsy.com/shop/GFALAWmerchandise"]}
 
 FOOT = '''<section class="band sec tight"><div class="wrap band-in">
-<div><h2>Request a case review</h2><p>Requesting a case review is free. If we can help, the consultation is $350. Submitting a request does not create an attorney-client relationship.</p></div>
+<div><h2>Request a case review</h2><p>Requesting a case review is free. If we can help, the next step is a $350 written legal review: a lawyer's written analysis of your matter, with no meeting required. Submitting a request does not create an attorney-client relationship.</p></div>
 <div class="btns" style="margin:0"><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a><a class="btn ghost" href="tel:+12544051726">CALLICON 254-405-1726</a></div>
 </div></section>'''
 
@@ -228,7 +228,7 @@ FOOTER = '''<footer class="ftr"><div class="wrap">
 <nav class="callbar" aria-label="Quick contact"><a class="btn" href="tel:+12544051726">CALLICON Call</a><a class="btn ghost" href="sms:+12544051726">SMSICON Text</a><a class="btn ghost" href="/contact/contact-gfa-law">Case Review</a></nav>'''
 
 SIDE_PRACTICE = '''<aside class="side">
-<div class="side-card"><h3>Talk to GFA LAW</h3><p>Requesting a case review is free. If we can help, the consultation is $350.</p>
+<div class="side-card"><h3>Talk to GFA LAW</h3><p>Requesting a case review is free. If we can help, the next step is a $350 written legal review: a lawyer's written analysis of your matter, with no meeting required.</p>
 <a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a><a class="btn ghost" href="tel:+12544051726">Call 254-405-1726</a></div>
 <div class="side-card"><h3 style="font-size:18px">Practice Areas</h3><ul>
 <li><a href="/about-the-firm/practice-areas/section-1983-civil-rights-lawsuits">Section 1983 Civil Rights Lawsuits</a></li>
@@ -455,7 +455,7 @@ def release_pages(R):
 {pn}
 </article>
 <aside class="side"><div class="side-card"><h2 class="h3">Media inquiries</h2><p>Reporters can reach the firm at <a href="mailto:press@gfalaw.us">press@gfalaw.us</a> or 254-405-1726.</p><a class="btn ghost" href="/press-releases">All press releases</a></div>
-<div class="side-card"><h2 class="h3">Need help with a case?</h2><p>Requesting a case review is free. If we can help, the consultation is $350.</p><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a></div></aside>
+<div class="side-card"><h2 class="h3">Need help with a case?</h2><p>Requesting a case review is free. If we can help, the next step is a $350 written legal review: a lawyer's written analysis of your matter, with no meeting required.</p><a class="btn" href="/contact/contact-gfa-law">Request a Case Review</a></div></aside>
 </div></section>'''
         meta = {'path': f'/press-releases/{r["id"]}', 'title': f'{r["title"]} | GFA LAW, PLLC', 'short': r['title'],
                 'desc': r.get('summary') or r['sub'], 'ogtype': 'article', 'schema': 'WebPage',
