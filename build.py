@@ -907,10 +907,10 @@ if __name__ == '__main__':
     R = json.load(open(os.path.join(SRC, 'data', 'releases.json')))
     C = json.load(open(os.path.join(SRC, 'data', 'coverage.json')))
     M = json.load(open(os.path.join(SRC, 'data', 'merch.json')))
-    V = json.load(open(os.path.join(SRC, 'data', 'videos.json')))
+    VIDS = json.load(open(os.path.join(SRC, 'data', 'videos.json')))  # not V: V is the asset version stamp
     rp, R = release_pages(R)
     pages = [parse(f) for f in sorted(glob.glob(os.path.join(SRC, 'pages', '*.html')))]
-    pages += rp + [press_index(R, C), merch_page(M), videos_page(V)]
+    pages += rp + [press_index(R, C), merch_page(M), videos_page(VIDS)]
     CJ = json.load(open(os.path.join(SRC, 'assets', 'fun', 'constitution.json')))
     pages += const_pages(CJ)
     pages.append(vault_page(M))
